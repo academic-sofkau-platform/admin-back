@@ -5,15 +5,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
 import java.util.UUID;
 
-@Document(collection = "courses")
+@Document(collection = "routes")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Curso {
+public class Ruta {
     private String id = UUID.randomUUID().toString();
-    private String nombre;
-    private String descripcion;
-    private Integer aprobacion;
+    private String idRutaAprendizaje;
+    private Integer nivel;
+    private String cursoId;
+    private List<String> prerrequisitosId;
 }
