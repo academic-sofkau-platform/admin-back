@@ -13,26 +13,35 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
 
     @Override
     public Mono<RutaAprendizaje> save(RutaAprendizaje rutaAprendizaje) {
-        return null;
+        return repository.save(rutaAprendizaje);
     }
 
     @Override
     public Flux<RutaAprendizaje> findAll() {
-        return null;
+        return repository.findAll();
     }
 
     @Override
     public Mono<RutaAprendizaje> findById(String rutaAprendizajeId) {
-        return null;
+        return repository.findById(rutaAprendizajeId);
     }
 
     @Override
     public Mono<RutaAprendizaje> update(RutaAprendizaje rutaAprendizaje, String rutaAprendizajeId) {
-        return null;
+        return repository
+                .findById(rutaAprendizajeId)
+                .flatMap(rutaAprendizaje1 -> {
+                    rutaAprendizaje1.setId(rutaAprendizajeId);
+                    return save(rutaAprendizaje1);
+                })
+                .switchIfEmpty(Mono.empty());
     }
 
     @Override
     public Mono<Void> deleteById(String rutaAprendizajeId) {
-        return null;
+        return repository
+                .findById(rutaAprendizajeId)
+                .flatMap(rutaAprendizaje -> repository.deleteById(rutaAprendizaje.getId()))
+                .switchIfEmpty(Mono.empty());
     }
 }
