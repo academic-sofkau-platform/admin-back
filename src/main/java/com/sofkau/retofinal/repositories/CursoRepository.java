@@ -1,4 +1,6 @@
 package com.sofkau.retofinal.repositories;
+import com.sofkau.retofinal.models.Curso;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
-public class CursoRepository {
+public interface CursoRepository  extends ReactiveMongoRepository<Curso, String> {
 }
