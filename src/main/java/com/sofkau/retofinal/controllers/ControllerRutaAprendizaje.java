@@ -1,5 +1,6 @@
 package com.sofkau.retofinal.controllers;
 
+import com.sofkau.retofinal.models.Ruta;
 import com.sofkau.retofinal.models.RutaAprendizaje;
 import com.sofkau.retofinal.services.RutaAprendizajeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,12 @@ public class ControllerRutaAprendizaje {
     public Mono<Void> deleteMovieById(@PathVariable("id") String rutaAprendizajeId){
         return service
                 .deleteById(rutaAprendizajeId);
+    }
+
+    //RUTAS
+    @PatchMapping("/add/route/{id}")
+    public Mono<RutaAprendizaje> agregarRuta(@RequestBody Ruta ruta, @PathVariable("id") String rutaAprendizajeId){
+        return service.addRoute(ruta, rutaAprendizajeId);
     }
 
 }

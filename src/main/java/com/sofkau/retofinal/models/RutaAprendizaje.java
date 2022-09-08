@@ -17,5 +17,4 @@ public class RutaAprendizaje {
     private String nombre;
     private String descripcion;
     private List<Ruta> rutas;
-
 }

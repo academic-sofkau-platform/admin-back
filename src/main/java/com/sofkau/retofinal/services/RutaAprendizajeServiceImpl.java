@@ -1,6 +1,7 @@
 package com.sofkau.retofinal.services;
 
 import com.sofkau.retofinal.interfaces.IRutaAprendizajeService;
+import com.sofkau.retofinal.models.Ruta;
 import com.sofkau.retofinal.models.RutaAprendizaje;
 import com.sofkau.retofinal.repositories.RutaAprendizajeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,4 +46,17 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                 .flatMap(rutaAprendizaje -> repository.deleteById(rutaAprendizaje.getId()))
                 .switchIfEmpty(Mono.empty());
     }
+
+    @Override
+    public Mono<RutaAprendizaje> addRoute(Ruta ruta, String rutaAprendizajeId) {
+        return repository
+                .findById(rutaAprendizajeId)
+                .flatMap(rutaAprendizaje -> {
+                    rutaAprendizaje.setId(rutaAprendizajeId);
+                    rutaAprendizaje.getRutas().add(ruta);
+                    return save(rutaAprendizaje);
+                })
+                .switchIfEmpty(Mono.empty());
+    }
+
 }

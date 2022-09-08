@@ -16,6 +16,6 @@ public class Ruta {
     private String id = UUID.randomUUID().toString();
     private String idRutaAprendizaje;
     private Integer nivel;
-    private String cursoId;
-    private List<String> prerrequisitosId;
+    private Curso curso;
+    private List<Curso> prerrequisitos;
 }
