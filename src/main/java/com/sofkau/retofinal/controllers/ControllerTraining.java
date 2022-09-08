@@ -17,7 +17,7 @@ public class ControllerTraining {
         return service.save(training);
     }
     @GetMapping("/findAll")
-    public Flux<Training> findById() {
+    public Flux<Training> findAll() {
         return service.findAll();
     }
     @GetMapping("/findById/{id}")
