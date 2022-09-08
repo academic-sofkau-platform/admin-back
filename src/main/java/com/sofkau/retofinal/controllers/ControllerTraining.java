@@ -39,4 +39,7 @@ public class ControllerTraining {
         return service.asignarCoach(name, trainingId);
     }
     //Todo cargarListaAprendiz
+
+    //TODO: findAll de aprendices.
+    //TODO: findById de aprendiz.
 }

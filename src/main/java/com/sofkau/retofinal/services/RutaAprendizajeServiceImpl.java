@@ -4,9 +4,10 @@ import com.sofkau.retofinal.interfaces.IRutaAprendizajeService;
 import com.sofkau.retofinal.models.RutaAprendizaje;
 import com.sofkau.retofinal.repositories.RutaAprendizajeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
+@Service
 public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
     @Autowired
     RutaAprendizajeRepository repository;

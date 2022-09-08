@@ -1,7 +1,6 @@
 package com.sofkau.retofinal.interfaces;
 
 import com.sofkau.retofinal.models.Curso;
-import com.sofkau.retofinal.models.RutaAprendizaje;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
