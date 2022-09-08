@@ -1,5 +1,7 @@
 package com.sofkau.retofinal.controllers;
 
+import com.sofkau.retofinal.dto.RutaAprendizajeDto;
+import com.sofkau.retofinal.dto.RutaDto;
 import com.sofkau.retofinal.models.Ruta;
 import com.sofkau.retofinal.models.RutaAprendizaje;
 import com.sofkau.retofinal.services.RutaAprendizajeServiceImpl;
@@ -15,22 +17,22 @@ public class ControllerRutaAprendizaje {
     RutaAprendizajeServiceImpl service;
 
     @GetMapping("/findAll")
-    public Flux<RutaAprendizaje> findAll(){
+    public Flux<RutaAprendizajeDto> findAll(){
         return service.findAll();
     }
 
     @GetMapping("/findById/{id}")
-    public Mono<RutaAprendizaje> findById(@PathVariable("id") String rutaAprendizajeId){
+    public Mono<RutaAprendizajeDto> findById(@PathVariable("id") String rutaAprendizajeId){
         return service.findById(rutaAprendizajeId);
     }
 
     @PostMapping("/save")
-    public Mono<RutaAprendizaje> save(RutaAprendizaje rutaAprendizaje){
+    public Mono<RutaAprendizajeDto> save(Mono<RutaAprendizajeDto> rutaAprendizaje){
         return service.save(rutaAprendizaje);
     }
 
     @PutMapping("/update/{id}")
-    public Mono<RutaAprendizaje> update(@RequestBody RutaAprendizaje rutaAprendizaje, @PathVariable("id") String rutaAprendizajeId){
+    public Mono<RutaAprendizajeDto> update(@RequestBody Mono<RutaAprendizajeDto> rutaAprendizaje, @PathVariable("id") String rutaAprendizajeId){
         return service.update(rutaAprendizaje, rutaAprendizajeId);
     }
 
@@ -42,7 +44,7 @@ public class ControllerRutaAprendizaje {
 
     //RUTAS
     @PatchMapping("/add/route/{id}")
-    public Mono<RutaAprendizaje> agregarRuta(@RequestBody Ruta ruta, @PathVariable("id") String rutaAprendizajeId){
+    public Mono<RutaAprendizajeDto> agregarRuta(@RequestBody Mono<RutaDto> ruta, @PathVariable("id") String rutaAprendizajeId){
         return service.addRoute(ruta, rutaAprendizajeId);
     }
 

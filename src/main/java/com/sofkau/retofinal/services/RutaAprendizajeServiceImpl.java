@@ -1,41 +1,49 @@
 package com.sofkau.retofinal.services;
 
+import com.sofkau.retofinal.dto.RutaAprendizajeDto;
+import com.sofkau.retofinal.dto.RutaDto;
 import com.sofkau.retofinal.interfaces.IRutaAprendizajeService;
 import com.sofkau.retofinal.models.Ruta;
 import com.sofkau.retofinal.models.RutaAprendizaje;
 import com.sofkau.retofinal.repositories.RutaAprendizajeRepository;
+import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 @Service
 public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
     @Autowired
     RutaAprendizajeRepository repository;
 
     @Override
-    public Mono<RutaAprendizaje> save(RutaAprendizaje rutaAprendizaje) {
-        return repository.save(rutaAprendizaje);
+    public Mono<RutaAprendizajeDto> save(Mono<RutaAprendizajeDto> rutaAprendizajeDto) {
+        return rutaAprendizajeDto.map(AppUtils::dtoToRutaAprendizaje)
+                .flatMap(repository::insert)
+                .map(AppUtils::rutaAprendizajeToDto);
     }
 
     @Override
-    public Flux<RutaAprendizaje> findAll() {
-        return repository.findAll();
+    public Flux<RutaAprendizajeDto> findAll() {
+        return repository.findAll().map(AppUtils::rutaAprendizajeToDto);
     }
 
     @Override
-    public Mono<RutaAprendizaje> findById(String rutaAprendizajeId) {
-        return repository.findById(rutaAprendizajeId);
+    public Mono<RutaAprendizajeDto> findById(String rutaAprendizajeId) {
+        return repository.findById(rutaAprendizajeId)
+                .map(AppUtils::rutaAprendizajeToDto);
     }
 
     @Override
-    public Mono<RutaAprendizaje> update(RutaAprendizaje rutaAprendizaje, String rutaAprendizajeId) {
+    public Mono<RutaAprendizajeDto> update(Mono<RutaAprendizajeDto> rutaAprendizajeDto, String rutaAprendizajeId) {
         return repository
                 .findById(rutaAprendizajeId)
-                .flatMap(rutaAprendizaje1 -> {
-                    rutaAprendizaje1.setId(rutaAprendizajeId);
-                    return save(rutaAprendizaje1);
-                })
+                .flatMap(rutaAprendizaje1 ->
+                        rutaAprendizajeDto.map(AppUtils::dtoToRutaAprendizaje)
+                                .doOnNext(e -> e.setId(rutaAprendizajeId)))
+                .flatMap(repository::save)
+                .map(AppUtils::rutaAprendizajeToDto)
                 .switchIfEmpty(Mono.empty());
     }
 
@@ -48,14 +56,17 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
     }
 
     @Override
-    public Mono<RutaAprendizaje> addRoute(Ruta ruta, String rutaAprendizajeId) {
+    public Mono<RutaAprendizajeDto> addRoute(Mono<RutaDto> rutaDto, String rutaAprendizajeId) {
         return repository
                 .findById(rutaAprendizajeId)
                 .flatMap(rutaAprendizaje -> {
-                    rutaAprendizaje.setId(rutaAprendizajeId);
-                    rutaAprendizaje.getRutas().add(ruta);
-                    return save(rutaAprendizaje);
-                })
+                    rutaDto.map(AppUtils::dtoToRuta)
+                            .doOnNext(e-> {
+                                e.setId(rutaAprendizajeId);
+                                rutaAprendizaje.getRutas().add(e);
+                            });
+                   return repository.save(rutaAprendizaje);
+                }).map(AppUtils::rutaAprendizajeToDto)
                 .switchIfEmpty(Mono.empty());
     }
 
