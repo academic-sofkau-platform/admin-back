@@ -27,12 +27,13 @@ public class ControllerRutaAprendizaje {
     }
 
     @PostMapping("/save")
-    public Mono<RutaAprendizajeDto> save(Mono<RutaAprendizajeDto> rutaAprendizaje){
+    public Mono<RutaAprendizajeDto> save(@RequestBody RutaAprendizajeDto rutaAprendizaje){
+        System.out.println(rutaAprendizaje);
         return service.save(rutaAprendizaje);
     }
 
     @PutMapping("/update/{id}")
-    public Mono<RutaAprendizajeDto> update(@RequestBody Mono<RutaAprendizajeDto> rutaAprendizaje, @PathVariable("id") String rutaAprendizajeId){
+    public Mono<RutaAprendizajeDto> update(@RequestBody RutaAprendizajeDto rutaAprendizaje, @PathVariable("id") String rutaAprendizajeId){
         return service.update(rutaAprendizaje, rutaAprendizajeId);
     }
 
@@ -44,7 +45,7 @@ public class ControllerRutaAprendizaje {
 
     //RUTAS
     @PatchMapping("/add/route/{id}")
-    public Mono<RutaAprendizajeDto> agregarRuta(@RequestBody Mono<RutaDto> ruta, @PathVariable("id") String rutaAprendizajeId){
+    public Mono<RutaAprendizajeDto> agregarRuta(@RequestBody RutaDto ruta, @PathVariable("id") String rutaAprendizajeId){
         return service.addRoute(ruta, rutaAprendizajeId);
     }
 

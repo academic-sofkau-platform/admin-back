@@ -8,10 +8,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IRutaAprendizajeService {
-    Mono<RutaAprendizajeDto> save(Mono<RutaAprendizajeDto> rutaAprendizajeDto);
+    Mono<RutaAprendizajeDto> save(RutaAprendizajeDto rutaAprendizajeDto);
     Flux<RutaAprendizajeDto> findAll();
     Mono<RutaAprendizajeDto> findById(String rutaAprendizajeId);
-    Mono<RutaAprendizajeDto> update(Mono<RutaAprendizajeDto> rutaAprendizajeDto, String rutaAprendizajeId);
+    Mono<RutaAprendizajeDto> update(RutaAprendizajeDto rutaAprendizajeDto, String rutaAprendizajeId);
     Mono<Void> deleteById(String rutaAprendizajeId);
-    Mono<RutaAprendizajeDto> addRoute(Mono<RutaDto> rutaDto, String rutaAprendizajeId);
+    Mono<RutaAprendizajeDto> addRoute(RutaDto rutaDto, String rutaAprendizajeId);
 }

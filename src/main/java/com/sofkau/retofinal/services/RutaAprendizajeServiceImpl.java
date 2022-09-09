@@ -18,9 +18,10 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
     RutaAprendizajeRepository repository;
 
     @Override
-    public Mono<RutaAprendizajeDto> save(Mono<RutaAprendizajeDto> rutaAprendizajeDto) {
-        return rutaAprendizajeDto.map(AppUtils::dtoToRutaAprendizaje)
-                .flatMap(repository::insert)
+    public Mono<RutaAprendizajeDto> save(RutaAprendizajeDto rutaAprendizajeDto) {
+        RutaAprendizaje rutaA = AppUtils.dtoToRutaAprendizaje(rutaAprendizajeDto);
+        return repository
+                .save(rutaA)
                 .map(AppUtils::rutaAprendizajeToDto);
     }
 
@@ -31,20 +32,21 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
 
     @Override
     public Mono<RutaAprendizajeDto> findById(String rutaAprendizajeId) {
-        return repository.findById(rutaAprendizajeId)
+        return repository
+                .findById(rutaAprendizajeId)
                 .map(AppUtils::rutaAprendizajeToDto);
     }
 
     @Override
-    public Mono<RutaAprendizajeDto> update(Mono<RutaAprendizajeDto> rutaAprendizajeDto, String rutaAprendizajeId) {
+    public Mono<RutaAprendizajeDto> update(RutaAprendizajeDto rutaAprendizajeDto, String rutaAprendizajeId) {
         return repository
                 .findById(rutaAprendizajeId)
-                .flatMap(rutaAprendizaje1 ->
-                        rutaAprendizajeDto.map(AppUtils::dtoToRutaAprendizaje)
-                                .doOnNext(e -> e.setId(rutaAprendizajeId)))
-                .flatMap(repository::save)
-                .map(AppUtils::rutaAprendizajeToDto)
-                .switchIfEmpty(Mono.empty());
+                .flatMap(rutaAprendizaje -> {
+                    RutaAprendizaje rutaA = AppUtils.dtoToRutaAprendizaje(rutaAprendizajeDto);
+                    rutaA.setId(rutaAprendizajeId);
+                    return repository.save(rutaA);
+                })
+                .map(AppUtils::rutaAprendizajeToDto);
     }
 
     @Override
@@ -56,17 +58,16 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
     }
 
     @Override
-    public Mono<RutaAprendizajeDto> addRoute(Mono<RutaDto> rutaDto, String rutaAprendizajeId) {
+    public Mono<RutaAprendizajeDto> addRoute(RutaDto rutaDto, String rutaAprendizajeId) {
         return repository
                 .findById(rutaAprendizajeId)
                 .flatMap(rutaAprendizaje -> {
-                    rutaDto.map(AppUtils::dtoToRuta)
-                            .doOnNext(e-> {
-                                e.setId(rutaAprendizajeId);
-                                rutaAprendizaje.getRutas().add(e);
-                            });
-                   return repository.save(rutaAprendizaje);
-                }).map(AppUtils::rutaAprendizajeToDto)
+                    Ruta ruta = AppUtils.dtoToRuta(rutaDto);
+                    ruta.setId(rutaDto.getId());
+                    rutaAprendizaje.getRutas().add(ruta);
+                    return repository.save(rutaAprendizaje);
+                })
+                .map(AppUtils::rutaAprendizajeToDto)
                 .switchIfEmpty(Mono.empty());
     }
 
