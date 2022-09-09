@@ -1,19 +1,18 @@
-package com.sofkau.retofinal.models;
+package com.sofkau.retofinal.dto;
 
+import com.sofkau.retofinal.models.Curso;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 import java.util.UUID;
 
-@Document(collection = "routes")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ruta {
-    private String id = UUID.randomUUID().toString();
+public class RutaDto {
+    private String id ;
     private Integer nivel;
     private Curso curso;
     private List<Curso> prerrequisitos;

@@ -1,15 +1,17 @@
 package com.sofkau.retofinal.interfaces;
 
+import com.sofkau.retofinal.dto.RutaAprendizajeDto;
+import com.sofkau.retofinal.dto.RutaDto;
 import com.sofkau.retofinal.models.Ruta;
 import com.sofkau.retofinal.models.RutaAprendizaje;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IRutaAprendizajeService {
-    Mono<RutaAprendizaje> save(RutaAprendizaje rutaAprendizaje);
-    Flux<RutaAprendizaje> findAll();
-    Mono<RutaAprendizaje> findById(String rutaAprendizajeId);
-    Mono<RutaAprendizaje> update(RutaAprendizaje rutaAprendizaje, String rutaAprendizajeId);
+    Mono<RutaAprendizajeDto> save(RutaAprendizajeDto rutaAprendizajeDto);
+    Flux<RutaAprendizajeDto> findAll();
+    Mono<RutaAprendizajeDto> findById(String rutaAprendizajeId);
+    Mono<RutaAprendizajeDto> update(RutaAprendizajeDto rutaAprendizajeDto, String rutaAprendizajeId);
     Mono<Void> deleteById(String rutaAprendizajeId);
-    Mono<RutaAprendizaje> addRoute(Ruta ruta, String rutaAprendizajeId);
+    Mono<RutaAprendizajeDto> addRoute(RutaDto rutaDto, String rutaAprendizajeId);
 }
