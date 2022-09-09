@@ -13,8 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Ruta {
-    private String id = UUID.randomUUID().toString();
     private Integer nivel;
-    private Curso curso;
-    private List<Curso> prerrequisitos;
+    private String cursoId;
+    private List<String> prerrequisitosId;
 }

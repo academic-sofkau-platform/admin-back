@@ -12,8 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RutaDto {
-    private String id ;
     private Integer nivel;
-    private Curso curso;
-    private List<Curso> prerrequisitos;
+    private String cursoId;
+    private List<String> prerrequisitosId;
 }
