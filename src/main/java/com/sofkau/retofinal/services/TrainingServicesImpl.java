@@ -55,8 +55,8 @@ public class TrainingServicesImpl implements ITrainingService{
         return repository
                 .findById(trainingId)
                 .flatMap(training2 -> {
-                    training2.setCoach(training.getCoach());
-                    return save(training2);
+                    training.setTrainingId(trainingId);
+                    return save(training);//preguntarle a Rauuuuuuuuuuuul
                 })
                 .switchIfEmpty(Mono.empty());
     }
