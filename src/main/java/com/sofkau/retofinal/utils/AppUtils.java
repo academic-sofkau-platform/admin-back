@@ -1,9 +1,11 @@
 package com.sofkau.retofinal.utils;
 
 import com.sofkau.retofinal.dto.ActividadDto;
+import com.sofkau.retofinal.dto.CursoDto;
 import com.sofkau.retofinal.dto.RutaAprendizajeDto;
 import com.sofkau.retofinal.dto.RutaDto;
 import com.sofkau.retofinal.models.Actividad;
+import com.sofkau.retofinal.models.Curso;
 import com.sofkau.retofinal.models.Ruta;
 import com.sofkau.retofinal.models.RutaAprendizaje;
 import org.springframework.beans.BeanUtils;
@@ -45,5 +47,17 @@ public class AppUtils {
     public static Flux<ActividadDto> actividadListToDto(Flux<Actividad> actividadFlux){
         Flux<ActividadDto> actividadListDto = actividadFlux.map(AppUtils::actividadToDto);
         return actividadListDto;
+    }
+
+    //Curso
+    public static CursoDto cursoToDto(Curso curso){
+        CursoDto cursoDto = new CursoDto();
+        BeanUtils.copyProperties(curso, cursoDto);
+        return cursoDto;
+    }
+
+    public static Flux<CursoDto> cursoListToDto(Flux<Curso> cursoFlux){
+        Flux<CursoDto> cursoListDto = cursoFlux.map(AppUtils::cursoToDto);
+        return cursoListDto;
     }
 }
