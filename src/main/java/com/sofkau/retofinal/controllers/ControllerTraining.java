@@ -75,9 +75,9 @@ public class ControllerTraining {
     }
 
     //TODO: findAll aprendices del training activos.++++++++++++++++++++++++++++++++++++++++++++++
-    @GetMapping("/findAllAprendicesActivos")
-    public Flux<Aprendiz> findAllApredicesActivos() {
-        return null;
+    @GetMapping("/getAllAprendicesDeLosTrainingActivos")
+    public Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos() {
+        return service.getAllAprendicesDeLosTrainingActivos();
     }
 
 
