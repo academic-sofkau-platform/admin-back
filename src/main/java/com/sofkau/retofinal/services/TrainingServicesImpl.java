@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDate;
+import java.util.Date;
+
 @Service
 public class TrainingServicesImpl implements ITrainingService{
     @Autowired
@@ -50,7 +54,7 @@ public class TrainingServicesImpl implements ITrainingService{
         return repository
                 .findById(trainingId)
                 .flatMap(training2 -> {
-                    training2.setTrainingId(trainingId);
+                    training2.setCoach(training.getCoach());
                     return save(training2);
                 })
                 .switchIfEmpty(Mono.empty());
@@ -59,5 +63,13 @@ public class TrainingServicesImpl implements ITrainingService{
     @Override
     public Mono<Void> deleteById(String trainingId) {
         return repository.deleteById(trainingId);
+    }
+
+    @Override
+    public Flux<Training> getActiveTrainings() {
+        Date today = new Date();
+        return repository.findAll()
+                .filter(training -> today.after(training.getStartDate()))
+                .filter(training -> today.before(training.getEndDate()));
     }
 }
