@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+
 @Service
 public class NotasServices implements INotasService {
 
@@ -24,10 +26,9 @@ public class NotasServices implements INotasService {
     }
 
     @Override
-    public Notas findByAprendizId(String aprendizId) {
-        Flux<Notas> notas= repository.findAll();
+    public Mono<Notas> findByAprendizId(String aprendizId) {
+        return Mono.just(Objects.requireNonNull(repository.findAll().filter(notas1 -> notas1.getAprendizId().equals(aprendizId)).blockFirst()));
 
-        return notas.filter(notas1 -> notas1.getAprendizId().equals(aprendizId));
     }
 
     @Override

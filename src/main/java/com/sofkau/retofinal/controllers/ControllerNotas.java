@@ -30,13 +30,11 @@ public class ControllerNotas {
         trainings.map(training1 -> {
             training1.getAprendices().forEach(aprendiz -> {
                 Notas a = new Notas(aprendiz.getId(), training1.getTrainingId());
-                Notas b = new Notas();
-                b = service.findByAprendizId(aprendiz.getId());
-                if (b.getAprendizId() != a.getAprendizId()){
+                Mono<Notas> b = service.findByAprendizId(aprendiz.getId());
+
                     service.save(a);
-                }else {
+
                     service.update(a.getId(), a);
-                }
 
             });
             return null;
