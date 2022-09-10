@@ -10,5 +10,6 @@ public interface INotasService {
     Flux<Notas> findAll();
     Mono<Notas> findById(String notasId);
     Mono<Notas> update(String notasId);
+    Notas findByAprendizId(String aprendizId, Notas notas);
 
 }

@@ -49,8 +49,8 @@ public class ControllerTraining {
     //Todo cargarListaAprendiz csv base64 body con json o parametros
 
     //Todo traer training activos
-    @GetMapping("/trainings/activos/{id}")
-    public Flux<Training> trainingActivos(@PathVariable("id") String trainingId) {
+    @GetMapping("/trainings/activos")
+    public Flux<Training> trainingActivos() {
         return null;
     }
 

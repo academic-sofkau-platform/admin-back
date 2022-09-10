@@ -18,4 +18,8 @@ public class Notas {
     private String aprendizId;
     private String trainingI;
 
+    public Notas(String id, String trainingId) {
+        this.aprendizId= id;
+        this.trainingI= trainingId;
+    }
 }

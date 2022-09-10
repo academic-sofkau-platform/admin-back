@@ -1,9 +1,7 @@
 package com.sofkau.retofinal.services;
 
 import com.sofkau.retofinal.interfaces.INotasService;
-import com.sofkau.retofinal.models.Curso;
 import com.sofkau.retofinal.models.Notas;
-import com.sofkau.retofinal.repositories.CursoRepository;
 import com.sofkau.retofinal.repositories.NotasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,11 +24,18 @@ public class NotasServices implements INotasService {
     }
 
     @Override
-    public Mono<Notas> update(String notasId) {
+    public Notas findByAprendizId(String aprendizId) {
+        Flux<Notas> notas= repository.findAll();
+
+        return notas.filter(notas1 -> notas1.getAprendizId().equals(aprendizId));
+    }
+
+    @Override
+    public Mono<Notas> update(String notasId, Notas notas) {
         return repository.findById(notasId)
                 .flatMap(notas1 -> {
-                    notas1.setId(notasId);
-                    return save(notas1);
+                    notas.setId(notasId);
+                    return save(notas);
                 }).switchIfEmpty(Mono.empty());
     }
 
