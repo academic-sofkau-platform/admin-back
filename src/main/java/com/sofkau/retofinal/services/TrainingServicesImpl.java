@@ -78,11 +78,12 @@ public class TrainingServicesImpl implements ITrainingService{
         );
     }
 
-    //Todo
+    //todo listar Mati
+    //Le toca a Luchooooooooooooooooooooooooooooo Lunes 8:30
     @Override
     public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
             return null;
     }
-
+    //Todo encontrar aprendiz mediante su email
 
 }
