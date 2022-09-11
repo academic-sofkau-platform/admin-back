@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Aprendiz {
+    @Id
     private String id;
     private String name;
     private String lastName;
