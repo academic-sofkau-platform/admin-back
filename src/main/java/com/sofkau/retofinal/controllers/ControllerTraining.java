@@ -1,5 +1,6 @@
 package com.sofkau.retofinal.controllers;
 
+import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.services.TrainingServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class ControllerTraining {
     public Mono<Training> findById(@PathVariable("id") String trainingId) {
         return service.findById(trainingId);
     }
+    //Todo control de errores del post
+    //Todo Dto
+    //Todo control de respuesta http
     @PutMapping("/update/{id}")
     public Mono<Training> update(@RequestBody Training training,
                                  @PathVariable("id") String trainingId) {
@@ -38,8 +42,18 @@ public class ControllerTraining {
                                        @PathVariable("id") String trainingId) {
         return service.asignarCoach(name, trainingId);
     }
-    //Todo cargarListaAprendiz
 
     //TODO: findAll de aprendices.
+
     //TODO: findById de aprendiz.
+
+    //Todo cargarListaAprendiz csv base64 body con json o parametros
+
+    //Todo traer training activos
+    @GetMapping("/trainings/activos/{id}")
+    public Flux<Training> trainingActivos(@PathVariable("id") String trainingId) {
+        return null;
+    }
+
+    //Todo update aprendiz
 }
