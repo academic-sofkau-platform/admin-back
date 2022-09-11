@@ -7,19 +7,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/curso")
-@CrossOrigin("*")
 public class ControllerCurso {
     @Autowired
     private CursoServiceImpl service;
 
     @GetMapping
-    public Flux<ResponseEntity<CursoDto>> findAll() {
+    public Flux<CursoDto> findAll() {
         return service.findAll()
-                .flatMap(cursoDto -> Mono.just(ResponseEntity.ok(cursoDto)))
-                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+                .flatMap(cursoDto -> Mono.just((cursoDto))
+                .switchIfEmpty(Mono.empty()));
     }
 
     @PostMapping("/save")
