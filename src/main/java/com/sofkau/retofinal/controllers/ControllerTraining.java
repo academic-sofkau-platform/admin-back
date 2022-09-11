@@ -68,25 +68,20 @@ public class ControllerTraining {
         return null;
     }
 
-    //Todo traer training activos
     @GetMapping("/findAllTrainingActivos")
     public Flux<Training> findAllTrainingActivos() {
         return service.getActiveTrainings();
     }
 
-    //TODO: findAll aprendices del training activos.++++++++++++++++++++++++++++++++++++++++++++++
     @GetMapping("/getAllAprendicesDeLosTrainingActivos")
     public Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos() {
         return service.getAllAprendicesDeLosTrainingActivos();
     }
 
-
-    //TODO: findById de aprendiz.
-    @GetMapping("/aprendiz/{id}/{trainingId}")
-    public Mono<Aprendiz> fingAprendizById(@PathVariable("id") String aprendizId,
-                                           @PathVariable("trainingId") String trainingId) {
-
-        return null;
+    //TODO: get all aprendices by trainingId
+    @GetMapping("/aprendices/{trainingId}")
+    public Flux<Aprendiz> getAllAprendicesByTrainingId(@PathVariable("trainingId") String trainingId) {
+        return service.getAllAprendicesByTrainingId(trainingId);
     }
 
     //Todo cargarListaAprendiz csv base64 body con json o parametros

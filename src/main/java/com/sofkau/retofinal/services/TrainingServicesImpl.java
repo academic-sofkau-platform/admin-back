@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.lang.model.util.Elements;
-import java.time.LocalDate;
 import java.util.Date;
 
 @Service
@@ -75,8 +73,16 @@ public class TrainingServicesImpl implements ITrainingService{
     }
     @Override
     public Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos() {
-        return this.getActiveTrainings().flatMap(x->
-            Flux.fromIterable(x.getApprentices())
+        return this.getActiveTrainings().flatMap(training ->
+            Flux.fromIterable(training.getApprentices())
         );
     }
+
+    //Todo
+    @Override
+    public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
+            return null;
+    }
+
+
 }
