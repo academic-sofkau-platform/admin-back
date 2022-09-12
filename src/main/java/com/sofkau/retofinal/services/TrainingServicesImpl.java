@@ -10,8 +10,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class TrainingServicesImpl implements ITrainingService{
@@ -80,13 +79,12 @@ public class TrainingServicesImpl implements ITrainingService{
         );
     }
 
-    //todo listar Mati
-    //Le toca a Luchooooooooooooooooooooooooooooo Lunes 8:30
     @Override
     public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
             return this.getActiveTrainings().filter(training -> training.getTrainingId().equals(trainingId))
                     .flatMapIterable(Training::getApprentices);
     }
     //Todo encontrar aprendiz mediante su email
+
 
 }
