@@ -37,16 +37,16 @@ import java.util.List;
 
 }
 
-//Todo  DETERMINAR si un aprendiz esta en bajo rendimiento
+    //Todo  DETERMINAR si un aprendiz esta en bajo rendimiento
 
 
-//Todo  PONER una accion de mejora cuando se tenga un bajo rendimieto
+    //Todo  PONER una accion de mejora cuando se tenga un bajo rendimieto
 
 
-//Todo  Si se tiene una accion de mejora se debe ENVIAR un correo con la accion de mejora correspondiente
+    //Todo  Si se tiene una accion de mejora se debe ENVIAR un correo con la accion de mejora correspondiente
 
 
-//Todo  No puedo enviar una accion de mejora repetida, es decir debo CONSULTAR si el aprendiz no tiene la accion de mejora correspodiente
+    //Todo  No puedo enviar una accion de mejora repetida, es decir debo CONSULTAR si el aprendiz no tiene la accion de mejora correspodiente
 
 
 //
