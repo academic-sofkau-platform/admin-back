@@ -3,18 +3,17 @@ package com.sofkau.retofinal.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-import java.util.UUID;
+import java.time.LocalDate;
 
-@Document(collection = "routes")
+@Document(collection="activity")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ruta {
-    private Integer nivel;
+public class Actividad {
     private String cursoId;
-    private List<String> prerrequisitosId;
+    private String aprendizId;
+    private LocalDate fecha;
+    private Integer puntaje;
 }

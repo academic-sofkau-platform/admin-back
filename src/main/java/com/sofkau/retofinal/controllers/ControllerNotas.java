@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @RestController
+
 public class ControllerNotas {
 
     @Autowired
@@ -24,11 +25,12 @@ public class ControllerNotas {
     @Autowired
     private ControllerTraining training;
 
+
     @Scheduled(cron = "0 0 * * *")
     public void extraerMediaNoche() {
-        Flux<Training> trainings = training.trainingActivos();
+        Flux<Training> trainings = training.findAllTrainingActivos();
         trainings.map(training1 -> {
-            training1.getAprendices().forEach(aprendiz -> {
+            training1.getApprentices().forEach(aprendiz -> {
                 Notas a = new Notas(aprendiz.getId(), training1.getTrainingId());
                 Mono<Notas> b = service.findByAprendizId(aprendiz.getId());
 
