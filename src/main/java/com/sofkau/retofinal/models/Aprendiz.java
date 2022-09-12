@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document(collection="apprentices")
 @Data
 @AllArgsConstructor
@@ -21,4 +23,5 @@ public class Aprendiz {
     private Integer phoneNumber;
     private String photo;
     private Boolean bilingual;
+    private List <String> accionDeMejora;
 }

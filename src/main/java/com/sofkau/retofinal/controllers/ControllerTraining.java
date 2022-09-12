@@ -1,7 +1,6 @@
 package com.sofkau.retofinal.controllers;
 
 import com.sofkau.retofinal.models.Aprendiz;
-import com.sofkau.retofinal.models.RutaAprendizaje;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.services.TrainingServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
