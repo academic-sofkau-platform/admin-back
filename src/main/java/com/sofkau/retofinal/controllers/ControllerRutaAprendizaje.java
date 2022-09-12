@@ -2,8 +2,6 @@ package com.sofkau.retofinal.controllers;
 
 import com.sofkau.retofinal.dto.RutaAprendizajeDto;
 import com.sofkau.retofinal.dto.RutaDto;
-import com.sofkau.retofinal.models.Ruta;
-import com.sofkau.retofinal.models.RutaAprendizaje;
 import com.sofkau.retofinal.services.RutaAprendizajeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/rutaAprendizaje")
+@CrossOrigin("*")
 public class ControllerRutaAprendizaje {
     @Autowired
     RutaAprendizajeServiceImpl service;
