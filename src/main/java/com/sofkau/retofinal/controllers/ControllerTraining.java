@@ -73,13 +73,14 @@ public class ControllerTraining {
         return service.getAllAprendicesDeLosTrainingActivos();
     }
 
-    //TODO: get all aprendices by trainingId
-    @GetMapping("/aprendices/{trainingId}")
-    public Flux<Aprendiz> getAllAprendicesByTrainingId(@PathVariable("trainingId") String trainingId) {
-        return service.getAllAprendicesByTrainingId(trainingId);
+    @GetMapping("/getAprendicesByTrainingId/{trainingId}")
+    public Flux<Aprendiz> getAprendicesByTrainingId(@PathVariable("trainingId") String trainingId){
+        return service.getAprendicesByTrainingId(trainingId);
     }
 
     //Todo cargarListaAprendiz csv base64 body con json o parametros
 
     //Todo update aprendiz
+
+    //ToDo delete aprendices
 }

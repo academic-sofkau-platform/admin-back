@@ -5,6 +5,8 @@ import com.sofkau.retofinal.models.Training;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 public interface ITrainingService {
     Mono<Training> save(Training training);
     Mono<Training> asignarCoach(String coach, String trainingId);
@@ -15,5 +17,5 @@ public interface ITrainingService {
     Mono<Void> deleteById(String trainingId);
     Flux<Training> getActiveTrainings();
     Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos();
-    Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
+    Flux<Aprendiz> getAprendicesByTrainingId(String trainingID);
 }

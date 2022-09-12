@@ -24,4 +24,6 @@ public class Aprendiz {
     private String photo;
     private Boolean bilingual;
     private List <String> accionDeMejora;
+
+
 }

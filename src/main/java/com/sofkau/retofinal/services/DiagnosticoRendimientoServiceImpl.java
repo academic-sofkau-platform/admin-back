@@ -13,16 +13,35 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
     @Service
     public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando se realice extracción de notas
 
-    @Autowired
-    NotasRepository repository;
-    @Autowired
-    ControllerTraining training;
+        public static void main(String[] args){
+            List<String> accionDeMejora = new ArrayList<String>();
+            accionDeMejora.add(1,"Repaso de conceptos de fundamentos de DDD (link de documentación");
+            accionDeMejora.add(2,"Repaso de componente estrategico de DDD (link de documentación)");
+            accionDeMejora.add(3,"Repaso de conceptos de fundamentos de Funcional y reactiva (link de documentación");
+            accionDeMejora.add(4,"Repaso de conceptos de fundamentos de WebFlux (link de documentación");
+            accionDeMejora.add(5,"Repaso de conceptos de Funcional y reactiva (link de documentación");
+
+        }
+    }
+
+
+//
+//        CURSO: DDD, Test 1, ACCION:Repaso de conceptos de fundamentos de DDD (link de documentación)
+//        CRUSO: DDD, Test 2, ACCION:Repaso de componente estrategico de DDD (link de documentación)
+//        CURSO: Reactividad: ACCION:Test 1: Funcional y reactiva (link documentación)
+//        seria todo bajo al 75%
+
+//    @Autowired
+//    NotasRepository repository;
+//    @Autowired
+//    ControllerTraining training;
 
     //todo obtener aprendices
 //        @Override
@@ -35,7 +54,7 @@ import java.util.List;
 
         //todo recorrer List de accion de mejoras para ver si esta repetida
 
-}
+
 
 //Todo  DETERMINAR si un aprendiz esta en bajo rendimiento
 
