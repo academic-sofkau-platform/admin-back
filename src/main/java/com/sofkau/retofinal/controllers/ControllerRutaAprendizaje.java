@@ -31,7 +31,7 @@ public class ControllerRutaAprendizaje {
 
     @PostMapping("/save")
     public ResponseEntity<Mono<RutaAprendizajeDto>> save(@RequestBody RutaAprendizajeDto rutaAprendizaje){
-        System.out.println(rutaAprendizaje);
+        System.out.println("hola: " + rutaAprendizaje);
         return ResponseEntity.ok().body(service.save(rutaAprendizaje));
     }
 
