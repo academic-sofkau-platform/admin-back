@@ -10,11 +10,14 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class TrainingServicesImpl implements ITrainingService{
+public class TrainingServicesImpl implements ITrainingService {
     @Autowired
     TrainingRepository repository;
+
     @Override
     public Mono<Training> save(Training training) {
         return repository.save(training);
@@ -71,19 +74,20 @@ public class TrainingServicesImpl implements ITrainingService{
                 .filter(training -> today.after(training.getStartDate()))
                 .filter(training -> today.before(training.getEndDate()));
     }
+
     @Override
     public Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos() {
         return this.getActiveTrainings().flatMap(training ->
-            Flux.fromIterable(training.getApprentices())
+                Flux.fromIterable(training.getApprentices())
         );
     }
 
-    //todo listar Mati
-    //Le toca a Luchooooooooooooooooooooooooooooo Lunes 8:30
     @Override
-    public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
-            return null;
+    public Flux<Aprendiz> getAprendicesByTrainingId(String trainingId) {
+        return this.getActiveTrainings()
+                .filter(training -> training.getTrainingId().equals(trainingId))
+                .flatMapIterable(Training::getApprentices);
     }
-    //Todo encontrar aprendiz mediante su email
+
 
 }

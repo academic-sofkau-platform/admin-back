@@ -18,7 +18,6 @@ public class ControllerRutaAprendizaje {
     RutaAprendizajeServiceImpl service;
 
     @GetMapping("/findAll")
-
     public ResponseEntity<Flux<RutaAprendizajeDto>> findAll(){
         return ResponseEntity.ok().body(service.findAll());
     }

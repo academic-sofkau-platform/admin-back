@@ -15,10 +15,10 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+
 @RestController
 
 public class ControllerNotas {
-
     @Autowired
     private NotasServices service;
 
@@ -47,6 +47,5 @@ public class ControllerNotas {
     public Flux<Notas> extraerMedioDia() {
         return null ;
     }
-
 
 }
