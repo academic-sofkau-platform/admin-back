@@ -10,6 +10,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TrainingServicesImpl implements ITrainingService{
@@ -54,7 +56,7 @@ public class TrainingServicesImpl implements ITrainingService{
                 .findById(trainingId)
                 .flatMap(training2 -> {
                     training.setTrainingId(trainingId);
-                    return save(training);//preguntarle a Rauuuuuuuuuuuul
+                    return save(training);
                 })
                 .switchIfEmpty(Mono.empty());
     }
@@ -81,7 +83,8 @@ public class TrainingServicesImpl implements ITrainingService{
     //Todo
     @Override
     public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
-            return null;
+            return this.getActiveTrainings().filter(training -> training.getTrainingId().equals(trainingId))
+                    .flatMapIterable(Training::getApprentices);
     }
 
 

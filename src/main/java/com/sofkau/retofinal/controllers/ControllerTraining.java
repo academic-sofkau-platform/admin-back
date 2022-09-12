@@ -83,7 +83,6 @@ public class ControllerTraining {
     public Flux<Aprendiz> getAllAprendicesByTrainingId(@PathVariable("trainingId") String trainingId) {
         return service.getAllAprendicesByTrainingId(trainingId);
     }
-
     //Todo cargarListaAprendiz csv base64 body con json o parametros
 
     //Todo update aprendiz
