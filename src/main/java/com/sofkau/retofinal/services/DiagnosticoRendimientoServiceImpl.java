@@ -25,13 +25,13 @@ import java.util.List;
     ControllerTraining training;
 
     //todo obtener aprendices
-        @Override
-
-
-        @Override
-        public Flux<Notas> findAllNota() {  //todo filtar por nota <75%
-            return repository.findAllNota();
-        }
+//        @Override
+//
+//
+//        @Override
+//        public Flux<Notas> findAllNota() {  //todo filtar por nota <75%
+//            return repository.findAllNota();
+//        }
 
         //todo recorrer List de accion de mejoras para ver si esta repetida
 

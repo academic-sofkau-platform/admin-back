@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Date;
+
 @Service
 public class TrainingServicesImpl implements ITrainingService{
     @Autowired
@@ -50,8 +53,8 @@ public class TrainingServicesImpl implements ITrainingService{
         return repository
                 .findById(trainingId)
                 .flatMap(training2 -> {
-                    training2.setTrainingId(trainingId);
-                    return save(training2);
+                    training.setTrainingId(trainingId);
+                    return save(training);//preguntarle a Rauuuuuuuuuuuul
                 })
                 .switchIfEmpty(Mono.empty());
     }
@@ -60,4 +63,27 @@ public class TrainingServicesImpl implements ITrainingService{
     public Mono<Void> deleteById(String trainingId) {
         return repository.deleteById(trainingId);
     }
+
+    @Override
+    public Flux<Training> getActiveTrainings() {
+        Date today = new Date();
+        return repository.findAll()
+                .filter(training -> today.after(training.getStartDate()))
+                .filter(training -> today.before(training.getEndDate()));
+    }
+    @Override
+    public Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos() {
+        return this.getActiveTrainings().flatMap(training ->
+            Flux.fromIterable(training.getApprentices())
+        );
+    }
+
+    //todo listar Mati
+    //Le toca a Luchooooooooooooooooooooooooooooo Lunes 8:30
+    @Override
+    public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
+            return null;
+    }
+    //Todo encontrar aprendiz mediante su email
+
 }
