@@ -19,6 +19,11 @@ public class ActividadServiceImpl implements IActividadService {
     ActividadRepository repository;
 
     @Override
+    public Mono<ActividadDto> save(Actividad actividad) {
+        return  repository.save(actividad).thenReturn(AppUtils.actividadToDto(actividad));
+    }
+
+    @Override
     public Flux<ActividadDto> findAll() {
         return AppUtils.actividadListToDto(repository.findAll());
     }

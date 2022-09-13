@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/trainings")
+@CrossOrigin("*")
 public class ControllerTraining {
     //Todo control de errores del post
     //Todo Dto
