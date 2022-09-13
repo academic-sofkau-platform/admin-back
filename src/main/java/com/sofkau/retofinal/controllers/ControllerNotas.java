@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 
@@ -25,22 +29,14 @@ public class ControllerNotas {
     @Autowired
     private ControllerTraining training;
 
+    private HttpClient htpp= HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_2).build();
 
     @Scheduled(cron = "0 0 * * *")
     public void extraerMediaNoche() {
-        Flux<Training> trainings = training.findAllTrainingActivos();
-        trainings.map(training1 -> {
-            training1.getApprentices().forEach(aprendiz -> {
-                Notas a = new Notas(aprendiz.getId(), training1.getTrainingId());
-                Mono<Notas> b = service.findByAprendizId(aprendiz.getId());
 
-                    service.save(a);
-
-                    service.update(a.getId(), a);
-
-            });
-            return null;
-        });
+                    final HttpRequest httpRequest = HttpRequest.newBuilder().GET()
+                            .uri(URI.create("https://campus.sofka.com.co/api/v1/gettestanswers/test_id:,user_id:4315?apikey=ADDYetylyhWhF5nXUy3Hh1e2vRx4QY")).build();
     }
 
     @Scheduled(cron = "0 12 * * *")
