@@ -13,12 +13,12 @@ import java.util.UUID;
 public class Notas {
     private String id = UUID.randomUUID().toString();
     private String aprendizId;
-    private String trainingI;
+    private String trainingId;
     private List<Actividad> actividadList;
 
     public Notas(String id, String trainingId) {
         this.aprendizId= id;
-        this.trainingI= trainingId;
+        this.trainingId = trainingId;
     }
 }
 

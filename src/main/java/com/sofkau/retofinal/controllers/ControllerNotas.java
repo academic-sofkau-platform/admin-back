@@ -1,24 +1,13 @@
 package com.sofkau.retofinal.controllers;
 
 
-import com.sofkau.retofinal.models.Aprendiz;
-import com.sofkau.retofinal.models.Curso;
 import com.sofkau.retofinal.models.Notas;
-import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.services.ActividadServiceImpl;
 import com.sofkau.retofinal.services.NotasServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.List;
 
 
 @RestController
@@ -42,8 +31,8 @@ public class ControllerNotas {
                         .forEach(aprendiz -> {
                             Notas nota= new Notas();
                             nota.setAprendizId(aprendiz.getId());
-                            nota.setTrainingI(training1.getTrainingId());
-                            actividadService.findByAprendizId(aprendiz.getId()).collectList().block()
+                            nota.setTrainingId(training1.getTrainingId());
+                            actividadService.findActivityByAprendizId(aprendiz.getId()).collectList().block()
                                     .forEach(actividad -> {
                                         nota.getActividadList().add(actividad);
                                     });
@@ -61,8 +50,8 @@ public class ControllerNotas {
                             .forEach(aprendiz -> {
                                 Notas nota= new Notas();
                                 nota.setAprendizId(aprendiz.getId());
-                                nota.setTrainingI(training1.getTrainingId());
-                                actividadService.findByAprendizId(aprendiz.getId()).collectList().block()
+                                nota.setTrainingId(training1.getTrainingId());
+                                actividadService.findActivityByAprendizId(aprendiz.getId()).collectList().block()
                                         .forEach(actividad -> {
                                             nota.getActividadList().add(actividad);
                                         });
@@ -72,4 +61,8 @@ public class ControllerNotas {
                 });
     }
 
+    @PostMapping("/diagnosticar")
+    public void sendSimpleCorreo(){
+        service.diagnosticar(service.findAll());
+    }
 }

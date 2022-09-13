@@ -8,5 +8,5 @@ import reactor.core.publisher.Mono;
 public interface IActividadService {
     Flux<ActividadDto> findAll();
     Mono<ActividadDto> addOrUpdate(Integer puntaje, String cursoId, String aprendizId, String fecha);
-    Flux<Actividad> findByAprendizId(String aprendizId);
+    Flux<Actividad> findActivityByAprendizId(String aprendizId);
 }

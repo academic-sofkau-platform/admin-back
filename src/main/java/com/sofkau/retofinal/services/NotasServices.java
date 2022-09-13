@@ -15,6 +15,10 @@ public class NotasServices implements INotasService {
 
     @Autowired
     NotasRepository repository;
+
+    @Autowired
+    DiagnosticoRendimientoServiceImpl diagnosticoRendimientoService;
+
     @Override
     public Mono<Notas> save(Notas notas) {
         return repository.save(notas);
@@ -43,5 +47,9 @@ public class NotasServices implements INotasService {
     @Override
     public Mono<Notas> findById(String notasId) {
         return repository.findById(notasId);
+    }
+
+    public void diagnosticar(Flux<Notas> notas){
+        diagnosticoRendimientoService.diagnosticar(notas);
     }
 }
