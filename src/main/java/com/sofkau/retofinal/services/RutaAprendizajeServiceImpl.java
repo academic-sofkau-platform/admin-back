@@ -64,6 +64,7 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                 .flatMap(rutaAprendizaje -> {
                     Ruta ruta = AppUtils.dtoToRuta(rutaDto);
                     ruta.setCursoId(rutaDto.getCursoId());
+
                     rutaAprendizaje.getRutas().add(ruta);
                     return repository.save(rutaAprendizaje);
                 })
