@@ -81,8 +81,10 @@ public class TrainingServicesImpl implements ITrainingService{
     //todo listar Mati
     //Le toca a Luchooooooooooooooooooooooooooooo Lunes 8:30
     @Override
-    public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
-            return null;
+    public Flux<Aprendiz> getAprendicesByTrainingId(String trainingId) {
+        return this.getActiveTrainings()
+                .filter(training -> training.getTrainingId().equals(trainingId))
+                .flatMapIterable(Training::getApprentices);
     }
     //Todo encontrar aprendiz mediante su email
 

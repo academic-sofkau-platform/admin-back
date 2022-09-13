@@ -79,9 +79,12 @@ public class ControllerTraining {
     }
 
     //TODO: get all aprendices by trainingId
-    @GetMapping("/aprendices/{trainingId}")
-    public Flux<Aprendiz> getAllAprendicesByTrainingId(@PathVariable("trainingId") String trainingId) {
-        return service.getAllAprendicesByTrainingId(trainingId);
+
+    @GetMapping("/aprendices/{trainingId}/{email}")
+    public Mono<Aprendiz> getAllAprendicesByTrainingIdAndEmail(@PathVariable("trainingId") String trainingId, @PathVariable("email") String emailId) {
+        return service.getAprendicesByTrainingId(trainingId)
+                .filter(aprendiz -> aprendiz.getEmail().equals(emailId))
+                .next();
     }
 
     //Todo cargarListaAprendiz csv base64 body con json o parametros
