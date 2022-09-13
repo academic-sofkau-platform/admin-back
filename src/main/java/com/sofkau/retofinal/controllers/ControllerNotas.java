@@ -5,6 +5,7 @@ import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.Curso;
 import com.sofkau.retofinal.models.Notas;
 import com.sofkau.retofinal.models.Training;
+import com.sofkau.retofinal.services.ActividadServiceImpl;
 import com.sofkau.retofinal.services.NotasServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -27,21 +28,48 @@ public class ControllerNotas {
     private NotasServices service;
 
     @Autowired
+    private ActividadServiceImpl actividadService;
+
+    @Autowired
     private ControllerTraining training;
 
-    private HttpClient htpp= HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_2).build();
 
     @Scheduled(cron = "0 0 * * *")
     public void extraerMediaNoche() {
-
-                    final HttpRequest httpRequest = HttpRequest.newBuilder().GET()
-                            .uri(URI.create("https://campus.sofka.com.co/api/v1/gettestanswers/test_id:,user_id:4315?apikey=ADDYetylyhWhF5nXUy3Hh1e2vRx4QY")).build();
+        training.findAllTrainingActivos()
+                .map(training1 -> {
+                        training1.getApprentices()
+                        .forEach(aprendiz -> {
+                            Notas nota= new Notas();
+                            nota.setAprendizId(aprendiz.getId());
+                            nota.setTrainingI(training1.getTrainingId());
+                            actividadService.findByAprendizId(aprendiz.getId()).collectList().block()
+                                    .forEach(actividad -> {
+                                        nota.getActividadList().add(actividad);
+                                    });
+                            service.save(nota);
+                        });
+                        return null;
+                 });
     }
 
     @Scheduled(cron = "0 12 * * *")
-    public Flux<Notas> extraerMedioDia() {
-        return null ;
+    public void extraerMedioDia() {
+        training.findAllTrainingActivos()
+                .map(training1 -> {
+                    training1.getApprentices()
+                            .forEach(aprendiz -> {
+                                Notas nota= new Notas();
+                                nota.setAprendizId(aprendiz.getId());
+                                nota.setTrainingI(training1.getTrainingId());
+                                actividadService.findByAprendizId(aprendiz.getId()).collectList().block()
+                                        .forEach(actividad -> {
+                                            nota.getActividadList().add(actividad);
+                                        });
+                                service.save(nota);
+                            });
+                    return null;
+                });
     }
 
 }

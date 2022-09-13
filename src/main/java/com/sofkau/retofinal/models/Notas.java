@@ -3,6 +3,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 import java.util.UUID;
 @Document(collection = "notes")
 @Data
@@ -12,6 +14,7 @@ public class Notas {
     private String id = UUID.randomUUID().toString();
     private String aprendizId;
     private String trainingI;
+    private List<Actividad> actividadList;
 
     public Notas(String id, String trainingId) {
         this.aprendizId= id;
