@@ -17,5 +17,6 @@ public interface ITrainingService {
     Mono<Void> deleteById(String trainingId);
     Flux<Training> getActiveTrainings();
     Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos();
-    Flux<Aprendiz> getAprendicesByTrainingId(String trainingID);
+    Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
+
 }

@@ -75,9 +75,8 @@ public class ControllerTraining {
 
     @GetMapping("/getAprendicesByTrainingId/{trainingId}")
     public Flux<Aprendiz> getAprendicesByTrainingId(@PathVariable("trainingId") String trainingId){
-        return service.getAprendicesByTrainingId(trainingId);
+        return service.getAllAprendicesByTrainingId(trainingId);
     }
-
     //Todo cargarListaAprendiz csv base64 body con json o parametros
 
     //Todo update aprendiz

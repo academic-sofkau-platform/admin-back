@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
 public class TrainingServicesImpl implements ITrainingService {
     @Autowired
@@ -57,7 +58,7 @@ public class TrainingServicesImpl implements ITrainingService {
                 .findById(trainingId)
                 .flatMap(training2 -> {
                     training.setTrainingId(trainingId);
-                    return save(training);//preguntarle a Rauuuuuuuuuuuul
+                    return save(training);
                 })
                 .switchIfEmpty(Mono.empty());
     }
@@ -83,11 +84,11 @@ public class TrainingServicesImpl implements ITrainingService {
     }
 
     @Override
-    public Flux<Aprendiz> getAprendicesByTrainingId(String trainingId) {
-        return this.getActiveTrainings()
-                .filter(training -> training.getTrainingId().equals(trainingId))
-                .flatMapIterable(Training::getApprentices);
+    public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
+            return this.getActiveTrainings().filter(training -> training.getTrainingId().equals(trainingId))
+                    .flatMapIterable(Training::getApprentices);
     }
+
 
 
 }
