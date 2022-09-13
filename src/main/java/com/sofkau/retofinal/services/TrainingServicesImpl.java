@@ -5,6 +5,7 @@ import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.repositories.TrainingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -18,6 +19,8 @@ import java.util.stream.Collectors;
 public class TrainingServicesImpl implements ITrainingService {
     @Autowired
     TrainingRepository repository;
+    @Autowired
+    ReactiveMongoTemplate template;
 
     @Override
     public Mono<Training> save(Training training) {
@@ -68,6 +71,18 @@ public class TrainingServicesImpl implements ITrainingService {
         return repository.deleteById(trainingId);
     }
 
+    //  A PRUEBA
+    @Override
+    public Mono<Void> deleteAprendizByEmail(String trainingId, String email) {
+        return repository.findById(trainingId)
+                .flatMap(training -> {
+                    var list = training.getApprentices().stream().filter(aprendiz -> !aprendiz.getEmail().equals(email)).collect(Collectors.toList());
+                    training.setApprentices(list);
+                    return repository.save(training);
+                }).then();
+
+    }
+
     @Override
     public Flux<Training> getActiveTrainings() {
         Date today = new Date();
@@ -84,9 +99,10 @@ public class TrainingServicesImpl implements ITrainingService {
     }
 
     @Override
-    public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
-            return this.getActiveTrainings().filter(training -> training.getTrainingId().equals(trainingId))
-                    .flatMapIterable(Training::getApprentices);
+    public Flux<Aprendiz> getAprendicesByTrainingId(String trainingId) {
+        return this.getActiveTrainings()
+                .filter(training -> training.getTrainingId().equals(trainingId))
+                .flatMapIterable(Training::getApprentices);
     }
 
 

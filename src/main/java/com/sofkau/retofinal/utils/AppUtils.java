@@ -11,8 +11,6 @@ import com.sofkau.retofinal.models.RutaAprendizaje;
 import org.springframework.beans.BeanUtils;
 import reactor.core.publisher.Flux;
 
-import java.util.List;
-
 public class AppUtils {
     public static RutaAprendizajeDto rutaAprendizajeToDto(RutaAprendizaje rutaAprendizaje){
         RutaAprendizajeDto rutaAprendizajeDto = new RutaAprendizajeDto();
