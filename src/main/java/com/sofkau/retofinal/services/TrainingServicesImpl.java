@@ -5,16 +5,23 @@ import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.repositories.TrainingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
-public class TrainingServicesImpl implements ITrainingService{
+public class TrainingServicesImpl implements ITrainingService {
     @Autowired
     TrainingRepository repository;
+    @Autowired
+    ReactiveMongoTemplate template;
+
     @Override
     public Mono<Training> save(Training training) {
         return repository.save(training);
@@ -54,7 +61,7 @@ public class TrainingServicesImpl implements ITrainingService{
                 .findById(trainingId)
                 .flatMap(training2 -> {
                     training.setTrainingId(trainingId);
-                    return save(training);//preguntarle a Rauuuuuuuuuuuul
+                    return save(training);
                 })
                 .switchIfEmpty(Mono.empty());
     }
@@ -64,6 +71,18 @@ public class TrainingServicesImpl implements ITrainingService{
         return repository.deleteById(trainingId);
     }
 
+    //  A PRUEBA
+    @Override
+    public Mono<Void> deleteAprendizByEmail(String trainingId, String email) {
+        return repository.findById(trainingId)
+                .flatMap(training -> {
+                    var list = training.getApprentices().stream().filter(aprendiz -> !aprendiz.getEmail().equals(email)).collect(Collectors.toList());
+                    training.setApprentices(list);
+                    return repository.save(training);
+                }).then();
+
+    }
+
     @Override
     public Flux<Training> getActiveTrainings() {
         Date today = new Date();
@@ -71,21 +90,21 @@ public class TrainingServicesImpl implements ITrainingService{
                 .filter(training -> today.after(training.getStartDate()))
                 .filter(training -> today.before(training.getEndDate()));
     }
+
     @Override
     public Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos() {
         return this.getActiveTrainings().flatMap(training ->
-            Flux.fromIterable(training.getApprentices())
+                Flux.fromIterable(training.getApprentices())
         );
     }
 
-    //todo listar Mati
-    //Le toca a Luchooooooooooooooooooooooooooooo Lunes 8:30
     @Override
     public Flux<Aprendiz> getAprendicesByTrainingId(String trainingId) {
         return this.getActiveTrainings()
                 .filter(training -> training.getTrainingId().equals(trainingId))
                 .flatMapIterable(Training::getApprentices);
     }
-    //Todo encontrar aprendiz mediante su email
+
+
 
 }

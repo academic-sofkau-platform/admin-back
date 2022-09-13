@@ -1,19 +1,14 @@
 package com.sofkau.retofinal.controllers;
-
 import com.sofkau.retofinal.models.Aprendiz;
-import com.sofkau.retofinal.models.RutaAprendizaje;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.services.TrainingServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/trainings")
@@ -79,7 +74,6 @@ public class ControllerTraining {
         return service.getAllAprendicesDeLosTrainingActivos();
     }
 
-    //TODO: get all aprendices by trainingId
 
     @GetMapping("/aprendices/{trainingId}/{email}")
     public Mono<Aprendiz> getAllAprendicesByTrainingIdAndEmail(@PathVariable("trainingId") String trainingId, @PathVariable("email") String emailId) {
@@ -88,7 +82,20 @@ public class ControllerTraining {
                 .next();
     }
 
+    @GetMapping("/getAprendicesByTrainingId/{trainingId}")
+    public Flux<Aprendiz> getAprendicesByTrainingId(@PathVariable("trainingId") String trainingId){
+        return service.getAprendicesByTrainingId(trainingId);
+    }
+
+    //TODO delete aprendiz por id de training y email
+    @PostMapping("/deleteAprendiz/{trainingId}")
+    public Mono<Void> delete(@PathVariable("trainingId") String trainingId, @RequestBody String email){
+        return service.deleteAprendizByEmail(trainingId,email);
+    }
+
     //Todo cargarListaAprendiz csv base64 body con json o parametros
 
     //Todo update aprendiz
+
+
 }

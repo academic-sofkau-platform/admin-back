@@ -42,10 +42,10 @@ public class ControllerRutaAprendizaje {
                 .body(service.update(rutaAprendizaje, rutaAprendizajeId));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public Mono<ResponseEntity<Void>> deleteMovieById(@PathVariable("id") String rutaAprendizajeId){
+    @PostMapping("/delete")
+    public Mono<ResponseEntity<Void>> deleteRutaAprendizajeById(@RequestBody String rutaAprendizajeId){
        return service
-                .deleteById(rutaAprendizajeId)
+               .deleteById(rutaAprendizajeId)
                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)))
                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
