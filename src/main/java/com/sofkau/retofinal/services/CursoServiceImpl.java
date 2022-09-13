@@ -19,17 +19,12 @@ public class CursoServiceImpl implements ICursoService {
     CursoRepository repository;
     @Override
     public Mono<CursoDto> save(Curso curso) {
-        return Mono.just(AppUtils.cursoToDto(repository.save(curso).block()));
+        return repository.save(curso).thenReturn(AppUtils.cursoToDto(curso));
     }
 
     @Override
     public Flux<CursoDto> findAll() {
         return AppUtils.cursoListToDto(repository.findAll());
-    }
-
-    @Override
-    public Mono<CursoDto> findById(String cursoId) {
-        return Mono.just(AppUtils.cursoToDto(repository.findById(cursoId).block()));
     }
 
     @Override

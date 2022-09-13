@@ -1,21 +1,18 @@
 package com.sofkau.retofinal.controllers;
-
 import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.services.TrainingServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/trainings")
+@CrossOrigin("*")
 public class ControllerTraining {
     //Todo control de errores del post
     //Todo Dto
@@ -77,13 +74,13 @@ public class ControllerTraining {
         return service.getAllAprendicesDeLosTrainingActivos();
     }
 
-    //TODO: get all aprendices by trainingId
-    @GetMapping("/aprendices/{trainingId}")
-    public Flux<Aprendiz> getAllAprendicesByTrainingId(@PathVariable("trainingId") String trainingId) {
+    @GetMapping("/getAprendicesByTrainingId/{trainingId}")
+    public Flux<Aprendiz> getAprendicesByTrainingId(@PathVariable("trainingId") String trainingId){
         return service.getAllAprendicesByTrainingId(trainingId);
     }
-
     //Todo cargarListaAprendiz csv base64 body con json o parametros
 
     //Todo update aprendiz
+
+    //ToDo delete aprendices
 }

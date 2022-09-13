@@ -10,6 +10,13 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Notas {
     private String id = UUID.randomUUID().toString();
-    private String trainingId;
-    private Aprendiz Aprendiz;
+    private String aprendizId;
+    private String trainingI;
+
+    public Notas(String id, String trainingId) {
+        this.aprendizId= id;
+        this.trainingI= trainingId;
+    }
 }
+
+

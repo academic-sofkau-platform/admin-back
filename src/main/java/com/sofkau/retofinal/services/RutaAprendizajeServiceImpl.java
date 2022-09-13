@@ -63,7 +63,7 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                 .findById(rutaAprendizajeId)
                 .flatMap(rutaAprendizaje -> {
                     Ruta ruta = AppUtils.dtoToRuta(rutaDto);
-                    ruta.setCursoId(rutaDto.getCursoId());
+                    ruta.setCurso(rutaDto.getCurso());
                     rutaAprendizaje.getRutas().add(ruta);
                     return repository.save(rutaAprendizaje);
                 })
