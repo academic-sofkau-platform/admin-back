@@ -15,6 +15,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Actividad {
 
+    @Id
+    private String actividadId = UUID.randomUUID().toString();
     private String cursoId;
     private String aprendizId;
     private LocalDate fecha;
@@ -22,4 +24,12 @@ public class Actividad {
     private String tipo;
     private Integer nota;
 
+    public Actividad(String cursoId, String aprendizId, LocalDate fecha, Integer puntaje, String tipo, Integer nota) {
+        this.cursoId = cursoId;
+        this.aprendizId = aprendizId;
+        this.fecha = fecha;
+        this.puntaje = puntaje;
+        this.tipo = tipo;
+        this.nota = nota;
+    }
 }

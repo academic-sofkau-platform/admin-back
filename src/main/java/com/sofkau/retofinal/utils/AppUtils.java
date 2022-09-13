@@ -43,6 +43,11 @@ public class AppUtils {
         BeanUtils.copyProperties(actividad, actividadDto);
         return actividadDto;
     }
+    public static Actividad dtoToActividad(ActividadDto actividadDto){
+        Actividad actividad = new Actividad();
+        BeanUtils.copyProperties(actividadDto, actividad);
+        return actividad;
+    }
 
     public static Flux<ActividadDto> actividadListToDto(Flux<Actividad> actividadFlux){
         Flux<ActividadDto> actividadListDto = actividadFlux.map(AppUtils::actividadToDto);
