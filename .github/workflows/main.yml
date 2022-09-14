@@ -15,6 +15,5 @@ jobs:
           heroku_app_name: "guarded-forest-06646"
           heroku_email: "alzategomez.raul@gmail.com"
           justlogin: true
-      - run: chmod +x mvnw && ./mvnw clean package  
-      - run: ./mvnw heroku:deploy  
+      - run: chmod +x mvnw && ./mvnw clean package && ./mvnw  clean heroku:deploy   
 
