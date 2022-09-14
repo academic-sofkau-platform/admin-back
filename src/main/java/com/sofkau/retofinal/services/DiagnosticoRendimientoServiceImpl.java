@@ -30,12 +30,20 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
         this.accionDeMejoras.add(new AccionDeMejora("022686ac-9f63-4636-8ac4-37c2129cba51", "Test 2", "Repaso Introduccion al Desarrollo (link documentación)"));
     }
 
-    public Aprendiz getAprendizById(Flux<Aprendiz> aprendices, String aprendizId){
-        return aprendices
+    public Aprendiz getAprendizById(String trainingId, String aprendizId){
+        // se obtienen todos los aprendices de cada training de la nota
+        Flux<Aprendiz> aprendices = trainingServices.getAllAprendicesByTrainingId(trainingId);
+
+        Aprendiz aprendiz = aprendices
                 .filter(aprendiz1 -> aprendiz1.getId().equals(aprendizId))
                 .collect(Collectors.toList())
                 .block()
                 .get(0);
+
+        // SE DEBE ACTUALIZAR LA BD PARA QUE ACCION DE MEJORA EN APRENDIZ NO SEA NULL SINO []
+        aprendiz.setAccionDeMejora(new ArrayList<>());
+
+        return aprendiz;
     }
 
     public Mono<AccionDeMejora> getAccionDeMejoraByCursoId(String cursoId) {
@@ -61,32 +69,28 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
 
         // Recorre todas las notas
         notas.toStream().forEach(notas1 -> {
-            // se obtienen todos los aprendices de cada training de la nota
-            Flux<Aprendiz> aprendices = trainingServices.getAllAprendicesByTrainingId(notas1.getTrainingId());
-            // se recorre cada aprendiz
-            aprendices.toStream().forEach(aprendiz -> {
-                // se obtiene las actividades del aprendiz
-                var actividades = actividadService.findActivityByAprendizId(aprendiz.getId()).collectList().block();
-                if(actividades != null && actividades.size()>0){
-                    actividades.forEach(actividad -> {
-                        if(actividad.getPuntaje()<75){
-                            AccionDeMejora accionDeMejora = getAccionDeMejoraByCursoId(actividad.getCursoId()).block();
-                            if(accionDeMejora != null ) {
 
-                                // SE DEBE ACTUALIZAR LA BD PARA QUE ACCION DE MEJORA EN APRENDIZ NO SEA NULL SINO []
-                                aprendiz.setAccionDeMejora(new ArrayList<>());
+            // se obtiene las actividades del aprendiz
+            var actividades = actividadService.findActivityByAprendizId(notas1.getAprendizId()).collectList().block();
 
-                                // le agrega al aprendiz la accion de mejora
-                                setAprendizAccionesDeMejora(aprendiz, accionDeMejora);
+            if(actividades != null && actividades.size() > 0){
+                actividades.forEach(actividad -> {
+                    if(actividad.getPuntaje() < 75){
+                        AccionDeMejora accionDeMejora = getAccionDeMejoraByCursoId(actividad.getCursoId()).block();
+                        if(accionDeMejora != null ) {
 
-                                System.out.println(aprendiz.getAccionDeMejora());
+                            // se obtiene el objeto aprendiz
+                            var aprendiz = getAprendizById(notas1.getTrainingId(), notas1.getAprendizId());
 
-                                // enviar correo
-                            }
+                            // le agrega al aprendiz la accion de mejora
+                            setAprendizAccionesDeMejora(aprendiz, accionDeMejora);
+
+                            // System.out.println(aprendiz);
+                            // enviar correo
                         }
-                    });
-                }
-            });
+                    }
+                });
+            }
         });
     }
 
