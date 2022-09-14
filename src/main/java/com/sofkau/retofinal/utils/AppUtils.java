@@ -39,6 +39,7 @@ public class AppUtils {
     public static ActividadDto actividadToDto(Actividad actividad){
         ActividadDto actividadDto = new ActividadDto();
         BeanUtils.copyProperties(actividad, actividadDto);
+        actividadDto.setFecha(actividad.getFecha().toString());
         return actividadDto;
     }
 
