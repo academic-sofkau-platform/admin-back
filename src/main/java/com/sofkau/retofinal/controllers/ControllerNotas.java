@@ -8,18 +8,18 @@ import com.sofkau.retofinal.services.NotasServices;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @RestController
-
 @RequestMapping("/notas")
 @CrossOrigin("*")
 public class ControllerNotas {
@@ -37,19 +37,19 @@ public class ControllerNotas {
 
 
     //@Scheduled(cron = "0 0 * * *")
-    @PostMapping
+    @GetMapping
     public Flux<Notas> extraerMediaNoche() {
-
+        List<Actividad> a= new ArrayList<>();
         return training.findAllTrainingActivos()
                 .flatMap(training1 -> Flux.fromIterable(training1.getApprentices())
                         .map(aprendiz -> {
                             Notas nota= new Notas();
                             nota.setAprendizId(aprendiz.getId());
                             nota.setTrainingI(training1.getTrainingId());
-                            controllerActividad.findByAprendiz(aprendiz.getId())
-                                    .map(actividadDto -> nota.getActividadList().add(AppUtils.dtoToActividad(actividadDto)));
-                            service.save(nota);
-                          return nota;
+                            nota.setActividadList(new ArrayList<>());
+
+                           AppUtils.dtoListToActividad(controllerActividad.findByAprendiz(aprendiz.getId())).collectList().block();
+                            return nota;
                         })
                 );
 
@@ -68,7 +68,7 @@ public class ControllerNotas {
                                 controllerActividad.findByAprendiz(aprendiz.getId()).collectList().block()
                                         .forEach(actividad -> {
 
-                                            nota.getActividadList().add(AppUtils.dtoToActividad(actividad));
+                                            //nota.getActividadList().add(AppUtils.dtoToActividad(actividad));
                                         });
                                 service.save(nota);
                             });
