@@ -5,8 +5,6 @@ import com.sofkau.retofinal.models.*;
 import org.springframework.beans.BeanUtils;
 import reactor.core.publisher.Flux;
 
-import java.util.List;
-
 public class AppUtils {
     public static RutaAprendizajeDto rutaAprendizajeToDto(RutaAprendizaje rutaAprendizaje){
         RutaAprendizajeDto rutaAprendizajeDto = new RutaAprendizajeDto();
@@ -35,6 +33,7 @@ public class AppUtils {
     public static ActividadDto actividadToDto(Actividad actividad){
         ActividadDto actividadDto = new ActividadDto();
         BeanUtils.copyProperties(actividad, actividadDto);
+        actividadDto.setFecha(actividad.getFecha().toString());
         return actividadDto;
     }
 

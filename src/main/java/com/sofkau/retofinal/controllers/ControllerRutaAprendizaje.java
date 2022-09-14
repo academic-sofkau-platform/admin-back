@@ -31,21 +31,20 @@ public class ControllerRutaAprendizaje {
 
     @PostMapping("/save")
     public ResponseEntity<Mono<RutaAprendizajeDto>> save(@RequestBody RutaAprendizajeDto rutaAprendizaje){
-        System.out.println("hola: " + rutaAprendizaje);
         return ResponseEntity.ok().body(service.save(rutaAprendizaje));
     }
 
-    @PutMapping("/update/{id}")
+    @PostMapping("/update/{id}")
     public ResponseEntity<Mono<RutaAprendizajeDto>> update(@RequestBody RutaAprendizajeDto rutaAprendizaje, @PathVariable("id") String rutaAprendizajeId){
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(service.update(rutaAprendizaje, rutaAprendizajeId));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public Mono<ResponseEntity<Void>> deleteMovieById(@PathVariable("id") String rutaAprendizajeId){
+    @PostMapping("/delete")
+    public Mono<ResponseEntity<Void>> deleteRutaAprendizajeById(@RequestBody String rutaAprendizajeId){
        return service
-                .deleteById(rutaAprendizajeId)
+               .deleteById(rutaAprendizajeId)
                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)))
                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
@@ -55,6 +54,12 @@ public class ControllerRutaAprendizaje {
     public ResponseEntity<Mono<RutaAprendizajeDto>> agregarRuta(@RequestBody RutaDto ruta, @PathVariable("id") String rutaAprendizajeId){
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(service.addRoute(ruta, rutaAprendizajeId));
+    }
+
+    @PatchMapping("/delete/route/{id}/{rutaId}")
+    public ResponseEntity<Mono<Void>> eliminarRuta(@PathVariable("id") String rutaAprendizajeId, @PathVariable("rutaId") String rutaId){
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(service.removeRoute(rutaId, rutaAprendizajeId));
     }
 
 }
