@@ -1,5 +1,9 @@
 name: Deploy to Heroku Hosting on PR
-'on': pull_request
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 jobs:
   build_backend:
     runs-on: ubuntu-latest  
