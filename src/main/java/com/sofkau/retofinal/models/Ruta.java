@@ -14,6 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Ruta {
+    private String id;
     private Integer nivel;
     private String curso;
     private List<String> prerrequisitos;
