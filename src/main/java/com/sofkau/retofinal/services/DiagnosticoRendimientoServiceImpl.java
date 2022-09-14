@@ -1,90 +1,93 @@
 package com.sofkau.retofinal.services;
-import com.sofkau.retofinal.controllers.ControllerTraining;
-import com.sofkau.retofinal.dto.RutaAprendizajeDto;
-import com.sofkau.retofinal.models.Aprendiz;
-import com.sofkau.retofinal.models.Curso;
-import com.sofkau.retofinal.models.Notas;
-import com.sofkau.retofinal.models.Training;
-import com.sofkau.retofinal.repositories.NotasRepository;
-import com.sofkau.retofinal.utils.AppUtils;
+
+import com.sofkau.retofinal.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
-    @Service
-    public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando se realice extracción de notas
+@Service
+public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando se realice extracción de notas
+    @Autowired
+    TrainingServicesImpl trainingServices;
+    @Autowired
+    ActividadServiceImpl actividadService;
+    public ArrayList<AccionDeMejora> accionDeMejoras = new ArrayList<AccionDeMejora>();
 
-        public static void main(String[] args){
-            List<String> accionDeMejora = new ArrayList<String>();
-            accionDeMejora.add(1,"Repaso de conceptos de fundamentos de DDD (link de documentación");
-            accionDeMejora.add(2,"Repaso de componente estrategico de DDD (link de documentación)");
-            accionDeMejora.add(3,"Repaso de conceptos de fundamentos de Funcional y reactiva (link de documentación");
-            accionDeMejora.add(4,"Repaso de conceptos de fundamentos de WebFlux (link de documentación");
-            accionDeMejora.add(5,"Repaso de conceptos de Funcional y reactiva (link de documentación");
+    public DiagnosticoRendimientoServiceImpl() {
+        this.accionDeMejoras.add(new AccionDeMejora("7595fb82-db54-490b-91fc-ec0c8e7daaa1", "Test 1", "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
+        this.accionDeMejoras.add(new AccionDeMejora("7595fb82-db54-490b-91fc-ec0c8e7daaa1", "Test 2", "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
+        this.accionDeMejoras.add(new AccionDeMejora("7979bb47-d347-4a42-a648-75abdf637886", "Test 1", "Repaso Reactiva (link documentación)"));
+        this.accionDeMejoras.add(new AccionDeMejora("7979bb47-d347-4a42-a648-75abdf637886", "Quiz 3", "Repaso Reactiva  (link documentación)"));
+        this.accionDeMejoras.add(new AccionDeMejora("990cfbf4-8022-4609-a21d-d25c2072f555", "Quiz 1", "Repaso Funcional y reactiva (link documentación)"));
+        this.accionDeMejoras.add(new AccionDeMejora("990cfbf4-8022-4609-a21d-d25c2072f555", "Test 2", "Repaso Funcional y reactiva (link documentación)"));
+        this.accionDeMejoras.add(new AccionDeMejora("022686ac-9f63-4636-8ac4-37c2129cba51", "Quiz 3", "Repaso Introduccion al Desarrollo (link documentación)"));
+        this.accionDeMejoras.add(new AccionDeMejora("022686ac-9f63-4636-8ac4-37c2129cba51", "Test 2", "Repaso Introduccion al Desarrollo (link documentación)"));
+    }
 
+    public Aprendiz getAprendizById(Flux<Aprendiz> aprendices, String aprendizId){
+        return aprendices
+                .filter(aprendiz1 -> aprendiz1.getId().equals(aprendizId))
+                .collect(Collectors.toList())
+                .block()
+                .get(0);
+    }
+
+    public Mono<AccionDeMejora> getAccionDeMejoraByCursoId(String cursoId) {
+        return Flux.fromIterable(this.accionDeMejoras)
+                .filter(accionDeMejora -> accionDeMejora.getCursoId().equals(cursoId))
+                .next()
+                .switchIfEmpty(Mono.empty());
+
+    }
+
+    public void setAprendizAccionesDeMejora(Aprendiz aprendiz, AccionDeMejora accionDeMejoras){
+        // si el aprendiz no tiene ya asignada la accion de mejora
+        if(!aprendiz.getAccionDeMejora().contains(accionDeMejoras.getAccion())){
+            aprendiz.getAccionDeMejora().add(accionDeMejoras.getAccion());
         }
     }
 
+    public void diagnosticar(Flux<Notas> notas){
 
-//
-//        CURSO: DDD, Test 1, ACCION:Repaso de conceptos de fundamentos de DDD (link de documentación)
-//        CRUSO: DDD, Test 2, ACCION:Repaso de componente estrategico de DDD (link de documentación)
-//        CURSO: Reactividad: ACCION:Test 1: Funcional y reactiva (link documentación)
-//        seria todo bajo al 75%
+        // Todo  No puedo enviar una accion de mejora repetida, es decir debo CONSULTAR si el aprendiz no tiene la accion de mejora correspodiente
+        // Todo  DETERMINAR si un aprendiz esta en bajo rendimiento <75% y poner una accion de mejora cuando se tenga un bajo rendimieto
+        // Todo  Si se tiene una accion de mejora se debe ENVIAR un correo con la accion de mejora correspondiente
 
-//    @Autowired
-//    NotasRepository repository;
-//    @Autowired
-//    ControllerTraining training;
+        // Recorre todas las notas
+        notas.toStream().forEach(notas1 -> {
+            // se obtienen todos los aprendices de cada training de la nota
+            Flux<Aprendiz> aprendices = trainingServices.getAllAprendicesByTrainingId(notas1.getTrainingId());
+            // se recorre cada aprendiz
+            aprendices.toStream().forEach(aprendiz -> {
+                // se obtiene las actividades del aprendiz
+                var actividades = actividadService.findActivityByAprendizId(aprendiz.getId()).collectList().block();
+                if(actividades != null && actividades.size()>0){
+                    actividades.forEach(actividad -> {
+                        if(actividad.getPuntaje()<75){
+                            AccionDeMejora accionDeMejora = getAccionDeMejoraByCursoId(actividad.getCursoId()).block();
+                            if(accionDeMejora != null ) {
 
-    //todo obtener aprendices
-//        @Override
-//
-//
-//        @Override
-//        public Flux<Notas> findAllNota() {  //todo filtar por nota <75%
-//            return repository.findAllNota();
-//        }
+                                // SE DEBE ACTUALIZAR LA BD PARA QUE ACCION DE MEJORA EN APRENDIZ NO SEA NULL SINO []
+                                aprendiz.setAccionDeMejora(new ArrayList<>());
 
-    //todo recorrer List de accion de mejoras para ver si esta repetida
+                                // le agrega al aprendiz la accion de mejora
+                                setAprendizAccionesDeMejora(aprendiz, accionDeMejora);
 
+                                System.out.println(aprendiz.getAccionDeMejora());
 
+                                // enviar correo
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    }
 
-    //Todo  DETERMINAR si un aprendiz esta en bajo rendimiento
-
-
-    //Todo  PONER una accion de mejora cuando se tenga un bajo rendimieto
-
-
-    //Todo  Si se tiene una accion de mejora se debe ENVIAR un correo con la accion de mejora correspondiente
-
-
-    //Todo  No puedo enviar una accion de mejora repetida, es decir debo CONSULTAR si el aprendiz no tiene la accion de mejora correspodiente
-
-
-//
-//
-//        DoR
-//
-//        - Banco de acciones de mejora
-
-//        - Los valores o promedios para determinar si un aprendiz tiene bajo rendimiento
-//
-
-//        Criterios de Aceptación:
-
-
-//
-//
-//        ~~El aprendiz debe tener una propiedad para poder sumarle la accion de mejora~~ HECHO
-//
-//
-//        Dependencia:
-//
-//        Extracción de notas y envio de correos
+}

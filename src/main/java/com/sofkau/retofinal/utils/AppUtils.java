@@ -11,8 +11,6 @@ import com.sofkau.retofinal.models.RutaAprendizaje;
 import org.springframework.beans.BeanUtils;
 import reactor.core.publisher.Flux;
 
-import java.util.List;
-
 public class AppUtils {
     public static RutaAprendizajeDto rutaAprendizajeToDto(RutaAprendizaje rutaAprendizaje){
         RutaAprendizajeDto rutaAprendizajeDto = new RutaAprendizajeDto();
@@ -42,6 +40,11 @@ public class AppUtils {
         ActividadDto actividadDto = new ActividadDto();
         BeanUtils.copyProperties(actividad, actividadDto);
         return actividadDto;
+    }
+    public static Actividad dtoToActividad(ActividadDto actividadDto){
+        Actividad actividad = new Actividad();
+        BeanUtils.copyProperties(actividadDto, actividad);
+        return actividad;
     }
 
     public static Flux<ActividadDto> actividadListToDto(Flux<Actividad> actividadFlux){

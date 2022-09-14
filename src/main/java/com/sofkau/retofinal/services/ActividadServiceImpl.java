@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 @Service
@@ -17,6 +18,11 @@ public class ActividadServiceImpl implements IActividadService {
 
     @Autowired
     ActividadRepository repository;
+
+    @Override
+    public Mono<ActividadDto> save(Actividad actividad) {
+        return  repository.save(actividad).thenReturn(AppUtils.actividadToDto(actividad));
+    }
 
     @Override
     public Flux<ActividadDto> findAll() {
@@ -30,7 +36,7 @@ public class ActividadServiceImpl implements IActividadService {
                     actividad.setPuntaje(actividad.getPuntaje() + puntaje);
                     return AppUtils.actividadToDto(repository.save(actividad).block());
                 })
-                .switchIfEmpty(Mono.just(AppUtils.actividadToDto(repository.save(new Actividad(cursoId, aprendizId, LocalDate.parse(fecha), puntaje)).block())));
+                .switchIfEmpty(Mono.just(AppUtils.actividadToDto(repository.save(new Actividad(cursoId, aprendizId, LocalDate.parse(fecha), puntaje, "test", 78)).block())));
     }
 
     private Mono<Actividad> findByAprendizIdAndFecha(String aprendizId,String cursoId, LocalDate fecha) {
@@ -39,6 +45,12 @@ public class ActividadServiceImpl implements IActividadService {
                 .filter(actividad -> actividad.getCursoId().equals(cursoId))
                 .filter(actividad -> actividad.getFecha().equals(fecha))
                 .next()
+                .switchIfEmpty(Mono.empty());
+    }
+
+    public Flux<Actividad> findActivityByAprendizId(String aprendizId) {
+        return repository.findAll()
+                .filter(actividad -> actividad.getAprendizId().equals(aprendizId))
                 .switchIfEmpty(Mono.empty());
     }
 }

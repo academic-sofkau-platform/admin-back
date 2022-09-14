@@ -74,13 +74,28 @@ public class ControllerTraining {
         return service.getAllAprendicesDeLosTrainingActivos();
     }
 
+
+    @GetMapping("/aprendices/{trainingId}/{email}")
+    public Mono<Aprendiz> getAllAprendicesByTrainingIdAndEmail(@PathVariable("trainingId") String trainingId, @PathVariable("email") String emailId) {
+        return service.getAprendicesByTrainingId(trainingId)
+                .filter(aprendiz -> aprendiz.getEmail().equals(emailId))
+                .next();
+    }
+
     @GetMapping("/getAprendicesByTrainingId/{trainingId}")
     public Flux<Aprendiz> getAprendicesByTrainingId(@PathVariable("trainingId") String trainingId){
-        return service.getAllAprendicesByTrainingId(trainingId);
+        return service.getAprendicesByTrainingId(trainingId);
     }
+
+    //TODO delete aprendiz por id de training y email
+    @PostMapping("/deleteAprendiz/{trainingId}")
+    public Mono<Void> delete(@PathVariable("trainingId") String trainingId, @RequestBody String email){
+        return service.deleteAprendizByEmail(trainingId,email);
+    }
+
     //Todo cargarListaAprendiz csv base64 body con json o parametros
 
     //Todo update aprendiz
 
-    //ToDo delete aprendices
+
 }
