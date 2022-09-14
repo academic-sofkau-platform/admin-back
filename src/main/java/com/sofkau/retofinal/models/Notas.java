@@ -15,7 +15,7 @@ public class Notas {
 
     @Id
     private String aprendizId;
-    private String trainingI;
+    private String trainingId;
     private List<Actividad> actividadList;
 
 }

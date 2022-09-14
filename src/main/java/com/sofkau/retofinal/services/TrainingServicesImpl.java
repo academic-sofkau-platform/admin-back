@@ -11,7 +11,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -105,6 +104,10 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMapIterable(Training::getApprentices);
     }
 
-
+    @Override
+    public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
+        return this.getActiveTrainings().filter(training -> training.getTrainingId().equals(trainingId))
+                .flatMapIterable(Training::getApprentices);
+    }
 
 }

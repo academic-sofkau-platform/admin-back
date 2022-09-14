@@ -47,4 +47,10 @@ public class ActividadServiceImpl implements IActividadService {
                 .next()
                 .switchIfEmpty(Mono.empty());
     }
+
+    public Flux<Actividad> findActivityByAprendizId(String aprendizId) {
+        return repository.findAll()
+                .filter(actividad -> actividad.getAprendizId().equals(aprendizId))
+                .switchIfEmpty(Mono.empty());
+    }
 }
