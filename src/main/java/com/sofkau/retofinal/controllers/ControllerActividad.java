@@ -43,4 +43,6 @@ public class ControllerActividad {
     public Mono<ActividadDto> addOrUpdate(@PathVariable("cursoId") String cursoId, @PathVariable("aprendizId") String aprendizId, @PathVariable("fecha") String fecha) {
        return service.addOrUpdate(3,cursoId, aprendizId, fecha);
     }
+
+
 }

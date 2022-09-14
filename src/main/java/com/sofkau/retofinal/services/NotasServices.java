@@ -26,19 +26,20 @@ public class NotasServices implements INotasService {
     }
 
     @Override
-    public Mono<Notas> findByAprendizId(String aprendizId) {
-        return Mono.just(Objects.requireNonNull(repository.findAll().filter(notas1 -> notas1.getAprendizId().equals(aprendizId)).blockFirst()));
+    public Flux<Notas> findByAprendizId(String aprendizId) {
+        return repository.findAll().filter(notas1 -> notas1.getAprendizId().equals(aprendizId));
 
     }
 
     @Override
-    public Mono<Notas> update(String notasId, Notas notas) {
-        return repository.findById(notasId)
-                .flatMap(notas1 -> {
-                    notas.setId(notasId);
-                    return save(notas);
-                }).switchIfEmpty(Mono.empty());
+    public Mono<Notas> findByAprendizIdAndTrainingId(String aprendizId, String trainingId) {
+        return Mono.just(Objects.requireNonNull(repository.findAll()
+                .filter(notas1 -> notas1.getAprendizId().equals(aprendizId))
+                .filter(notas1 -> notas1.getTrainingI().equals(trainingId))
+                .blockFirst()));
+
     }
+
 
     @Override
     public Mono<Notas> findById(String notasId) {
