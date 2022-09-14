@@ -40,14 +40,6 @@ public class NotasServices implements INotasService {
 
     }
 
-    @Override
-    public Mono<Notas> update(String notasId, Notas notas) {
-        return repository.findById(notasId)
-                .flatMap(notas1 -> {
-                    notas.setId(notasId);
-                    return save(notas);
-                }).switchIfEmpty(Mono.empty());
-    }
 
     @Override
     public Mono<Notas> findById(String notasId) {
