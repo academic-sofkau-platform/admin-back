@@ -17,12 +17,12 @@ public class ControllerCorreo {
     @PostMapping("/sendMail")
     public void sendSimpleCorreo(@RequestBody DetallesDeCorreo details){
 
-        service.sendFeedback(details);
+        service.sendSimpleMail(details);
     }
 
     @PostMapping("/sendFeedbackMail")
     public void sendFeedbackCorreo(@RequestBody DetallesDeCorreo details){
-        service.sendFeedback(service.TemplateFeedback(details));
+        service.sendSimpleMail(service.TemplateFeedback(details));
     }
 
 }
