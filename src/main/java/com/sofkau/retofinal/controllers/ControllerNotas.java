@@ -1,57 +1,56 @@
 package com.sofkau.retofinal.controllers;
 
-
-import com.sofkau.retofinal.models.Aprendiz;
-import com.sofkau.retofinal.models.Curso;
 import com.sofkau.retofinal.models.Notas;
-import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.services.ActividadServiceImpl;
+import com.sofkau.retofinal.services.DiagnosticoRendimientoServiceImpl;
 import com.sofkau.retofinal.services.NotasServices;
+import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.List;
-
-
 @RestController
 
+@RequestMapping("/notas")
+@CrossOrigin("*")
 public class ControllerNotas {
+
+    private Flux<Notas> notas;
+
     @Autowired
     private NotasServices service;
 
     @Autowired
-    private ActividadServiceImpl actividadService;
+    private ControllerActividad controllerActividad;
 
     @Autowired
     private ControllerTraining training;
 
+    @Autowired
+    private DiagnosticoRendimientoServiceImpl diagnosticoRendimientoService;
 
-    @Scheduled(cron = "0 0 * * *")
-    public void extraerMediaNoche() {
-        training.findAllTrainingActivos()
-                .map(training1 -> {
-                        training1.getApprentices()
-                        .forEach(aprendiz -> {
+    //@Scheduled(cron = "0 0 * * *")
+    @PostMapping
+    public Flux<Notas> extraerMediaNoche() {
+
+        return training.findAllTrainingActivos()
+                .flatMap(training1 -> Flux.fromIterable(training1.getApprentices())
+                        .map(aprendiz -> {
                             Notas nota= new Notas();
                             nota.setAprendizId(aprendiz.getId());
-                            nota.setTrainingI(training1.getTrainingId());
-                            actividadService.findByAprendizId(aprendiz.getId()).collectList().block()
-                                    .forEach(actividad -> {
-                                        nota.getActividadList().add(actividad);
-                                    });
+                            nota.setTrainingId(training1.getTrainingId());
+                            controllerActividad.findByAprendiz(aprendiz.getId())
+                                    .map(actividadDto -> nota.getActividadList().add(AppUtils.dtoToActividad(actividadDto)));
                             service.save(nota);
-                        });
-                        return null;
-                 });
+                          return nota;
+                        })
+                );
+
     }
+
 
     @Scheduled(cron = "0 12 * * *")
     public void extraerMedioDia() {
@@ -61,15 +60,22 @@ public class ControllerNotas {
                             .forEach(aprendiz -> {
                                 Notas nota= new Notas();
                                 nota.setAprendizId(aprendiz.getId());
-                                nota.setTrainingI(training1.getTrainingId());
-                                actividadService.findByAprendizId(aprendiz.getId()).collectList().block()
+                                nota.setTrainingId(training1.getTrainingId());
+                                controllerActividad.findByAprendiz(aprendiz.getId()).collectList().block()
                                         .forEach(actividad -> {
-                                            nota.getActividadList().add(actividad);
+                                            nota.getActividadList().add(AppUtils.dtoToActividad(actividad));
                                         });
                                 service.save(nota);
                             });
                     return null;
+
+
                 });
     }
 
+    //FUNCION DE PRUEBA, BORRAR ANTES DE SUBIR
+    @PostMapping("/diagnosticar")
+    public void sendSimpleCorreo(){
+        diagnosticoRendimientoService.diagnosticar(Flux.fromIterable(service.notas));
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 @Service
@@ -17,6 +18,11 @@ public class ActividadServiceImpl implements IActividadService {
 
     @Autowired
     ActividadRepository repository;
+
+    @Override
+    public Mono<ActividadDto> save(Actividad actividad) {
+        return  repository.save(actividad).thenReturn(AppUtils.actividadToDto(actividad));
+    }
 
     @Override
     public Flux<ActividadDto> findAll() {
@@ -42,7 +48,7 @@ public class ActividadServiceImpl implements IActividadService {
                 .switchIfEmpty(Mono.empty());
     }
 
-    public Flux<Actividad> findByAprendizId(String aprendizId) {
+    public Flux<Actividad> findActivityByAprendizId(String aprendizId) {
         return repository.findAll()
                 .filter(actividad -> actividad.getAprendizId().equals(aprendizId))
                 .switchIfEmpty(Mono.empty());
