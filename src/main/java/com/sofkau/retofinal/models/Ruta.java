@@ -14,8 +14,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Ruta {
-    private String id;
+    private String id = UUID.randomUUID().toString();;
     private Integer nivel;
     private String curso;
     private List<String> prerrequisitos;
+
+
 }
