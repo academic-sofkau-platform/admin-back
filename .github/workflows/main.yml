@@ -15,6 +15,6 @@ jobs:
           heroku_app_name: "academic-sofkau"
           heroku_email: "alzategomez.raul@gmail.com"
           justlogin: true
-      - run: chmod +x mvnw && ./mvnw clean compile 
-      - run: ./mvnw clean  heroku:deploy
+      - run: chmod +x mvnw && ./mvnw clean package  
+      - run: ./mvnw heroku:deploy  
 
