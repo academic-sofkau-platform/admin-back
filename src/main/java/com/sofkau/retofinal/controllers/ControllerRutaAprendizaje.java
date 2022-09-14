@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/rutaAprendizaje")
+@CrossOrigin("*")
 public class ControllerRutaAprendizaje {
     @Autowired
     RutaAprendizajeServiceImpl service;
@@ -30,7 +31,7 @@ public class ControllerRutaAprendizaje {
 
     @PostMapping("/save")
     public ResponseEntity<Mono<RutaAprendizajeDto>> save(@RequestBody RutaAprendizajeDto rutaAprendizaje){
-        System.out.println(rutaAprendizaje);
+        System.out.println("hola: " + rutaAprendizaje);
         return ResponseEntity.ok().body(service.save(rutaAprendizaje));
     }
 
@@ -41,10 +42,10 @@ public class ControllerRutaAprendizaje {
                 .body(service.update(rutaAprendizaje, rutaAprendizajeId));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public Mono<ResponseEntity<Void>> deleteMovieById(@PathVariable("id") String rutaAprendizajeId){
+    @PostMapping("/delete")
+    public Mono<ResponseEntity<Void>> deleteRutaAprendizajeById(@RequestBody String rutaAprendizajeId){
        return service
-                .deleteById(rutaAprendizajeId)
+               .deleteById(rutaAprendizajeId)
                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)))
                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
