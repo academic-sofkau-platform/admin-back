@@ -4,6 +4,7 @@ import com.sofkau.retofinal.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +15,13 @@ import java.util.stream.Collectors;
 public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando se realice extracción de notas
     @Autowired
     TrainingServicesImpl trainingServices;
+    @Autowired
+    ActividadServiceImpl actividadService;
     public ArrayList<AccionDeMejora> accionDeMejoras = new ArrayList<AccionDeMejora>();
 
     public DiagnosticoRendimientoServiceImpl() {
-        this.accionDeMejoras.add(new AccionDeMejora("07343d77-02c7-466a-8cbc-fbbaeb3643a8", "Test 1", "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
-        this.accionDeMejoras.add(new AccionDeMejora("07343d77-02c7-466a-8cbc-fbbaeb3643a8", "Test 2", "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
+        this.accionDeMejoras.add(new AccionDeMejora("7595fb82-db54-490b-91fc-ec0c8e7daaa1", "Test 1", "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
+        this.accionDeMejoras.add(new AccionDeMejora("7595fb82-db54-490b-91fc-ec0c8e7daaa1", "Test 2", "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
         this.accionDeMejoras.add(new AccionDeMejora("7979bb47-d347-4a42-a648-75abdf637886", "Test 1", "Repaso Reactiva (link documentación)"));
         this.accionDeMejoras.add(new AccionDeMejora("7979bb47-d347-4a42-a648-75abdf637886", "Quiz 3", "Repaso Reactiva  (link documentación)"));
         this.accionDeMejoras.add(new AccionDeMejora("990cfbf4-8022-4609-a21d-d25c2072f555", "Quiz 1", "Repaso Funcional y reactiva (link documentación)"));
@@ -27,20 +30,27 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
         this.accionDeMejoras.add(new AccionDeMejora("022686ac-9f63-4636-8ac4-37c2129cba51", "Test 2", "Repaso Introduccion al Desarrollo (link documentación)"));
     }
 
-    public void ponerMejora() {}
-
-    public Aprendiz getAprendizById(List<Aprendiz> aprendices, String aprendizId){
-        return aprendices.stream()
+    public Aprendiz getAprendizById(Flux<Aprendiz> aprendices, String aprendizId){
+        return aprendices
                 .filter(aprendiz1 -> aprendiz1.getId().equals(aprendizId))
                 .collect(Collectors.toList())
+                .block()
                 .get(0);
     }
 
-    public AccionDeMejora getAccionDeMejoraByCursoId(ArrayList<AccionDeMejora> accionDeMejoras, String cursoId){
-        return accionDeMejoras.stream()
+    public Mono<AccionDeMejora> getAccionDeMejoraByCursoId(String cursoId) {
+        return Flux.fromIterable(this.accionDeMejoras)
                 .filter(accionDeMejora -> accionDeMejora.getCursoId().equals(cursoId))
-                .collect(Collectors.toList())
-                .get(0);
+                .next()
+                .switchIfEmpty(Mono.empty());
+
+    }
+
+    public void setAprendizAccionesDeMejora(Aprendiz aprendiz, AccionDeMejora accionDeMejoras){
+        // si el aprendiz no tiene ya asignada la accion de mejora
+        if(!aprendiz.getAccionDeMejora().contains(accionDeMejoras.getAccion())){
+            aprendiz.getAccionDeMejora().add(accionDeMejoras.getAccion());
+        }
     }
 
     public void diagnosticar(Flux<Notas> notas){
@@ -49,31 +59,35 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
         // Todo  DETERMINAR si un aprendiz esta en bajo rendimiento <75% y poner una accion de mejora cuando se tenga un bajo rendimieto
         // Todo  Si se tiene una accion de mejora se debe ENVIAR un correo con la accion de mejora correspondiente
 
-        notas.toStream()
-                .forEach(notas1 -> {
+        // Recorre todas las notas
+        notas.toStream().forEach(notas1 -> {
+            // se obtienen todos los aprendices de cada training de la nota
+            Flux<Aprendiz> aprendices = trainingServices.getAllAprendicesByTrainingId(notas1.getTrainingId());
+            // se recorre cada aprendiz
+            aprendices.toStream().forEach(aprendiz -> {
+                // se obtiene las actividades del aprendiz
+                var actividades = actividadService.findActivityByAprendizId(aprendiz.getId()).collectList().block();
+                if(actividades != null && actividades.size()>0){
+                    actividades.forEach(actividad -> {
+                        if(actividad.getPuntaje()<75){
+                            AccionDeMejora accionDeMejora = getAccionDeMejoraByCursoId(actividad.getCursoId()).block();
+                            if(accionDeMejora != null ) {
 
-                    var aprendices = trainingServices.getAllAprendicesByTrainingId(notas1.getTrainingId()).collectList().block();
-                    var aprendiz = getAprendizById(aprendices, notas1.getAprendizId());
-                    System.out.println(aprendiz);
+                                // SE DEBE ACTUALIZAR LA BD PARA QUE ACCION DE MEJORA EN APRENDIZ NO SEA NULL SINO []
+                                aprendiz.setAccionDeMejora(new ArrayList<>());
 
-                    notas1.getActividadList()
-                        .stream()
-                        .forEach(actividad -> {
-                            // si la actividad tiene menos de 75% de puntaje
-                            if(actividad.getPuntaje() < 75){
-                                var accion = getAccionDeMejoraByCursoId(accionDeMejoras, actividad.getCursoId());
-                                System.out.println(accion);
-                                var accionesDelAprendiz = aprendiz.getAccionDeMejora();
+                                // le agrega al aprendiz la accion de mejora
+                                setAprendizAccionesDeMejora(aprendiz, accionDeMejora);
 
-                                // si el aprendiz no tiene ya asignada esa accion de mejora, se le asigna
-                                if(!accionesDelAprendiz.contains(accion.getAccion())){
-                                    aprendiz.getAccionDeMejora().add(accion.getAccion());
-                                }
+                                System.out.println(aprendiz.getAccionDeMejora());
 
-                                //Mandar un correo
+                                // enviar correo
                             }
-                        });
-                });
+                        }
+                    });
+                }
+            });
+        });
     }
 
 }

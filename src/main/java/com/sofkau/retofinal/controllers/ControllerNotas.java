@@ -1,15 +1,16 @@
 package com.sofkau.retofinal.controllers;
 
 import com.sofkau.retofinal.models.Notas;
+import com.sofkau.retofinal.services.ActividadServiceImpl;
+import com.sofkau.retofinal.services.DiagnosticoRendimientoServiceImpl;
 import com.sofkau.retofinal.services.NotasServices;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 
@@ -28,6 +29,8 @@ public class ControllerNotas {
     @Autowired
     private ControllerTraining training;
 
+    @Autowired
+    private DiagnosticoRendimientoServiceImpl diagnosticoRendimientoService;
 
     //@Scheduled(cron = "0 0 * * *")
     @PostMapping
@@ -70,8 +73,9 @@ public class ControllerNotas {
                 });
     }
 
+    //FUNCION DE PRUEBA, BORRAR ANTES DE SUBIR
     @PostMapping("/diagnosticar")
     public void sendSimpleCorreo(){
-        service.diagnosticar(service.findAll());
+        diagnosticoRendimientoService.diagnosticar(Flux.fromIterable(service.notas));
     }
 }

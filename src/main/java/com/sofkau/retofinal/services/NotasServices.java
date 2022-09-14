@@ -1,6 +1,7 @@
 package com.sofkau.retofinal.services;
 
 import com.sofkau.retofinal.interfaces.INotasService;
+import com.sofkau.retofinal.models.Actividad;
 import com.sofkau.retofinal.models.Notas;
 import com.sofkau.retofinal.repositories.NotasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class NotasServices implements INotasService {
@@ -19,6 +20,18 @@ public class NotasServices implements INotasService {
     @Autowired
     DiagnosticoRendimientoServiceImpl diagnosticoRendimientoService;
 
+    @Autowired
+    private ActividadServiceImpl actividadService;
+
+    public ArrayList<Notas> notas = new ArrayList<>();
+    public NotasServices() {
+        List<Actividad> actividades1 = new ArrayList<>();
+
+        this.notas.add(new Notas("1555de", "7595fb82-db54-490b-91fc-ec0c8e7daaa1", actividades1));
+        this.notas.add(new Notas("raul", "4149bdc6-f0b4-4f94-a030-385c695a88a7", actividades1));
+
+    }
+
     @Override
     public Mono<Notas> save(Notas notas) {
         return repository.save(notas);
@@ -26,7 +39,7 @@ public class NotasServices implements INotasService {
 
     @Override
     public Flux<Notas> findAll() {
-        return repository.findAll();
+        return /*repository.findAll();*/ Flux.fromIterable(this.notas);
     }
 
     @Override
@@ -48,9 +61,5 @@ public class NotasServices implements INotasService {
     @Override
     public Mono<Notas> findById(String notasId) {
         return repository.findById(notasId);
-    }
-
-    public void diagnosticar(Flux<Notas> notas){
-        diagnosticoRendimientoService.diagnosticar(notas);
     }
 }
