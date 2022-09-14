@@ -10,4 +10,5 @@ public interface IActividadService {
     Mono<ActividadDto> save(Actividad actividad);
     Flux<ActividadDto> findAll();
     Mono<ActividadDto> addOrUpdate(Integer puntaje, String cursoId, String aprendizId, String fecha);
+    Flux<Actividad> findActivityByAprendizId(String aprendizId);
 }

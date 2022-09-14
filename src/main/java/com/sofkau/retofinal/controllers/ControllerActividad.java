@@ -4,6 +4,7 @@ import com.sofkau.retofinal.dto.ActividadDto;
 import com.sofkau.retofinal.models.Actividad;
 import com.sofkau.retofinal.services.ActividadServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -42,5 +43,15 @@ public class ControllerActividad {
     @PostMapping("/update/{cursoId}/{aprendizId}/{fecha}")
     public Mono<ActividadDto> addOrUpdate(@PathVariable("cursoId") String cursoId, @PathVariable("aprendizId") String aprendizId, @PathVariable("fecha") String fecha) {
        return service.addOrUpdate(3,cursoId, aprendizId, fecha);
+    }
+
+    @GetMapping("/aprendices/{aprendizId}")
+    /**
+     * Busca todas las notas por su aprendiz
+     */
+    public ResponseEntity<Flux<Actividad>> findAll(@PathVariable("aprendizId") String aprendizId){
+        return ResponseEntity.ok()
+                .body(service.findActivityByAprendizId(aprendizId));
+
     }
 }
