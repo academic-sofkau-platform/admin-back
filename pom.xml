@@ -85,9 +85,7 @@
 				     <version>3.0.3</version>
 			            <configuration>
 				          <appName>academic-sofkau</appName>
-				          <processTypes>
-					     <web>java -Dserver.port=$PORT $JAVA_OPTS -jar target/retofinal-0.0.1-SNAPSHOT.jar</web>
-					  </processTypes>
+				        
 				</configuration>
 			 </plugin>
 		</plugins>
