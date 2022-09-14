@@ -3,9 +3,6 @@ name: Deploy to Heroku Hosting on PR
 jobs:
   build_backend:
     runs-on: ubuntu-latest  
-    defaults:
-      run:
-        working-directory: ./backend
     steps:
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
