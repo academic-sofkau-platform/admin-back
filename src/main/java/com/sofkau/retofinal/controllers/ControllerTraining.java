@@ -1,9 +1,11 @@
 package com.sofkau.retofinal.controllers;
+import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.services.TrainingServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -21,15 +23,19 @@ public class ControllerTraining {
     TrainingServicesImpl service;
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Training> save(@RequestBody Training training) {
-        return service.save(training);
+    public Mono<ResponseEntity<TrainingDto>> save(@RequestBody Training training) {
+        System.out.println(training);
+        return service.save(training)
+                .flatMap(trainingDto -> Mono.just(ResponseEntity.ok(trainingDto)))
+                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+       // return null;
     }
     @GetMapping("/findAllTrainings")
-    public Flux<Training> findAllTrainings() {
+    public Flux<TrainingDto> findAllTrainings() {
         return service.findAll();
     }
     @GetMapping("/findById/{id}")
-    public Mono<Training> findById(@PathVariable("id") String trainingId) {
+    public Mono<TrainingDto> findById(@PathVariable("id") String trainingId) {
         return service.findById(trainingId);
     }
 
@@ -43,7 +49,7 @@ public class ControllerTraining {
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }*/
     @PutMapping("/update/{id}")
-    public Mono<Training> update(@RequestBody Training training,
+    public Mono<TrainingDto> update(@RequestBody Training training,
                                  @PathVariable("id") String trainingId){
         return service.update(training, trainingId);
     }
@@ -52,8 +58,8 @@ public class ControllerTraining {
         return service.deleteById(trainingId);
     }
     @PutMapping("/update/coach/{id}")
-    public Mono<Training> asignarCoach(@RequestBody String name,
-                                       @PathVariable("id") String trainingId) {
+    public Mono<TrainingDto> asignarCoach(@RequestBody String name,
+                                          @PathVariable("id") String trainingId) {
         return service.asignarCoach(name, trainingId);
     }
 
@@ -65,7 +71,7 @@ public class ControllerTraining {
     }
 
     @GetMapping("/findAllTrainingActivos")
-    public Flux<Training> findAllTrainingActivos() {
+    public Flux<TrainingDto> findAllTrainingActivos() {
         return service.getActiveTrainings();
     }
 
