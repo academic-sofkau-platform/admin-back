@@ -30,13 +30,13 @@ public class ActividadServiceImpl implements IActividadService {
     }
 
     @Override
-    public Mono<ActividadDto> addOrUpdate(Integer puntaje, String cursoId, String aprendizId, String fecha) {
-        return  findByAprendizIdAndFecha(aprendizId, cursoId, LocalDate.parse(fecha))
+    public Mono<ActividadDto> addOrUpdate(Integer puntaje, String cursoId, String aprendizId) {
+        return  findByAprendizIdAndFecha(aprendizId, cursoId, LocalDate.now())
                 .map(actividad -> {
                     actividad.setPuntaje(actividad.getPuntaje() + puntaje);
                     return AppUtils.actividadToDto(repository.save(actividad).block());
                 })
-                .switchIfEmpty(Mono.just(AppUtils.actividadToDto(repository.save(new Actividad(cursoId, aprendizId, LocalDate.parse(fecha), puntaje)).block())));
+                .switchIfEmpty(Mono.just(AppUtils.actividadToDto(repository.save(new Actividad(cursoId, aprendizId, LocalDate.now(), puntaje)).block())));
     }
 
     private Mono<Actividad> findByAprendizIdAndFecha(String aprendizId,String cursoId, LocalDate fecha) {
