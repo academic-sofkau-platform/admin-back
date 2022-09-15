@@ -1,21 +1,22 @@
-package com.sofkau.retofinal.models;
+package com.sofkau.retofinal.dto;
 
+import com.sofkau.retofinal.models.Aprendiz;
+import com.sofkau.retofinal.models.RutaAprendizaje;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Document(collection="trainings")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Training {
-    @Id
+@Getter
+@Setter
+public class TrainingDto {
     private String trainingId = UUID.randomUUID().toString();
     private String name;
     private String description;
@@ -23,5 +24,7 @@ public class Training {
     private Date endDate;
     private String coach;
     private List<Aprendiz> apprentices;
-    private String rutaId;
+    private RutaAprendizaje rutaAprendizaje;
+    private long apprenticesCount;
+    private String periodo;
 }
