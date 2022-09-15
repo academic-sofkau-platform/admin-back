@@ -62,4 +62,9 @@ public class ControllerRutaAprendizaje {
                 .body(service.removeRoute(rutaId, rutaAprendizajeId));
     }
 
+    @GetMapping("/curso/{id}")
+    public ResponseEntity<Mono<Boolean>> controlCursoEnRutaAprendizaje(@PathVariable("id") String cursoId){
+        return ResponseEntity.ok().body(service.controlCursoEnRutaAprendizaje(cursoId));
+    }
+
 }
