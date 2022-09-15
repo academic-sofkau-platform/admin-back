@@ -6,15 +6,14 @@ import com.sofkau.retofinal.models.Training;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 
 public interface ITrainingService {
-    Mono<Training> save(Training training);
-    Mono<Training> asignarCoach(String coach, String trainingId);
+    Mono<TrainingDto> save(Training training);
+    Mono<TrainingDto> asignarCoach(String coach, String trainingId);
     Flux<Aprendiz> cargarListaAprendiz(); //csv
-    Flux<Training> findAll();
-    Mono<Training> findById(String trainingId);
-    Mono<Training> update(Training training, String trainingId);
+    Flux<TrainingDto> findAll();
+    Mono<TrainingDto> findById(String trainingId);
+    Mono<TrainingDto> update(Training training, String trainingId);
     Mono<Void> deleteById(String trainingId);
 
     Flux<TrainingDto> getActiveTrainings();
@@ -23,4 +22,6 @@ public interface ITrainingService {
 
     Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos();
     Flux<Aprendiz> getAprendicesByTrainingId(String trainingId);
+
+    Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
 }
