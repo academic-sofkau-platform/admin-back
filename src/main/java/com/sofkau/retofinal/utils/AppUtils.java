@@ -1,13 +1,7 @@
 package com.sofkau.retofinal.utils;
 
-import com.sofkau.retofinal.dto.ActividadDto;
-import com.sofkau.retofinal.dto.CursoDto;
-import com.sofkau.retofinal.dto.RutaAprendizajeDto;
-import com.sofkau.retofinal.dto.RutaDto;
-import com.sofkau.retofinal.models.Actividad;
-import com.sofkau.retofinal.models.Curso;
-import com.sofkau.retofinal.models.Ruta;
-import com.sofkau.retofinal.models.RutaAprendizaje;
+import com.sofkau.retofinal.dto.*;
+import com.sofkau.retofinal.models.*;
 import org.springframework.beans.BeanUtils;
 import reactor.core.publisher.Flux;
 
@@ -39,6 +33,7 @@ public class AppUtils {
     public static ActividadDto actividadToDto(Actividad actividad){
         ActividadDto actividadDto = new ActividadDto();
         BeanUtils.copyProperties(actividad, actividadDto);
+        actividadDto.setFecha(actividad.getFecha().toString());
         return actividadDto;
     }
     public static Actividad dtoToActividad(ActividadDto actividadDto){
@@ -66,5 +61,18 @@ public class AppUtils {
     public static Flux<CursoDto> cursoListToDto(Flux<Curso> cursoFlux){
         Flux<CursoDto> cursoListDto = cursoFlux.map(AppUtils::cursoToDto);
         return cursoListDto;
+    }
+
+    //Trainings
+    public static TrainingDto trainingToDto(Training training){
+        TrainingDto trainingDto = new TrainingDto();
+        BeanUtils.copyProperties(training, trainingDto);
+        return trainingDto;
+    }
+
+    public static Training dtoToTraining(TrainingDto trainingDto){
+        Training training = new Training();
+        BeanUtils.copyProperties(trainingDto, training);
+        return training;
     }
 }

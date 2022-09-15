@@ -1,4 +1,5 @@
 package com.sofkau.retofinal.controllers;
+import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.services.TrainingServicesImpl;
@@ -65,13 +66,9 @@ public class ControllerTraining {
     }
 
     @GetMapping("/findAllTrainingActivos")
-    public Flux<Training> findAllTrainingActivos() {
-        return service.getActiveTrainings();
-    }
+    public Flux<TrainingDto> findAllTrainingActivos() {
 
-    @GetMapping("/getAllAprendicesDeLosTrainingActivos")
-    public Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos() {
-        return service.getAllAprendicesDeLosTrainingActivos();
+        return service.getActiveTrainings();
     }
 
 

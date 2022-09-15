@@ -1,9 +1,11 @@
 package com.sofkau.retofinal.services;
 
+import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
 import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.repositories.TrainingRepository;
+import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
@@ -84,25 +86,44 @@ public class TrainingServicesImpl implements ITrainingService {
     }
 
     @Override
-    public Flux<Training> getActiveTrainings() {
+    public Flux<TrainingDto> getActiveTrainings() {
         Date today = new Date();
         return repository.findAll()
                 .filter(training -> today.after(training.getStartDate()))
-                .filter(training -> today.before(training.getEndDate()));
+                .filter(training -> today.before(training.getEndDate()))
+                .map(training -> AppUtils.trainingToDto(training))
+                .map(trainingDto -> {
+                    trainingDto.setApprenticesCount(trainingDto.getApprentices().size());
+                      repository.save(AppUtils.dtoToTraining(trainingDto));
+                    return trainingDto;
+                });
+
+
     }
 
     @Override
     public Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos() {
-        return this.getActiveTrainings().flatMap(training ->
+        return this.getActiveTrainings()
+                .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
+                .flatMap(training ->
                 Flux.fromIterable(training.getApprentices())
         );
     }
 
+    /*@Override
+    public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
+        return this.getActiveTrainings()
+                .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
+                .filter(training -> training.getTrainingId().equals(trainingId))
+                .flatMapIterable(Training::getApprentices);
+    }*/
     @Override
     public Flux<Aprendiz> getAprendicesByTrainingId(String trainingId) {
         return this.getActiveTrainings()
+                .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
                 .filter(training -> training.getTrainingId().equals(trainingId))
                 .flatMapIterable(Training::getApprentices);
+
     }
 
 

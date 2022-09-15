@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RutaAprendizajeDto {
-    private String id ;
+    private String id;
     private String nombre;
     private String descripcion;
     private List<Ruta> rutas;

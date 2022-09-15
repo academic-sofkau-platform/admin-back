@@ -31,11 +31,10 @@ public class ControllerRutaAprendizaje {
 
     @PostMapping("/save")
     public ResponseEntity<Mono<RutaAprendizajeDto>> save(@RequestBody RutaAprendizajeDto rutaAprendizaje){
-        System.out.println("hola: " + rutaAprendizaje);
         return ResponseEntity.ok().body(service.save(rutaAprendizaje));
     }
 
-    @PutMapping("/update/{id}")
+    @PostMapping("/update/{id}")
     public ResponseEntity<Mono<RutaAprendizajeDto>> update(@RequestBody RutaAprendizajeDto rutaAprendizaje, @PathVariable("id") String rutaAprendizajeId){
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -51,10 +50,16 @@ public class ControllerRutaAprendizaje {
     }
 
     //RUTAS
-    @PatchMapping("/add/route/{id}")
+    @PostMapping("/add/route/{id}")
     public ResponseEntity<Mono<RutaAprendizajeDto>> agregarRuta(@RequestBody RutaDto ruta, @PathVariable("id") String rutaAprendizajeId){
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(service.addRoute(ruta, rutaAprendizajeId));
+    }
+
+    @PostMapping("/delete/route/")
+    public ResponseEntity<Mono<Void>> eliminarRuta(@RequestBody String rutaAprendizajeId, @RequestBody String rutaId){
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(service.removeRoute(rutaId, rutaAprendizajeId));
     }
 
 }
