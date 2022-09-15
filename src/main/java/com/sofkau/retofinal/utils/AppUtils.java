@@ -5,6 +5,12 @@ import com.sofkau.retofinal.models.*;
 import org.springframework.beans.BeanUtils;
 import reactor.core.publisher.Flux;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+
 public class AppUtils {
     public static RutaAprendizajeDto rutaAprendizajeToDto(RutaAprendizaje rutaAprendizaje){
         RutaAprendizajeDto rutaAprendizajeDto = new RutaAprendizajeDto();
@@ -69,5 +75,31 @@ public class AppUtils {
         Training training = new Training();
         BeanUtils.copyProperties(trainingDto, training);
         return training;
+    }
+    public static String decoderBase64(String encodedBytesBase64) {
+        byte[] decodedBytes = Base64.getDecoder().decode(encodedBytesBase64);
+        String decodedString = new String(decodedBytes);
+        return decodedString;
+    }
+    public static List<Aprendiz> obtenerAprendices(String csvDecodificado) {
+        String[] aprendices = csvDecodificado.split("\n", 0);
+        String[] aprendicesLimpio = Arrays.copyOfRange(aprendices, 1, aprendices.length);
+        List<Aprendiz> listAprendices = new ArrayList<>();
+        Arrays.stream(aprendicesLimpio).forEach(aprendiz -> {
+            var aprendizString= aprendiz.split(",", 0);
+            var aprendizNombreCompleto = aprendizString[0].split(" ", 2);
+            Aprendiz newAprendiz = new Aprendiz();
+            newAprendiz.setName(aprendizNombreCompleto[0]);
+            newAprendiz.setLastName(aprendizNombreCompleto[1]);
+            newAprendiz.setEmail(aprendizString[1]);
+            newAprendiz.setPhoneNumber(aprendizString[2]);
+            listAprendices.add(newAprendiz);
+        });
+        return listAprendices;
+    }
+
+    //Todo crear training original ARMAR ESTO y luego saviarlo
+    public static Training armarTrainingOriginal(TrainingAuxiliar trainingAuxiliar) {
+        return null;
     }
 }

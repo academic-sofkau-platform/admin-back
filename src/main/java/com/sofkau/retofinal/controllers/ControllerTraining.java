@@ -1,8 +1,11 @@
 package com.sofkau.retofinal.controllers;
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.Training;
+import com.sofkau.retofinal.models.TrainingAuxiliar;
 import com.sofkau.retofinal.services.TrainingServicesImpl;
+import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +14,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.sofkau.retofinal.utils.AppUtils.decoderBase64;
+import static com.sofkau.retofinal.utils.AppUtils.obtenerAprendices;
 
 @RestController
 @RequestMapping("/trainings")
@@ -21,27 +27,20 @@ public class ControllerTraining {
     //Todo control de respuesta http
     @Autowired
     TrainingServicesImpl service;
+
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<ResponseEntity<TrainingDto>> save(@RequestBody Training training) {
+    public Mono<ResponseEntity<TrainingDto>> save(@RequestBody TrainingAuxiliar trainingAuxiliar) {
+        System.out.println(trainingAuxiliar);
+        //System.out.println("Codificado "+trainingAuxiliar.getApprentices());
+        //System.out.print("Decodificado "+decoderBase64(trainingAuxiliar.getApprentices()));
 
-        //hacer una función que decodifique el base64 y me entregue una lista de los aprendices
+        // System.out.println(obtenerAprendices(decoderBase64(trainingAuxiliar.getApprentices())));
 
-//        byte[] bytesDecodificados = Base64.getDecoder().decode(cadenaCodificada);
-//        String cadenaDecodificada = new String(bytesDecodificados);
-        System.out.println(training);
-        System.out.println(training.getApprentices());
-        System.out.println(training.getCoach());
-        System.out.println(training.getDescription());
-        System.out.println(training.getEndDate());
-        System.out.println(training.getName());
-        System.out.println(training.getRutaId());
-        System.out.println(training.getTrainingId());
-
-        return service.save(training)
-                .flatMap(trainingDto -> Mono.just(ResponseEntity.ok(trainingDto)))
-                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
-       // return null;
+        //return service.save(training)
+        //         .flatMap(trainingDto -> Mono.just(ResponseEntity.ok(trainingDto)))
+        //         .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+        return null;
     }
     @GetMapping("/findAllTrainings")
     public Flux<TrainingDto> findAllTrainings() {

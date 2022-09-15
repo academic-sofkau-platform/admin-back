@@ -20,10 +20,8 @@ public class Aprendiz {
     private String city;
     private String gender;
     private String email;
-    private Integer phoneNumber;
+    private String phoneNumber;
     private String photo;
     private Boolean bilingual;
     private List <String> accionDeMejora;
-
-
 }
