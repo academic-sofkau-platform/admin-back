@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection="apprentices")
@@ -20,8 +21,9 @@ public class Aprendiz {
     private String city;
     private String gender;
     private String email;
-    private Integer phoneNumber;
+    private String phoneNumber;
     private String photo;
+    private List <Tareas> tareas= new ArrayList<>();
     private Boolean bilingual;
     private List <String> accionDeMejora;
 
