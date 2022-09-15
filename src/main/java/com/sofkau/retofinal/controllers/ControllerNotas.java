@@ -3,13 +3,10 @@ package com.sofkau.retofinal.controllers;
 
 
 import com.sofkau.retofinal.models.*;
-import com.sofkau.retofinal.services.ActividadServiceImpl;
 import com.sofkau.retofinal.services.NotasServices;
-import com.sofkau.retofinal.services.TrainingServicesImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
@@ -17,34 +14,25 @@ import reactor.core.publisher.Flux;
 @RequestMapping("/notas")
 @CrossOrigin("*")
 public class ControllerNotas {
-
-    private Flux<Notas> notas;
-
     @Autowired
     private NotasServices service;
 
-    @Autowired
-    private ActividadServiceImpl actividadService;
-    @Autowired
-    private ControllerActividad controllerActividad;
 
     @Autowired
     private ControllerTraining training;
 
-    @Autowired
-    TrainingServicesImpl trainingServices;
 
 
 
-   /*@Scheduled(cron = "20 * * * * *")
+   @Scheduled(cron = "0 0 * * * *")
    public void extraerMediaNoche(){
-       extraerNotas();
+       extraerNotas().subscribe();
    }
 
-    @Scheduled(cron = "0 12 * * *")
+    @Scheduled(cron = "0 12 * * * *")
     public void extraerMedioDia() {
-        extraerNotas();
-    }*/
+        extraerNotas().subscribe();
+    }
 
     @GetMapping
     @PostMapping
