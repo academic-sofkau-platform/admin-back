@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,7 +66,7 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                 .findById(rutaAprendizajeId)
                 .flatMap(rutaAprendizaje -> {
                     Ruta ruta = AppUtils.dtoToRuta(rutaDto);
-                    ruta.setCurso(rutaDto.getCurso());
+                    ruta.setCursoId(rutaDto.getCursoId());
                     rutaAprendizaje.getRutas().add(ruta);
                     return repository.save(rutaAprendizaje);
                 })
@@ -90,6 +89,16 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                     return repository.save(rutaAprendizaje);
                 })
                 .then();
+    }
+
+    @Override
+    public Mono<Boolean> controlCursoEnRutaAprendizaje(String cursoId) {
+            return repository
+                .findAll()
+                .flatMapIterable(RutaAprendizaje::getRutas)
+                .filter(ruta -> ruta.getCursoId().equals(cursoId))
+                .next()
+                .hasElement();
     }
 
 }
