@@ -3,6 +3,7 @@ package com.sofkau.retofinal.dto;
 import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.RutaAprendizaje;
 import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,9 +27,4 @@ public class TrainingDto {
     private RutaAprendizaje rutaAprendizaje;
     private long apprenticesCount;
     private String periodo;
-
-
-
-
-
 }

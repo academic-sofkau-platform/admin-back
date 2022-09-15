@@ -172,7 +172,7 @@ class RutaAprendizajeServiceImplTest {
         );
 
         Ruta ruta = new Ruta();
-        ruta.setCurso("Curso de prueba 2");
+        ruta.setCursoId("2");
         ruta.setNivel(2);
         ruta.setPrerrequisitos(prerrequisitos);
 
@@ -221,5 +221,31 @@ class RutaAprendizajeServiceImplTest {
                 .expectNext()
                 .expectComplete()
                 .verify();
+    }
+    @Test
+    void controlCursoEnRutaAprendizaje(){
+        List<String> prerrequisitos = new ArrayList<>();
+        prerrequisitos.add("Angular");
+        prerrequisitos.add("Programación funcional y reactiva");
+
+        List<Ruta> rutas = new ArrayList<>();
+        rutas.add(new Ruta("1",1, "AAAAA", prerrequisitos));
+        rutas.add(new Ruta("2",2, "BBBBB", prerrequisitos));
+
+        RutaAprendizaje rutaAprendizaje = new RutaAprendizaje("1",
+                "Prueba",
+                "Descripción de prueba",
+                rutas
+        );
+
+        when(repository.findAll())
+                .thenReturn(Flux.just(rutaAprendizaje));
+
+        StepVerifier
+                .create(service.controlCursoEnRutaAprendizaje("AAAAA"))
+                .expectNext(true)
+                .expectComplete()
+                .verify();
+
     }
 }

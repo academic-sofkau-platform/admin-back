@@ -26,6 +26,4 @@ public class Aprendiz {
     private List <Tareas> tareas= new ArrayList<>();
     private Boolean bilingual;
     private List <String> accionDeMejora;
-
-
 }
