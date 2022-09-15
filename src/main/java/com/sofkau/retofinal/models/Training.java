@@ -24,6 +24,8 @@ public class Training {
     private String coach;
     private List<Aprendiz> apprentices;
     private RutaAprendizaje rutaAprendizaje;
+    private long apprenticesCount;
+    private String periodo;
 
 
 

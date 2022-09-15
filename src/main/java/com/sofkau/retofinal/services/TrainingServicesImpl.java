@@ -91,12 +91,12 @@ public class TrainingServicesImpl implements ITrainingService {
         return repository.findAll()
                 .filter(training -> today.after(training.getStartDate()))
                 .filter(training -> today.before(training.getEndDate()))
-                .map(training -> AppUtils.trainingToDto(training))
-                .map(trainingDto -> {
+                .map(training -> AppUtils.trainingToDto(training));
+                /*.map(trainingDto -> {
                     trainingDto.setApprenticesCount(trainingDto.getApprentices().size());
                       repository.save(AppUtils.dtoToTraining(trainingDto));
                     return trainingDto;
-                });
+                });*/
 
 
     }

@@ -16,7 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class TrainingDto {
-    private String trainingId = UUID.randomUUID().toString();
+    private String trainingId;
     private String name;
     private String description;
     private Date startDate;

@@ -6,6 +6,7 @@ import com.sofkau.retofinal.models.Actividad;
 import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.Notas;
 import com.sofkau.retofinal.models.Training;
+import com.sofkau.retofinal.services.ActividadServiceImpl;
 import com.sofkau.retofinal.services.NotasServices;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class ControllerNotas {
     private NotasServices service;
 
     @Autowired
+    private ActividadServiceImpl actividadService;
+    @Autowired
     private ControllerActividad controllerActividad;
 
     @Autowired
@@ -44,10 +47,11 @@ public class ControllerNotas {
         return training.findAllTrainingActivos()
                 .flatMap(training1 -> Flux.fromIterable(training1.getApprentices()).map(aprendiz -> {
                     List<Actividad> a= new ArrayList<>();
-                     AppUtils.dtoListToActividad(controllerActividad.findByAprendiz(aprendiz.getId()))
-                             .collectList().subscribe(a::addAll);
-                    Notas nota= new Notas(aprendiz.getId(), training1.getTrainingId(), a);
-                    return nota;
+                     actividadService.findActivityByAprendizId(aprendiz.getId());
+                    System.out.println(aprendiz.getId());
+                    System.out.println(a);
+                    return new Notas(aprendiz.getId(), training1.getTrainingId(), a);
+
                 }));
 
 
