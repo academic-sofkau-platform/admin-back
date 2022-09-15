@@ -3,7 +3,9 @@ package com.sofkau.retofinal.controllers;
 
 import com.sofkau.retofinal.dto.ActividadDto;
 import com.sofkau.retofinal.models.Actividad;
+import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.Notas;
+import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.services.NotasServices;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,19 +41,18 @@ public class ControllerNotas {
     //@Scheduled(cron = "0 0 * * *")
     @GetMapping
     public Flux<Notas> extraerMediaNoche() {
-        List<Actividad> a= new ArrayList<>();
         return training.findAllTrainingActivos()
-                .flatMap(training1 -> Flux.fromIterable(training1.getApprentices())
-                        .map(aprendiz -> {
-                            Notas nota= new Notas();
-                            nota.setAprendizId(aprendiz.getId());
-                            nota.setTrainingI(training1.getTrainingId());
-                            nota.setActividadList(new ArrayList<>());
+                .flatMap(training1 -> Flux.fromIterable(training1.getApprentices()).map(aprendiz -> {
+                    List<Actividad> a= new ArrayList<>();
+                     AppUtils.dtoListToActividad(controllerActividad.findByAprendiz(aprendiz.getId()))
+                             .collectList().subscribe(a::addAll);
+                    Notas nota= new Notas(aprendiz.getId(), training1.getTrainingId(), a);
+                    return nota;
+                }));
 
-                           AppUtils.dtoListToActividad(controllerActividad.findByAprendiz(aprendiz.getId())).collectList().block();
-                            return nota;
-                        })
-                );
+
+
+
 
     }
 
