@@ -15,8 +15,7 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sofkau.retofinal.utils.AppUtils.decoderBase64;
-import static com.sofkau.retofinal.utils.AppUtils.obtenerAprendices;
+import static com.sofkau.retofinal.utils.AppUtils.*;
 
 @RestController
 @RequestMapping("/trainings")
@@ -31,16 +30,9 @@ public class ControllerTraining {
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<ResponseEntity<TrainingDto>> save(@RequestBody TrainingAuxiliar trainingAuxiliar) {
-        System.out.println(trainingAuxiliar);
-        //System.out.println("Codificado "+trainingAuxiliar.getApprentices());
-        //System.out.print("Decodificado "+decoderBase64(trainingAuxiliar.getApprentices()));
-
-        // System.out.println(obtenerAprendices(decoderBase64(trainingAuxiliar.getApprentices())));
-
-        //return service.save(training)
-        //         .flatMap(trainingDto -> Mono.just(ResponseEntity.ok(trainingDto)))
-        //         .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
-        return null;
+        return service.save(armarTraining(trainingAuxiliar))
+                 .flatMap(trainingDto -> Mono.just(ResponseEntity.ok(trainingDto)))
+                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
     @GetMapping("/findAllTrainings")
     public Flux<TrainingDto> findAllTrainings() {

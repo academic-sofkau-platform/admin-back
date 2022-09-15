@@ -5,7 +5,6 @@ import com.sofkau.retofinal.models.*;
 import org.springframework.beans.BeanUtils;
 import reactor.core.publisher.Flux;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -99,7 +98,15 @@ public class AppUtils {
     }
 
     //Todo crear training original ARMAR ESTO y luego saviarlo
-    public static Training armarTrainingOriginal(TrainingAuxiliar trainingAuxiliar) {
-        return null;
+    public static Training armarTraining(TrainingAuxiliar trainingAuxiliar) {
+        Training training = new Training();
+        training.setApprentices(obtenerAprendices(decoderBase64(trainingAuxiliar.getApprentices())));
+        training.setCoach(trainingAuxiliar.getCoach());
+        training.setDescription(trainingAuxiliar.getDescription());
+        training.setEndDate(trainingAuxiliar.getEndDate());
+        training.setName(trainingAuxiliar.getName());
+        training.setRutaId(trainingAuxiliar.getRutaId());
+        training.setStartDate(trainingAuxiliar.getStartDate());
+        return training;
     }
 }
