@@ -24,7 +24,20 @@ public class ControllerTraining {
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<ResponseEntity<TrainingDto>> save(@RequestBody Training training) {
+
+        //hacer una función que decodifique el base64 y me entregue una lista de los aprendices
+
+//        byte[] bytesDecodificados = Base64.getDecoder().decode(cadenaCodificada);
+//        String cadenaDecodificada = new String(bytesDecodificados);
         System.out.println(training);
+        System.out.println(training.getApprentices());
+        System.out.println(training.getCoach());
+        System.out.println(training.getDescription());
+        System.out.println(training.getEndDate());
+        System.out.println(training.getName());
+        System.out.println(training.getRutaId());
+        System.out.println(training.getTrainingId());
+
         return service.save(training)
                 .flatMap(trainingDto -> Mono.just(ResponseEntity.ok(trainingDto)))
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
