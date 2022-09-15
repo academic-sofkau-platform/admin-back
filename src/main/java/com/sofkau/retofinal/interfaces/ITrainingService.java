@@ -15,8 +15,11 @@ public interface ITrainingService {
     Mono<TrainingDto> findById(String trainingId);
     Mono<TrainingDto> update(Training training, String trainingId);
     Mono<Void> deleteById(String trainingId);
-    Mono<Void> deleteAprendizByEmail(String trainingId,String email);
+
     Flux<TrainingDto> getActiveTrainings();
+
+    Mono<Void> deleteAprendizByEmail(String trainingId,String email);
+
     Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos();
     Flux<Aprendiz> getAprendicesByTrainingId(String trainingId);
 }

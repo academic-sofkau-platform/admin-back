@@ -53,7 +53,7 @@ public class AppUtils {
         return cursoListDto;
     }
 
-    //Training
+    //Trainings
     public static TrainingDto trainingToDto(Training training){
         TrainingDto trainingDto = new TrainingDto();
         BeanUtils.copyProperties(training, trainingDto);
@@ -65,4 +65,9 @@ public class AppUtils {
         return trainingFluxDto;
     }
 
+    public static Training dtoToTraining(TrainingDto trainingDto){
+        Training training = new Training();
+        BeanUtils.copyProperties(trainingDto, training);
+        return training;
+    }
 }

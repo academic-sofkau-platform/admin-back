@@ -24,4 +24,5 @@ public class Training {
     private String coach;
     private List<Aprendiz> apprentices;
     private String rutaId;
+
 }

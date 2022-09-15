@@ -88,11 +88,6 @@ public class ControllerTraining {
         return service.getActiveTrainings();
     }
 
-    @GetMapping("/getAllAprendicesDeLosTrainingActivos")
-    public Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos() {
-        return service.getAllAprendicesDeLosTrainingActivos();
-    }
-
 
     @GetMapping("/aprendices/{trainingId}/{email}")
     public Mono<Aprendiz> getAllAprendicesByTrainingIdAndEmail(@PathVariable("trainingId") String trainingId, @PathVariable("email") String emailId) {

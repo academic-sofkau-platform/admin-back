@@ -91,12 +91,19 @@ public class TrainingServicesImpl implements ITrainingService {
         return repository.findAll()
                 .filter(training -> today.after(training.getStartDate()))
                 .filter(training -> today.before(training.getEndDate()))
-                .map(training -> AppUtils.trainingToDto(training));
+                .map(training -> AppUtils.trainingToDto(training))
+                .map(trainingDto -> {
+                    trainingDto.setApprenticesCount(trainingDto.getApprentices().size());
+                      repository.save(AppUtils.dtoToTraining(trainingDto));
+                    return trainingDto;
+                });
     }
 
     @Override
     public Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos() {
-        return this.getActiveTrainings().flatMap(training ->
+        return this.getActiveTrainings()
+                .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
+                .flatMap(training ->
                 Flux.fromIterable(training.getApprentices())
         );
     }
@@ -104,8 +111,9 @@ public class TrainingServicesImpl implements ITrainingService {
     @Override
     public Flux<Aprendiz> getAprendicesByTrainingId(String trainingId) {
         return this.getActiveTrainings()
+                .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
                 .filter(training -> training.getTrainingId().equals(trainingId))
-                .flatMapIterable(trainingDto -> trainingDto.getApprentices());
+                .flatMapIterable(Training::getApprentices);
     }
 
 
