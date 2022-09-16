@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import reactor.core.publisher.Mono;
 import static org.mockito.Mockito.when;
@@ -148,7 +149,7 @@ class TrainingServicesImplTest {
     }
 
     @Test
-    void deleteAprendizByEmail() throws ParseException{
+    void deleteAprendizByEmail() throws ParseException {
         SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
         Date date1 = DateFor.parse("2022-09-15");
         Date date2 = DateFor.parse("2022-09-30");
@@ -198,28 +199,17 @@ class TrainingServicesImplTest {
                 .expectNext()
                 .expectComplete()
                 .verify();
-
     }
 
     @Test
-    void getActiveTrainings() throws ParseException{
+    void getActiveTrainings() throws ParseException {
         SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
         Date date1 = DateFor.parse("2022-09-15");
         Date date2 = DateFor.parse("2022-09-30");
-        Date date3 = DateFor.parse("2021-09-15");
-        Date date4 = DateFor.parse("2021-09-30");
+        Date date3 = DateFor.parse("2021-08-15");
+        Date date4 = DateFor.parse("2021-10-30");
         List<Aprendiz> aprendices1 = new ArrayList<>();
-        aprendices1.add(new Aprendiz("1",
-                "Fabri",
-                "Rancio",
-                "Las Vegas",
-                "Femenino",
-                "fabri@gmail.com",
-                "1234",
-                "xd.png",
-                null,
-                true,
-                null));
+        List<Aprendiz> aprendices2 = new ArrayList<>();
 
         Training training1 = new Training();
         training1.setCoach("Eddie");
@@ -239,13 +229,13 @@ class TrainingServicesImplTest {
         training2.setName("IalP");
         training2.setRutaId("ruta2");
         training2.setTrainingId("321");
-        training2.setApprentices(aprendices1);
+        training2.setApprentices(aprendices2);
 
         when(repository.save(training1))
                 .thenReturn(Mono.just(training1));
 
         when(repository.findAll())
-                .thenReturn(Flux.just(training1));
+                .thenReturn(Flux.just(training1, training2));
 
         StepVerifier
                 .create(service.getActiveTrainings())
