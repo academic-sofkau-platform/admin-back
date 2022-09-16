@@ -33,6 +33,11 @@ public class ControllerActividad {
                 .filter(actividad -> actividad.getAprendizId().equals(aprendizId));
     }
 
+    @GetMapping("/findByAprendiz/{aprendizId}")
+    public Flux<Actividad> findByAprendizId(@PathVariable("aprendizId") String aprendizId) {
+        return service.findActivityByAprendizId(aprendizId);
+    }
+
     @GetMapping("/find-specific/{cursoId}/{aprendizId}")
     public Flux<ActividadDto> findByCursoAndAprendiz(@PathVariable("cursoId") String cursoId, @PathVariable("aprendizId") String aprendizId) {
         return service.findAll()
@@ -52,6 +57,7 @@ public class ControllerActividad {
     public ResponseEntity<Flux<Actividad>> findAll(@PathVariable("aprendizId") String aprendizId){
         return ResponseEntity.ok()
                 .body(service.findActivityByAprendizId(aprendizId));
+
 
     }
 }

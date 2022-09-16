@@ -36,7 +36,7 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
 
     private Aprendiz getAprendizById(String trainingId, String aprendizId){
         // se obtienen todos los aprendices de cada training de la nota
-        Flux<Aprendiz> aprendices = trainingServices.getAllAprendicesByTrainingId(trainingId);
+        Flux<Aprendiz> aprendices = trainingServices.getAprendicesByTrainingId(trainingId);
 
         Aprendiz aprendiz = aprendices
                 .filter(aprendiz1 -> aprendiz1.getId().equals(aprendizId))

@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
-import java.util.UUID;
 @Document(collection = "notes")
 @Data
 @AllArgsConstructor
@@ -16,7 +15,7 @@ public class Notas {
     @Id
     private String aprendizId;
     private String trainingId;
-    private List<Actividad> actividadList;
+    private List<Tareas> tareasList;
 
 }
 

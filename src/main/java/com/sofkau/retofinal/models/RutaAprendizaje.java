@@ -14,6 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RutaAprendizaje {
+    @Id
     private String id = UUID.randomUUID().toString();
     private String nombre;
     private String descripcion;
