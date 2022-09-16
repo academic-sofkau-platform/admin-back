@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.stream.Collectors;
+
 @Service
 public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
     @Autowired
@@ -63,12 +65,39 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                 .findById(rutaAprendizajeId)
                 .flatMap(rutaAprendizaje -> {
                     Ruta ruta = AppUtils.dtoToRuta(rutaDto);
-                    ruta.setCurso(rutaDto.getCurso());
+                    ruta.setCursoId(rutaDto.getCursoId());
                     rutaAprendizaje.getRutas().add(ruta);
                     return repository.save(rutaAprendizaje);
                 })
                 .map(AppUtils::rutaAprendizajeToDto)
                 .switchIfEmpty(Mono.empty());
+    }
+
+
+    //Acá estoy haciendo por ID pero cuando se crea la ruta de aprendizaje no se guarda el id de la ruta.
+    @Override
+    public Mono<Void> removeRoute(String rutaId, String rutaAprendizajeId) {
+        return repository
+                .findById(rutaAprendizajeId)
+                .flatMap(rutaAprendizaje -> {
+                    var list = rutaAprendizaje
+                            .getRutas()
+                            .stream()
+                            .filter(ruta -> !ruta.getId().equals(rutaId)).collect(Collectors.toList());
+                    rutaAprendizaje.setRutas(list);
+                    return repository.save(rutaAprendizaje);
+                })
+                .then();
+    }
+
+    @Override
+    public Mono<Boolean> controlCursoEnRutaAprendizaje(String cursoId) {
+            return repository
+                .findAll()
+                .flatMapIterable(RutaAprendizaje::getRutas)
+                .filter(ruta -> ruta.getCursoId().equals(cursoId))
+                .next()
+                .hasElement();
     }
 
 }

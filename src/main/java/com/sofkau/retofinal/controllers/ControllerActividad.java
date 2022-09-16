@@ -4,6 +4,7 @@ import com.sofkau.retofinal.dto.ActividadDto;
 import com.sofkau.retofinal.models.Actividad;
 import com.sofkau.retofinal.services.ActividadServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -32,6 +33,11 @@ public class ControllerActividad {
                 .filter(actividad -> actividad.getAprendizId().equals(aprendizId));
     }
 
+    @GetMapping("/findByAprendiz/{aprendizId}")
+    public Flux<Actividad> findByAprendizId(@PathVariable("aprendizId") String aprendizId) {
+        return service.findActivityByAprendizId(aprendizId);
+    }
+
     @GetMapping("/find-specific/{cursoId}/{aprendizId}")
     public Flux<ActividadDto> findByCursoAndAprendiz(@PathVariable("cursoId") String cursoId, @PathVariable("aprendizId") String aprendizId) {
         return service.findAll()
@@ -39,8 +45,19 @@ public class ControllerActividad {
                 .filter(actividad -> actividad.getAprendizId().equals(aprendizId));
     }
 
-    @PostMapping("/update/{cursoId}/{aprendizId}")
-    public Mono<ActividadDto> addOrUpdate(@PathVariable("cursoId") String cursoId, @PathVariable("aprendizId") String aprendizId) {
-       return service.addOrUpdate(3,cursoId, aprendizId);
+    @PutMapping("/updatepuntaje")
+    public Mono<ActividadDto> updatePuntaje(@RequestBody Actividad actividad) {
+       return service.updatePuntaje(actividad, 3);
+    }
+
+    @GetMapping("/aprendices/{aprendizId}")
+    /**
+     * Busca todas las notas por su aprendiz
+     */
+    public ResponseEntity<Flux<Actividad>> findAll(@PathVariable("aprendizId") String aprendizId){
+        return ResponseEntity.ok()
+                .body(service.findActivityByAprendizId(aprendizId));
+
+
     }
 }

@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-
 @Service
 public class ActividadServiceImpl implements IActividadService {
 
@@ -30,21 +27,19 @@ public class ActividadServiceImpl implements IActividadService {
     }
 
     @Override
-    public Mono<ActividadDto> addOrUpdate(Integer puntaje, String cursoId, String aprendizId) {
-        return  findByAprendizIdAndFecha(aprendizId, cursoId, LocalDate.now())
+    public Mono<ActividadDto> updatePuntaje(Actividad actividadx, Integer puntaje) {
+        return  repository.findById(actividadx.getActividadId())
                 .map(actividad -> {
                     actividad.setPuntaje(actividad.getPuntaje() + puntaje);
                     return AppUtils.actividadToDto(repository.save(actividad).block());
                 })
-                .switchIfEmpty(Mono.just(AppUtils.actividadToDto(repository.save(new Actividad(cursoId, aprendizId, LocalDate.now(), puntaje)).block())));
+                .switchIfEmpty(Mono.empty());
     }
 
-    private Mono<Actividad> findByAprendizIdAndFecha(String aprendizId,String cursoId, LocalDate fecha) {
+
+    public Flux<Actividad> findActivityByAprendizId(String aprendizId) {
         return repository.findAll()
                 .filter(actividad -> actividad.getAprendizId().equals(aprendizId))
-                .filter(actividad -> actividad.getCursoId().equals(cursoId))
-                .filter(actividad -> actividad.getFecha().equals(fecha))
-                .next()
                 .switchIfEmpty(Mono.empty());
     }
 }
