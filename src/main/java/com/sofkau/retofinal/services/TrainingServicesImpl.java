@@ -40,7 +40,6 @@ public class TrainingServicesImpl implements ITrainingService {
                 .switchIfEmpty(Mono.empty());
     }
 
-    //Todo preguntarle a Raul - Cómo transformar lo que me llega a un flux
     @Override
     public Flux<Aprendiz> cargarListaAprendiz() {
         return null;
@@ -118,7 +117,7 @@ public class TrainingServicesImpl implements ITrainingService {
     @Override
     public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
         return this.getActiveTrainings().filter(training -> training.getTrainingId().equals(trainingId))
-                .flatMapIterable(Training::getApprentices);
+                .flatMapIterable(TrainingDto::getApprentices);
     }
 
 }
