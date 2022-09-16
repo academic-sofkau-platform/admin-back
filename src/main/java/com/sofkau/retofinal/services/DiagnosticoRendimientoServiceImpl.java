@@ -21,7 +21,7 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
     @Autowired
     private EnvioDeCorreoServiceImpl envioDeCorreoService;
     public ArrayList<AccionDeMejora> accionDeMejoras = new ArrayList<AccionDeMejora>();
-    public ArrayList<Aprendiz> aprendicesConAccionesDeMejora = new ArrayList<>();
+    private ArrayList<Aprendiz> aprendicesConAccionesDeMejora = new ArrayList<>();
 
     public DiagnosticoRendimientoServiceImpl() {
         this.accionDeMejoras.add(new AccionDeMejora("7595fb82-db54-490b-91fc-ec0c8e7daaa1", "Test 1", "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
@@ -34,7 +34,7 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
         this.accionDeMejoras.add(new AccionDeMejora("022686ac-9f63-4636-8ac4-37c2129cba51", "Test 2", "Repaso Introduccion al Desarrollo (link documentación)"));
     }
 
-    public Aprendiz getAprendizById(String trainingId, String aprendizId){
+    private Aprendiz getAprendizById(String trainingId, String aprendizId){
         // se obtienen todos los aprendices de cada training de la nota
         Flux<Aprendiz> aprendices = trainingServices.getAprendicesByTrainingId(trainingId);
 
@@ -50,7 +50,7 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
         return aprendiz;
     }
 
-    public Mono<AccionDeMejora> getAccionDeMejoraByCursoId(String cursoId) {
+    private Mono<AccionDeMejora> getAccionDeMejoraByCursoId(String cursoId) {
         return Flux.fromIterable(this.accionDeMejoras)
                 .filter(accionDeMejora -> accionDeMejora.getCursoId().equals(cursoId))
                 .next()
@@ -58,14 +58,14 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
 
     }
 
-    public void setAprendizAccionesDeMejora(Aprendiz aprendiz, AccionDeMejora accionDeMejoras){
+    private void setAprendizAccionesDeMejora(Aprendiz aprendiz, AccionDeMejora accionDeMejoras){
         // si el aprendiz no tiene ya asignada la accion de mejora
         if(!aprendiz.getAccionDeMejora().contains(accionDeMejoras.getAccion())){
             aprendiz.getAccionDeMejora().add(accionDeMejoras.getAccion());
         }
     }
 
-    public String BuildBody(Aprendiz aprendiz){
+    private String BuildBody(Aprendiz aprendiz){
         StringBuilder acciones = new StringBuilder();
         aprendiz.getAccionDeMejora().forEach(accion -> {
             if(aprendiz.getAccionDeMejora().size()==1 || acciones.length() == 0) {
@@ -109,14 +109,13 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
         });
 
         this.aprendicesConAccionesDeMejora.stream()
-                .forEach(acadm -> {
+                .forEach(aprendicesConAccionesDeMejora -> {
                     // enviar correo
                     DetallesDeCorreo detallesDeCorreo = new DetallesDeCorreo();
                     detallesDeCorreo.setSubject("Acciones de Mejora");
-                    //detallesDeCorreo.setRecipient(aprendiz.getEmail());
-                    detallesDeCorreo.setRecipient("bianchi.elias@gmail.com");
+                    detallesDeCorreo.setRecipient(aprendicesConAccionesDeMejora.getEmail());
 
-                    detallesDeCorreo.setMsgBody(BuildBody(acadm));
+                    detallesDeCorreo.setMsgBody(BuildBody(aprendicesConAccionesDeMejora));
 
                     envioDeCorreoService.sendSimpleMail(envioDeCorreoService.TemplateFeedback(detallesDeCorreo));
                 });
