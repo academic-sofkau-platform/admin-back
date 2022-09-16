@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -46,6 +47,19 @@ class ActividadServiceImplTest {
 
     @Test
     void findAll() {
+        LocalDate date1 = LocalDate.of(2022, 9, 22);
+        Actividad actividad1 = new Actividad("cursoId1", "aprendizId1", date1, 76, "tipo1", 75);
+        LocalDate date2 = LocalDate.of(2022, 8, 11);
+        Actividad actividad2 = new Actividad("cursoId2", "aprendizId2", date2, 78, "tipo2", 76);
+
+        when(repository.findAll())
+                .thenReturn(Flux.just(actividad1, actividad2));
+
+        StepVerifier
+                .create(service.findAll())
+                .expectNextCount(2)
+                .expectComplete()
+                .verify();
     }
 
     @Test
