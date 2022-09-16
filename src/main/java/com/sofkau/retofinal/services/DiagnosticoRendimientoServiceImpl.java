@@ -62,11 +62,6 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
     }
 
     public void diagnosticar(Flux<Notas> notas){
-
-        // Todo  No puedo enviar una accion de mejora repetida, es decir debo CONSULTAR si el aprendiz no tiene la accion de mejora correspodiente
-        // Todo  DETERMINAR si un aprendiz esta en bajo rendimiento <75% y poner una accion de mejora cuando se tenga un bajo rendimieto
-        // Todo  Si se tiene una accion de mejora se debe ENVIAR un correo con la accion de mejora correspondiente
-
         // Recorre todas las notas
         notas.toStream().forEach(notas1 -> {
 
@@ -87,6 +82,7 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
 
                             // System.out.println(aprendiz);
                             // enviar correo
+
                         }
                     }
                 });
