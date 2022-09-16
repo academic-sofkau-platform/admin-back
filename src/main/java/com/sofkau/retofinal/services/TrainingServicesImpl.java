@@ -3,13 +3,11 @@ package com.sofkau.retofinal.services;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
 import com.sofkau.retofinal.models.Aprendiz;
-import com.sofkau.retofinal.models.Notas;
 import com.sofkau.retofinal.models.Tareas;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.repositories.TrainingRepository;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -22,8 +20,6 @@ import java.util.stream.Collectors;
 public class TrainingServicesImpl implements ITrainingService {
     @Autowired
     TrainingRepository repository;
-    @Autowired
-    ReactiveMongoTemplate template;
 
     @Override
     public Mono<TrainingDto> save(Training training) {
@@ -133,8 +129,10 @@ public class TrainingServicesImpl implements ITrainingService {
 
     /*@Override
     public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
+<<<<<<< HEAD
         return this.getActiveTrainings().filter(training -> training.getTrainingId().equals(trainingId))
                 .flatMapIterable(Training::getApprentices);
     }*/
+
 
 }
