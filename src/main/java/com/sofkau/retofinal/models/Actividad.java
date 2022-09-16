@@ -21,15 +21,11 @@ public class Actividad {
     private String aprendizId;
     private LocalDate fecha;
     private Integer puntaje;
-    private String tipo;
-    private Integer nota;
 
     public Actividad(String cursoId, String aprendizId, LocalDate fecha, Integer puntaje, String tipo, Integer nota) {
         this.cursoId = cursoId;
         this.aprendizId = aprendizId;
         this.fecha = fecha;
         this.puntaje = puntaje;
-        this.tipo = tipo;
-        this.nota = nota;
     }
 }
