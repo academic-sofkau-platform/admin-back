@@ -8,8 +8,7 @@ public interface INotasService {
 
     Mono<Notas> save(Notas notas);
     Flux<Notas> findAll();
-    Mono<Notas> findById(String notasId);
-    Flux<Notas> findByAprendizId(String aprendizId);
+    Mono<Notas> findByAprendizId(String aprendizId);
     Mono<Notas> findByAprendizIdAndTrainingId(String aprendizId, String trainingId);
 
 }

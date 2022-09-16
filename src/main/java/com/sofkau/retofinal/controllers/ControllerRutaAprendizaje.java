@@ -50,16 +50,21 @@ public class ControllerRutaAprendizaje {
     }
 
     //RUTAS
-    @PatchMapping("/add/route/{id}")
+    @PostMapping("/add/route/{id}")
     public ResponseEntity<Mono<RutaAprendizajeDto>> agregarRuta(@RequestBody RutaDto ruta, @PathVariable("id") String rutaAprendizajeId){
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(service.addRoute(ruta, rutaAprendizajeId));
     }
 
-    @PatchMapping("/delete/route/{id}/{rutaId}")
-    public ResponseEntity<Mono<Void>> eliminarRuta(@PathVariable("id") String rutaAprendizajeId, @PathVariable("rutaId") String rutaId){
+    @PostMapping("/delete/route/")
+    public ResponseEntity<Mono<Void>> eliminarRuta(@RequestBody String rutaAprendizajeId, @RequestBody String rutaId){
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(service.removeRoute(rutaId, rutaAprendizajeId));
+    }
+
+    @GetMapping("/curso/{id}")
+    public ResponseEntity<Mono<Boolean>> controlCursoEnRutaAprendizaje(@PathVariable("id") String cursoId){
+        return ResponseEntity.ok().body(service.controlCursoEnRutaAprendizaje(cursoId));
     }
 
 }

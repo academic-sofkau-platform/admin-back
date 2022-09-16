@@ -29,22 +29,6 @@ public class EnvioDeCorreoServiceImpl {
      *
      */
     public void sendSimpleMail(DetallesDeCorreo details){
-        try {
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-
-            mailMessage.setFrom(sender);
-            mailMessage.setTo(details.getRecipient());
-            mailMessage.setText(details.getMsgBody());
-            mailMessage.setSubject(details.getSubject());
-
-            javaMailSender.send(mailMessage);
-        }
-
-        catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-    public void sendFeedback (DetallesDeCorreo details){
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             message.setFrom(sender);

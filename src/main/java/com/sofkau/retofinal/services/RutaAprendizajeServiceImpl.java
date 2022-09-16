@@ -65,7 +65,7 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                 .findById(rutaAprendizajeId)
                 .flatMap(rutaAprendizaje -> {
                     Ruta ruta = AppUtils.dtoToRuta(rutaDto);
-                    ruta.setCurso(rutaDto.getCurso());
+                    ruta.setCursoId(rutaDto.getCursoId());
                     rutaAprendizaje.getRutas().add(ruta);
                     return repository.save(rutaAprendizaje);
                 })
@@ -88,6 +88,16 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                     return repository.save(rutaAprendizaje);
                 })
                 .then();
+    }
+
+    @Override
+    public Mono<Boolean> controlCursoEnRutaAprendizaje(String cursoId) {
+            return repository
+                .findAll()
+                .flatMapIterable(RutaAprendizaje::getRutas)
+                .filter(ruta -> ruta.getCursoId().equals(cursoId))
+                .next()
+                .hasElement();
     }
 
 }
