@@ -44,7 +44,21 @@ class TrainingServicesImplTest {
 
     @Test
     void asignarCoach() {
+        Training training = new Training();
+        training.setTrainingId("1");
+        training.setName("Prueba");
 
+        when(repository.save(training))
+                .thenReturn(Mono.just(training));
+
+        when(repository.findById(training.getTrainingId()))
+                .thenReturn(Mono.just(training));
+
+        StepVerifier
+                .create(service.asignarCoach("Raul", training.getTrainingId()))
+                .expectNextMatches(trainingDto -> trainingDto.getCoach().equals("Raul"))
+                .expectComplete()
+                .verify();
     }
 
     @Test
@@ -134,23 +148,258 @@ class TrainingServicesImplTest {
     }
 
     @Test
-    void deleteAprendizByEmail() {
+    void deleteAprendizByEmail() throws ParseException{
+        SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = DateFor.parse("2022-09-15");
+        Date date2 = DateFor.parse("2022-09-30");
+        List<Aprendiz> aprendices1 = new ArrayList<>();
+        aprendices1.add(new Aprendiz("1",
+                "Fabri",
+                "Rancio",
+                "Las Vegas",
+                "Femenino",
+                "fabri@gmail.com",
+                "1234",
+                "xd.png",
+                null,
+                true,
+                null));
+
+        aprendices1.add(new Aprendiz("2",
+                "Matias",
+                "Souza",
+                "Ranciolandia",
+                "Masculino",
+                "queinteresante@gmail.com",
+                "12345",
+                "elmati.png",
+                null,
+                false,
+                null));
+
+        Training training1 = new Training();
+        training1.setCoach("Eddie");
+        training1.setDescription("Doman Driven Design");
+        training1.setStartDate(date1);
+        training1.setEndDate(date2);
+        training1.setName("DDD");
+        training1.setRutaId("ruta1");
+        training1.setTrainingId("123");
+        training1.setApprentices(aprendices1);
+
+        when(repository.save(training1))
+                .thenReturn(Mono.just(training1));
+
+        when(repository.findById(training1.getTrainingId()))
+                .thenReturn(Mono.just(training1));
+
+        StepVerifier
+                .create(service.deleteAprendizByEmail(training1.getTrainingId(), "fabri@gmail.com"))
+                .expectNext()
+                .expectComplete()
+                .verify();
+
     }
 
     @Test
-    void getActiveTrainings() {
+    void getActiveTrainings() throws ParseException{
+        SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = DateFor.parse("2022-09-15");
+        Date date2 = DateFor.parse("2022-09-30");
+        Date date3 = DateFor.parse("2021-09-15");
+        Date date4 = DateFor.parse("2021-09-30");
+        List<Aprendiz> aprendices1 = new ArrayList<>();
+        aprendices1.add(new Aprendiz("1",
+                "Fabri",
+                "Rancio",
+                "Las Vegas",
+                "Femenino",
+                "fabri@gmail.com",
+                "1234",
+                "xd.png",
+                null,
+                true,
+                null));
+
+        Training training1 = new Training();
+        training1.setCoach("Eddie");
+        training1.setDescription("Doman Driven Design");
+        training1.setStartDate(date1);
+        training1.setEndDate(date2);
+        training1.setName("DDD");
+        training1.setRutaId("ruta1");
+        training1.setTrainingId("123");
+        training1.setApprentices(aprendices1);
+
+        Training training2 = new Training();
+        training2.setCoach("Raul");
+        training2.setDescription("Introducción a la programación");
+        training2.setStartDate(date3);
+        training2.setEndDate(date4);
+        training2.setName("IalP");
+        training2.setRutaId("ruta2");
+        training2.setTrainingId("321");
+        training2.setApprentices(aprendices1);
+
+        when(repository.save(training1))
+                .thenReturn(Mono.just(training1));
+
+        when(repository.findAll())
+                .thenReturn(Flux.just(training1));
+
+        StepVerifier
+                .create(service.getActiveTrainings())
+                .expectNextCount(1)
+                .expectComplete()
+                .verify();
     }
 
     @Test
-    void getAllAprendicesDeLosTrainingActivos() {
+    void getAllAprendicesDeLosTrainingActivos() throws ParseException{
+        SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = DateFor.parse("2022-09-15");
+        Date date2 = DateFor.parse("2022-09-30");
+        Date date3 = DateFor.parse("2021-09-15");
+        Date date4 = DateFor.parse("2021-09-30");
+        List<Aprendiz> aprendices1 = new ArrayList<>();
+        List<Aprendiz> aprendices2 = new ArrayList<>();
+        aprendices1.add(new Aprendiz("1",
+                "Fabri",
+                "Rancio",
+                "Las Vegas",
+                "Femenino",
+                "fabri@gmail.com",
+                "1234",
+                "xd.png",
+                null,
+                true,
+                null));
+
+        aprendices1.add(new Aprendiz("2",
+                "Matias",
+                "Souza",
+                "Ranciolandia",
+                "Masculino",
+                "queinteresante@gmail.com",
+                "12345",
+                "elmati.png",
+                null,
+                false,
+                null));
+
+        aprendices2.add(new Aprendiz("1",
+                "Nico",
+                "Drilo",
+                "Las Vegas",
+                "Femenino",
+                "nicodrilo@gmail.com",
+                "1234",
+                "xd.png",
+                null,
+                true,
+                null));
+
+        aprendices2.add(new Aprendiz("2",
+                "Lucho",
+                "Ca",
+                "Ranciolandia",
+                "Masculino",
+                "luchoca@gmail.com",
+                "12345",
+                "ellucho.png",
+                null,
+                false,
+                null));
+
+        Training training1 = new Training();
+        training1.setCoach("Eddie");
+        training1.setDescription("Doman Driven Design");
+        training1.setStartDate(date3);
+        training1.setEndDate(date4);
+        training1.setName("DDD");
+        training1.setRutaId("ruta1");
+        training1.setTrainingId("123");
+        training1.setApprentices(aprendices1);
+
+        Training training2 = new Training();
+        training2.setCoach("Raul");
+        training2.setDescription("Introducción a la programación");
+        training2.setStartDate(date1);
+        training2.setEndDate(date2);
+        training2.setName("IalP");
+        training2.setRutaId("ruta2");
+        training2.setTrainingId("321");
+        training2.setApprentices(aprendices2);
+
+        when(repository.save(training1))
+                .thenReturn(Mono.just(training1));
+
+        when(repository.findById(training1.getTrainingId()))
+                .thenReturn(Mono.just(training1));
+
+        when(repository.findAll()).thenReturn(Flux.just(training1, training2));
+
+        StepVerifier
+                .create(service.getAllAprendicesDeLosTrainingActivos())
+                .expectNextCount(2)
+                .expectComplete()
+                .verify();
+
     }
 
     @Test
-    void getAprendicesByTrainingId() {
-    }
+    void getAprendicesByTrainingId() throws ParseException {
+        SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = DateFor.parse("2022-09-15");
+        Date date2 = DateFor.parse("2022-09-30");
+        List<Aprendiz> aprendices1 = new ArrayList<>();
+        aprendices1.add(new Aprendiz("1",
+                "Fabri",
+                "Rancio",
+                "Las Vegas",
+                "Femenino",
+                "fabri@gmail.com",
+                "1234",
+                "xd.png",
+                null,
+                true,
+                null));
 
-    @Test
-    void getAllAprendicesByTrainingId() {
+        aprendices1.add(new Aprendiz("2",
+                "Matias",
+                "Souza",
+                "Ranciolandia",
+                "Masculino",
+                "queinteresante@gmail.com",
+                "12345",
+                "elmati.png",
+                null,
+                false,
+                null));
+
+        Training training1 = new Training();
+        training1.setCoach("Eddie");
+        training1.setDescription("Doman Driven Design");
+        training1.setStartDate(date1);
+        training1.setEndDate(date2);
+        training1.setName("DDD");
+        training1.setRutaId("ruta1");
+        training1.setTrainingId("123");
+        training1.setApprentices(aprendices1);
+
+        when(repository.save(training1))
+                .thenReturn(Mono.just(training1));
+
+        when(repository.findById(training1.getTrainingId()))
+                .thenReturn(Mono.just(training1));
+
+        when(repository.findAll()).thenReturn(Flux.just(training1));
+
+        StepVerifier
+                .create(service.getAprendicesByTrainingId(training1.getTrainingId()))
+                .expectNextCount(2)
+                .expectComplete()
+                .verify();
     }
 
 }
