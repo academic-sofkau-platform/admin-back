@@ -23,7 +23,6 @@ public class Actividad {
     private Integer puntaje;
     private String tipo;
     private Integer nota;
-    //TODO: PONER LA ENTIDAD NOTAS EN ACTIVIDAD
 
     public Actividad(String cursoId, String aprendizId, LocalDate fecha, Integer puntaje, String tipo, Integer nota) {
         this.cursoId = cursoId;
