@@ -29,11 +29,14 @@ public class ControllerNotas {
    @Scheduled(cron = "0 0 * * * *")
    public void extraerMediaNoche(){
        extraerNotas().subscribe();
+       diagnosticoRendimientoService.diagnosticar(extraerNotas());
+
    }
 
     @Scheduled(cron = "0 12 * * * *")
     public void extraerMedioDia() {
         extraerNotas().subscribe();
+        diagnosticoRendimientoService.diagnosticar(extraerNotas());
     }
 
     @GetMapping
@@ -47,9 +50,6 @@ public class ControllerNotas {
                     )
                 );
     }
-
-
-
 
 
     //FUNCION DE PRUEBA, BORRAR ANTES DE SUBIR
