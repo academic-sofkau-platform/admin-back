@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import reactor.core.publisher.Mono;
 import static org.mockito.Mockito.when;
@@ -135,10 +136,47 @@ class TrainingServicesImplTest {
 
     @Test
     void deleteAprendizByEmail() {
+
     }
 
     @Test
-    void getActiveTrainings() {
+    void getActiveTrainings() throws ParseException {
+        SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = DateFor.parse("2022-09-15");
+        Date date2 = DateFor.parse("2022-09-30");
+        Date date3 = DateFor.parse("2021-08-15");
+        Date date4 = DateFor.parse("2021-10-30");
+        List<Aprendiz> aprendices1 = new ArrayList<>();
+        List<Aprendiz> aprendices2 = new ArrayList<>();
+
+        Training training1 = new Training();
+        training1.setCoach("Eddie");
+        training1.setDescription("Doman Driven Design");
+        training1.setStartDate(date1);
+        training1.setEndDate(date2);
+        training1.setName("DDD");
+        training1.setRutaId("ruta1");
+        training1.setTrainingId("123");
+        training1.setApprentices(aprendices1);
+
+        Training training2 = new Training();
+        training2.setCoach("Raul");
+        training2.setDescription("Introducción a la programación");
+        training2.setStartDate(date3);
+        training2.setEndDate(date4);
+        training2.setName("IalP");
+        training2.setRutaId("ruta2");
+        training2.setTrainingId("321");
+        training2.setApprentices(aprendices2);
+
+        when(repository.findAll())
+                .thenReturn(Flux.just(training1, training2));
+
+        StepVerifier
+                .create(service.getActiveTrainings())
+                .expectNextCount(1)
+                .expectComplete()
+                .verify();
     }
 
     @Test
