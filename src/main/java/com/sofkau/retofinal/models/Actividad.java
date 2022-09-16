@@ -22,7 +22,7 @@ public class Actividad {
     private LocalDate fecha;
     private Integer puntaje;
 
-    public Actividad(String cursoId, String aprendizId, LocalDate fecha, Integer puntaje, String tipo, Integer nota) {
+    public Actividad(String cursoId, String aprendizId, LocalDate fecha, Integer puntaje) {
         this.cursoId = cursoId;
         this.aprendizId = aprendizId;
         this.fecha = fecha;
