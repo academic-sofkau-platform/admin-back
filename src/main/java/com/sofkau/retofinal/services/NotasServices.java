@@ -41,12 +41,12 @@ public class NotasServices implements INotasService {
 
     @Override
     public Flux<Notas> findAll() {
-        return /*repository.findAll();*/ Flux.fromIterable(this.notas);
+        return repository.findAll();
     }
 
     @Override
-    public Flux<Notas> findByAprendizId(String aprendizId) {
-        return repository.findAll().filter(notas1 -> notas1.getAprendizId().equals(aprendizId));
+    public Mono<Notas> findByAprendizId(String aprendizId) {
+        return repository.findById(aprendizId);
 
     }
 
@@ -59,9 +59,4 @@ public class NotasServices implements INotasService {
 
     }
 
-
-    @Override
-    public Mono<Notas> findById(String notasId) {
-        return repository.findById(notasId);
-    }
 }

@@ -17,7 +17,6 @@ public class Notas {
     private String trainingId;
     private List<Tareas> tareasList;
 
-
 }
 
 
