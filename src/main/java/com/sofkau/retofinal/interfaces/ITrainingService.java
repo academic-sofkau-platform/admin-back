@@ -2,6 +2,7 @@ package com.sofkau.retofinal.interfaces;
 
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.models.Aprendiz;
+import com.sofkau.retofinal.models.Tareas;
 import com.sofkau.retofinal.models.Training;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,6 +16,7 @@ public interface ITrainingService {
     Mono<TrainingDto> findById(String trainingId);
     Mono<TrainingDto> update(Training training, String trainingId);
     Mono<Void> deleteById(String trainingId);
+    Mono<TrainingDto> addtarea(String trainingId, String aprendizId, Tareas tarea);
 
     Flux<TrainingDto> getActiveTrainings();
 
@@ -23,5 +25,5 @@ public interface ITrainingService {
     Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos();
     Flux<Aprendiz> getAprendicesByTrainingId(String trainingId);
 
-    Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
+   // Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
 }

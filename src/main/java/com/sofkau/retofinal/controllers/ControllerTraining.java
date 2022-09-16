@@ -2,6 +2,7 @@ package com.sofkau.retofinal.controllers;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.models.Aprendiz;
+import com.sofkau.retofinal.models.Tareas;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.models.TrainingAuxiliar;
 import com.sofkau.retofinal.services.TrainingServicesImpl;
@@ -52,6 +53,13 @@ public class ControllerTraining {
                 .flatMap(training1 -> Mono.just(ResponseEntity.ok(training1)))
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }*/
+
+    @PutMapping("/addtarea/{trainingId}/{aprendizId}")
+    public Mono<TrainingDto> addTarea(@RequestBody Tareas tarea,
+                                 @PathVariable("trainingId") String trainingId, @PathVariable("aprendizId") String aprendizId){
+        return service.addtarea( trainingId, aprendizId,tarea);
+    }
+
     @PutMapping("/update/{id}")
     public Mono<TrainingDto> update(@RequestBody Training training,
                                  @PathVariable("id") String trainingId){

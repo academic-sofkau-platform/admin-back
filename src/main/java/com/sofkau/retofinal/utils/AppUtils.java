@@ -51,6 +51,10 @@ public class AppUtils {
         Flux<ActividadDto> actividadListDto = actividadFlux.map(AppUtils::actividadToDto);
         return actividadListDto;
     }
+    public static Flux<Actividad> dtoListToActividad(Flux<ActividadDto> actividadDtoFlux){
+        Flux<Actividad> actividadListDto = actividadDtoFlux.map(AppUtils::dtoToActividad);
+        return actividadListDto;
+    }
 
     //Curso
     public static CursoDto cursoToDto(Curso curso){

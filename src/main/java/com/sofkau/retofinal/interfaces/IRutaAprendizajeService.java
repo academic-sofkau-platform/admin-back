@@ -15,4 +15,5 @@ public interface IRutaAprendizajeService {
     Mono<Void> deleteById(String rutaAprendizajeId);
     Mono<RutaAprendizajeDto> addRoute(RutaDto rutaDto, String rutaAprendizajeId);
     Mono<Void> removeRoute(String rutaId, String rutaAprendizajeId);
+    Mono<Boolean> controlCursoEnRutaAprendizaje(String cursoId);
 }

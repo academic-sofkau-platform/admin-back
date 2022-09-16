@@ -3,11 +3,11 @@ package com.sofkau.retofinal.services;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
 import com.sofkau.retofinal.models.Aprendiz;
+import com.sofkau.retofinal.models.Tareas;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.repositories.TrainingRepository;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 public class TrainingServicesImpl implements ITrainingService {
     @Autowired
     TrainingRepository repository;
-    @Autowired
-    ReactiveMongoTemplate template;
 
     @Override
     public Mono<TrainingDto> save(Training training) {
@@ -82,6 +80,19 @@ public class TrainingServicesImpl implements ITrainingService {
                 }).then();
 
     }
+    @Override
+    public Mono<TrainingDto> addtarea(String trainingId, String aprendizId, Tareas tarea){
+        return  repository.findById(trainingId)
+                .flatMap(training -> {training.getApprentices()
+                        .forEach(aprendiz -> {
+                            if (aprendiz.getId().equals(aprendizId))
+                                aprendiz.getTareas().add(tarea);
+                        });
+                    return save(training);
+                });
+
+    }
+
 
     @Override
     public Flux<TrainingDto> getActiveTrainings() {
@@ -89,12 +100,13 @@ public class TrainingServicesImpl implements ITrainingService {
         return repository.findAll()
                 .filter(training -> today.after(training.getStartDate()))
                 .filter(training -> today.before(training.getEndDate()))
-                .map(training -> AppUtils.trainingToDto(training))
-                .map(trainingDto -> {
+                .map(training -> AppUtils.trainingToDto(training));
+                /*.map(trainingDto -> {
                     trainingDto.setApprenticesCount(trainingDto.getApprentices().size());
                       repository.save(AppUtils.dtoToTraining(trainingDto));
                     return trainingDto;
-                });
+                });*/
+
     }
 
     @Override
@@ -114,10 +126,12 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMapIterable(Training::getApprentices);
     }
 
+    /*
     @Override
     public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
         return this.getActiveTrainings().filter(training -> training.getTrainingId().equals(trainingId))
                 .flatMapIterable(TrainingDto::getApprentices);
     }
+    */
 
 }

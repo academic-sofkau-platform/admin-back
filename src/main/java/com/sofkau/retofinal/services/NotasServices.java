@@ -3,6 +3,7 @@ package com.sofkau.retofinal.services;
 import com.sofkau.retofinal.interfaces.INotasService;
 import com.sofkau.retofinal.models.Actividad;
 import com.sofkau.retofinal.models.Notas;
+import com.sofkau.retofinal.models.Tareas;
 import com.sofkau.retofinal.repositories.NotasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class NotasServices implements INotasService {
 
     public ArrayList<Notas> notas = new ArrayList<>();
     public NotasServices() {
-        List<Actividad> actividades1 = new ArrayList<>();
+        List<Tareas> actividades1 = new ArrayList<>();
 
         this.notas.add(new Notas("1555de", "7595fb82-db54-490b-91fc-ec0c8e7daaa1", actividades1));
         this.notas.add(new Notas("1231231311354456", "4149bdc6-f0b4-4f94-a030-385c695a88a7", actividades1));

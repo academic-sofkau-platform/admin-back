@@ -1,23 +1,23 @@
 package com.sofkau.retofinal.models;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-@Document(collection = "notes")
+import java.util.UUID;
+
+@Document(collection="task")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Notas {
+public class Tareas {
 
     @Id
-    private String aprendizId;
-    private String trainingId;
-    private List<Tareas> tareasList;
-
+    private String tareaId =  UUID.randomUUID().toString();
+    private String cursoId;
+    private String tipo;
+    private Integer calificacion;
 
 }
-
-
