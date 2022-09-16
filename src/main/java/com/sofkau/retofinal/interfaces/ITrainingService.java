@@ -11,7 +11,6 @@ import reactor.core.publisher.Mono;
 public interface ITrainingService {
     Mono<TrainingDto> save(Training training);
     Mono<TrainingDto> asignarCoach(String coach, String trainingId);
-    Flux<Aprendiz> cargarListaAprendiz(); //csv
     Flux<TrainingDto> findAll();
     Mono<TrainingDto> findById(String trainingId);
     Mono<TrainingDto> update(Training training, String trainingId);

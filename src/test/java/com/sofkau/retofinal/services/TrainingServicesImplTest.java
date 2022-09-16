@@ -61,9 +61,6 @@ class TrainingServicesImplTest {
                 .verify();
     }
 
-    @Test
-    void cargarListaAprendiz() {
-    }
 
     @Test
     void findAll() throws ParseException {

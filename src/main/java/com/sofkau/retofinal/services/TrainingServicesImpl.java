@@ -39,11 +39,6 @@ public class TrainingServicesImpl implements ITrainingService {
     }
 
     @Override
-    public Flux<Aprendiz> cargarListaAprendiz() {
-        return null;
-    }
-
-    @Override
     public Flux<TrainingDto> findAll() {
         return AppUtils.trainingFluxToDto(repository.findAll());
     }
