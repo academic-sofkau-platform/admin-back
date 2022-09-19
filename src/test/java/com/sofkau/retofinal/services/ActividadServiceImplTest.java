@@ -2,6 +2,7 @@ package com.sofkau.retofinal.services;
 
 import com.sofkau.retofinal.models.Actividad;
 import com.sofkau.retofinal.repositories.ActividadRepository;
+import com.sofkau.retofinal.utils.AppUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +13,6 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -63,10 +63,24 @@ class ActividadServiceImplTest {
     }
 
     @Test
-    void addOrUpdate() {
-    }
+    void updatePuntaje() {
+        LocalDate date1 = LocalDate.of(2022, 9, 22);
+        Actividad actividad1 = new Actividad("XXX-YYY","cursoId1", "aprendizId1", date1, 3);
 
-    @Test
-    void findActivityByAprendizId() {
+        when(repository.findById(actividad1.getActividadId())).thenReturn(Mono.just(actividad1));
+        when(repository.save(actividad1)).thenReturn(Mono.just(actividad1));
+
+        StepVerifier.create(service.updatePuntaje(actividad1, 3))
+                .expectNextMatches(newAct ->
+                        newAct.getActividadId().equals("XXX-YYY") &&
+                                newAct.getCursoId().equals("cursoId1") &&
+                                newAct.getAprendizId().equals("aprendizId1") &&
+                                newAct.getFecha().equals("2022-09-22") &&
+                                newAct.getPuntaje().equals(6) &&
+                                newAct.getTipo().equals("tipo1") &&
+                                newAct.getNota().equals(75)
+                        )
+                .expectComplete()
+                .verify();
     }
 }
