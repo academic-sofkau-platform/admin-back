@@ -56,10 +56,13 @@ public class ControllerRutaAprendizaje {
                 .body(service.addRoute(ruta, rutaAprendizajeId));
     }
 
-    @PostMapping("/delete/route/")
-    public ResponseEntity<Mono<Void>> eliminarRuta(@RequestBody String rutaAprendizajeId, @RequestBody String rutaId){
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(service.removeRoute(rutaId, rutaAprendizajeId));
+    @PostMapping("/delete/route/{id}")
+    public Mono<ResponseEntity<Void>> eliminarRuta(@PathVariable("id") String rutaAprendizajeId, @RequestBody String rutaId){
+        System.out.println(rutaAprendizajeId +"/"+ rutaId);
+        return service
+                .removeRoute(rutaId, rutaAprendizajeId)
+                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)))
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/curso/{id}")
