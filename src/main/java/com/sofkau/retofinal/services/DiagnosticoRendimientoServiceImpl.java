@@ -20,18 +20,18 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
 
     @Autowired
     private EnvioDeCorreoServiceImpl envioDeCorreoService;
-    public ArrayList<AccionDeMejora> accionDeMejoras = new ArrayList<AccionDeMejora>();
+ //   public ArrayList<AccionDeMejora> accionDeMejoras = new ArrayList<AccionDeMejora>();
     private final ArrayList<Aprendiz> aprendicesConAccionesDeMejora = new ArrayList<>();
 
     public DiagnosticoRendimientoServiceImpl() {
-        this.accionDeMejoras.add(new AccionDeMejora("63226e34adbe15156e21d4ad","7595fb82-db54-490b-91fc-ec0c8e7daaa1",  "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
-        this.accionDeMejoras.add(new AccionDeMejora("63226e4cadbe15156e21d4ae", "7595fb82-db54-490b-91fc-ec0c8e7daaa1",  "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
-        this.accionDeMejoras.add(new AccionDeMejora("63226e4fadbe15156e21d4af", "4149bdc6-f0b4-4f94-a030-385c695a88a7",  "Repaso Reactiva (link documentación)"));
-        this.accionDeMejoras.add(new AccionDeMejora("63234960e11cf83d158c80c3", "7595fb82-db54-490b-91fc-ec0c8e7daaa1",  "Repaso Reactiva  (link documentación)"));
-        this.accionDeMejoras.add(new AccionDeMejora("63226e62adbe15156e21d4b1", "7595fb82-db54-490b-91fc-ec0c8e7daaa1",  "Repaso Funcional y reactiva (link documentación)"));
-        this.accionDeMejoras.add(new AccionDeMejora("63226e67adbe15156e21d4b2", "990cfbf4-8022-4609-a21d-d25c2072f555",  "Repaso Funcional y reactiva (link documentación)"));
-        this.accionDeMejoras.add(new AccionDeMejora("63234a7be11cf83d158c80dc", "022686ac-9f63-4636-8ac4-37c2129cba51",  "Repaso Introduccion al Desarrollo (link documentación)"));
-        this.accionDeMejoras.add(new AccionDeMejora("63234969e11cf83d158c80c3", "022686ac-9f63-4636-8ac4-37c2129cba51",  "Repaso Introduccion al Desarrollo (link documentación)"));
+//        this.accionDeMejoras.add(new AccionDeMejora("63226e34adbe15156e21d4ad","7595fb82-db54-490b-91fc-ec0c8e7daaa1",  "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
+//        this.accionDeMejoras.add(new AccionDeMejora("63226e4cadbe15156e21d4ae", "7595fb82-db54-490b-91fc-ec0c8e7daaa1",  "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
+//        this.accionDeMejoras.add(new AccionDeMejora("63226e4fadbe15156e21d4af", "4149bdc6-f0b4-4f94-a030-385c695a88a7",  "Repaso Reactiva (link documentación)"));
+//        this.accionDeMejoras.add(new AccionDeMejora("63234960e11cf83d158c80c3", "7595fb82-db54-490b-91fc-ec0c8e7daaa1",  "Repaso Reactiva  (link documentación)"));
+//        this.accionDeMejoras.add(new AccionDeMejora("63226e62adbe15156e21d4b1", "7595fb82-db54-490b-91fc-ec0c8e7daaa1",  "Repaso Funcional y reactiva (link documentación)"));
+//        this.accionDeMejoras.add(new AccionDeMejora("63226e67adbe15156e21d4b2", "990cfbf4-8022-4609-a21d-d25c2072f555",  "Repaso Funcional y reactiva (link documentación)"));
+//        this.accionDeMejoras.add(new AccionDeMejora("63234a7be11cf83d158c80dc", "022686ac-9f63-4636-8ac4-37c2129cba51",  "Repaso Introduccion al Desarrollo (link documentación)"));
+//        this.accionDeMejoras.add(new AccionDeMejora("63234969e11cf83d158c80c3", "022686ac-9f63-4636-8ac4-37c2129cba51",  "Repaso Introduccion al Desarrollo (link documentación)"));
     }
 
     /*public void diagnosticar(Flux<Notas> notas){

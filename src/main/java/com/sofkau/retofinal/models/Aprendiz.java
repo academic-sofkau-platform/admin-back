@@ -25,5 +25,5 @@ public class Aprendiz {
     private String photo;
     private List <Tarea> tareas = new ArrayList<>();
     private Boolean bilingual;
-    private List <AccionDeMejora> accionDeMejoras = new ArrayList<>();
+    private List <String> accionDeMejoras = new ArrayList<>();
 }
