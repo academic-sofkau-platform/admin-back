@@ -18,4 +18,5 @@ public class Curso {
     private String consigna;
     private String enlace;
     private Integer aprobacion;
+    private String AccionDeMejora;
 }

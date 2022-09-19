@@ -24,7 +24,7 @@ class CursoServiceImplTest {
     @Test
     void findAll() {
         Flux<Curso> simulado = Flux.just( new Curso("f5ac2983-5521-416d-b713-b74192c576cd","Angular"
-                ,"Angular es un framework para aplicaciones web desarrollado en TypeScript","Entregar CRUD","https://angular.io/start",75));
+                ,"Angular es un framework para aplicaciones web desarrollado en TypeScript","Entregar CRUD","https://angular.io/start",75, "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
 
         when(repository.findAll()).thenReturn(simulado);
 
@@ -43,10 +43,10 @@ class CursoServiceImplTest {
     @Test
     void save() {
         CursoDto curso = new CursoDto("f5ac2983-5521-416d-b713-b74192c576cd","Angular"
-                ,"Angular es un framework para aplicaciones web desarrollado en TypeScript","Entregar CRUD","https://angular.io/start",75);
+                ,"Angular es un framework para aplicaciones web desarrollado en TypeScript","Entregar CRUD","https://angular.io/start",75, "Repaso Reactiva (link documentación)");
 
         Curso curso1 = new Curso("f5ac2983-5521-416d-b713-b74192c576cd","Angular"
-                ,"Angular es un framework para aplicaciones web desarrollado en TypeScript","Entregar CRUD","https://angular.io/start",75);
+                ,"Angular es un framework para aplicaciones web desarrollado en TypeScript","Entregar CRUD","https://angular.io/start",75, "Repaso Reactiva (link documentación)");
 
         when(repository.save(curso1)).thenReturn(Mono.just(curso1));
 
@@ -61,10 +61,10 @@ class CursoServiceImplTest {
     @Test
     void update() {
         Curso curso1 = new Curso("f5ac2983-5521-416d-b713-b74192c576cd","Angular"
-                ,"Angular es un framework para aplicaciones web desarrollado en TypeScript","Entregar CRUD","https://angular.io/start",75);
+                ,"Angular es un framework para aplicaciones web desarrollado en TypeScript","Entregar CRUD","https://angular.io/start",75, "Repaso Funcional y reactiva (link documentación)");
 
         Curso curso2 = new Curso("f5ac2983-5521-416d-b713-b74192c576cd","React"
-                ,"React es un framework","Entregar CRUD","https://es.reactjs.org/docs/getting-started.html",75);
+                ,"React es un framework","Entregar CRUD","https://es.reactjs.org/docs/getting-started.html",75, "Repaso Reactiva (link documentación)");
 
         when(repository.findById(curso1.getId())).thenReturn(Mono.just(curso1));
         when(repository.save(curso1)).thenReturn(Mono.just(curso1));
@@ -82,10 +82,10 @@ class CursoServiceImplTest {
     @Test
     void delete() {
         CursoDto curso = new CursoDto("f5ac2983-5521-416d-b713-b74192c576cd","Angular"
-                ,"Angular es un framework para aplicaciones web desarrollado en TypeScript","Entregar CRUD","https://angular.io/start",75);
+                ,"Angular es un framework para aplicaciones web desarrollado en TypeScript","Entregar CRUD","https://angular.io/start",75, "Repaso de conceptos de fundamentos de DDD (link de documentación)");
 
         Curso curso1 = new Curso("f5ac2983-5521-416d-b713-b74192c576cd","Angular"
-                ,"Angular es un framework para aplicaciones web desarrollado en TypeScript","Entregar CRUD","https://angular.io/start",75);
+                ,"Angular es un framework para aplicaciones web desarrollado en TypeScript","Entregar CRUD","https://angular.io/start",75, "Repaso de conceptos de fundamentos de DDD (link de documentación)");
 
         when(repository.deleteById(curso1.getId())).thenReturn(Mono.empty());
 
