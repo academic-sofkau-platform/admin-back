@@ -80,7 +80,7 @@ public class TrainingServicesImpl implements ITrainingService {
         return  repository.findById(trainingId)
                 .flatMap(training -> {training.getApprentices()
                         .forEach(aprendiz -> {
-                            if (aprendiz.getId().equals(aprendizId))
+                            if (aprendiz.getEmail().equals(aprendizId))
                                 aprendiz.getTareas().add(tarea);
                         });
                     return save(training);

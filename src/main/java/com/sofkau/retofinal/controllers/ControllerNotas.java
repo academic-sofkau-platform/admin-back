@@ -49,7 +49,7 @@ public class ControllerNotas {
         System.out.println("se esta ejecutando media noche");
         return training.findAllTrainingActivos()
                 .flatMap(training1 -> Flux.fromIterable(training1.getApprentices())
-                    .flatMap(aprendiz -> service.save(new Notas(aprendiz.getId(), training1.getTrainingId(), aprendiz.getTareas()))
+                    .flatMap(aprendiz -> service.save(new Notas(aprendiz.getEmail(), training1.getTrainingId(), aprendiz.getTareas()))
                     )
                 );
     }
