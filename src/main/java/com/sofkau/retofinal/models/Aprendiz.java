@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Document(collection="apprentices")
 @Data
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Aprendiz {
     @Id
-    private String id;
+    private String id = UUID.randomUUID().toString();
     private String name;
     private String lastName;
     private String city;
