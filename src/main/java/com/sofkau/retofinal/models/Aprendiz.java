@@ -23,7 +23,7 @@ public class Aprendiz {
     private String email;
     private String phoneNumber;
     private String photo;
-    private List <Tareas> tareas= new ArrayList<>();
+    private List <Tarea> tareas = new ArrayList<>();
     private Boolean bilingual;
-    private List <String> accionDeMejora;
+    private List <AccionDeMejora> accionDeMejoras = new ArrayList<>();
 }

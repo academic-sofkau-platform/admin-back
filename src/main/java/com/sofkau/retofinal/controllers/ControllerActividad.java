@@ -45,9 +45,9 @@ public class ControllerActividad {
                 .filter(actividad -> actividad.getAprendizId().equals(aprendizId));
     }
 
-    @PostMapping("/update/{cursoId}/{aprendizId}/{fecha}")
-    public Mono<ActividadDto> addOrUpdate(@PathVariable("cursoId") String cursoId, @PathVariable("aprendizId") String aprendizId, @PathVariable("fecha") String fecha) {
-       return service.addOrUpdate(3,cursoId, aprendizId, fecha);
+    @PutMapping("/updatepuntaje")
+    public Mono<ActividadDto> updatePuntaje(@RequestBody Actividad actividad) {
+       return service.updatePuntaje(actividad, 3);
     }
 
     @GetMapping("/aprendices/{aprendizId}")

@@ -33,6 +33,8 @@ public class CursoServiceImpl implements ICursoService {
         return  curso1.flatMap(curso2 -> {
             curso2.setNombre(curso.getNombre());
             curso2.setDescripcion(curso.getDescripcion());
+            curso2.setConsigna(curso.getConsigna());
+            curso2.setEnlace(curso.getEnlace());
             curso2.setAprobacion(curso.getAprobacion());
             return repository.save(curso2).thenReturn(AppUtils.cursoToDto(curso2));
         }).switchIfEmpty(Mono.empty());

@@ -1,12 +1,10 @@
 package com.sofkau.retofinal.controllers;
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.models.Aprendiz;
-import com.sofkau.retofinal.models.Tareas;
+import com.sofkau.retofinal.models.Tarea;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.models.TrainingAuxiliar;
 import com.sofkau.retofinal.services.TrainingServicesImpl;
-import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +53,7 @@ public class ControllerTraining {
     }*/
 
     @PutMapping("/addtarea/{trainingId}/{aprendizId}")
-    public Mono<TrainingDto> addTarea(@RequestBody Tareas tarea,
+    public Mono<TrainingDto> addTarea(@RequestBody Tarea tarea,
                                  @PathVariable("trainingId") String trainingId, @PathVariable("aprendizId") String aprendizId){
         return service.addtarea( trainingId, aprendizId,tarea);
     }
