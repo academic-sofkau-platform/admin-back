@@ -106,9 +106,7 @@ public class ControllerTraining {
         return service.deleteAprendizByEmail(trainingId,email);
     }
 
-    //Todo cargarListaAprendiz csv base64 body con json o parametros
 
     //Todo update aprendiz
-
 
 }
