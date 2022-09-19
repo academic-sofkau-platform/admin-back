@@ -79,7 +79,7 @@ class TrainingServicesImplTest {
         training1.setStartDate(date1);
         training1.setEndDate(date2);
         training1.setName("DDD");
-        training1.setRutaId("ruta1");
+        training1.setRutaAprendizajeId("ruta1");
         training1.setTrainingId("123");
         training1.setApprentices(aprendices1);
 
@@ -89,7 +89,7 @@ class TrainingServicesImplTest {
         training2.setStartDate(date3);
         training2.setEndDate(date4);
         training2.setName("IalP");
-        training2.setRutaId("ruta2");
+        training2.setRutaAprendizajeId("ruta2");
         training2.setTrainingId("321");
         training2.setApprentices(aprendices2);
 
@@ -141,7 +141,7 @@ class TrainingServicesImplTest {
         training1.setStartDate(date1);
         training1.setEndDate(date2);
         training1.setName("DDD");
-        training1.setRutaId("ruta1");
+        training1.setRutaAprendizajeId("ruta1");
         training1.setTrainingId("123");
         training1.setApprentices(aprendices1);
 
@@ -151,7 +151,7 @@ class TrainingServicesImplTest {
         training2.setStartDate(date3);
         training2.setEndDate(date4);
         training2.setName("IalP");
-        training2.setRutaId("ruta2");
+        training2.setRutaAprendizajeId("ruta2");
         training2.setTrainingId("321");
         training2.setApprentices(aprendices2);
 
@@ -224,7 +224,7 @@ class TrainingServicesImplTest {
         training1.setStartDate(date1);
         training1.setEndDate(date2);
         training1.setName("DDD");
-        training1.setRutaId("ruta1");
+        training1.setRutaAprendizajeId("ruta1");
         training1.setTrainingId("123");
         training1.setApprentices(aprendices1);
 
@@ -257,7 +257,7 @@ class TrainingServicesImplTest {
         training1.setStartDate(date1);
         training1.setEndDate(date2);
         training1.setName("DDD");
-        training1.setRutaId("ruta1");
+        training1.setRutaAprendizajeId("ruta1");
         training1.setTrainingId("123");
         training1.setApprentices(aprendices1);
 
@@ -267,7 +267,7 @@ class TrainingServicesImplTest {
         training2.setStartDate(date3);
         training2.setEndDate(date4);
         training2.setName("IalP");
-        training2.setRutaId("ruta2");
+        training2.setRutaAprendizajeId("ruta2");
         training2.setTrainingId("321");
         training2.setApprentices(aprendices2);
 
@@ -347,7 +347,7 @@ class TrainingServicesImplTest {
         training1.setStartDate(date3);
         training1.setEndDate(date4);
         training1.setName("DDD");
-        training1.setRutaId("ruta1");
+        training1.setRutaAprendizajeId("ruta1");
         training1.setTrainingId("123");
         training1.setApprentices(aprendices1);
 
@@ -357,7 +357,7 @@ class TrainingServicesImplTest {
         training2.setStartDate(date1);
         training2.setEndDate(date2);
         training2.setName("IalP");
-        training2.setRutaId("ruta2");
+        training2.setRutaAprendizajeId("ruta2");
         training2.setTrainingId("321");
         training2.setApprentices(aprendices2);
 
@@ -413,7 +413,7 @@ class TrainingServicesImplTest {
         training1.setStartDate(date1);
         training1.setEndDate(date2);
         training1.setName("DDD");
-        training1.setRutaId("ruta1");
+        training1.setRutaAprendizajeId("ruta1");
         training1.setTrainingId("123");
         training1.setApprentices(aprendices1);
 

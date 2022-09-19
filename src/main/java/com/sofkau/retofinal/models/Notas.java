@@ -15,7 +15,7 @@ public class Notas {
     @Id
     private String aprendizId;
     private String trainingId;
-    private List<Tareas> tareasList;
+    private List<Tarea> tareasList;
 
 }
 
