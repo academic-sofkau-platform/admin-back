@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 @Document(collection = "notes")
 @Data
@@ -13,9 +14,9 @@ import java.util.List;
 public class Notas {
 
     @Id
-    private String aprendizId;
+    private String aprendizEmail;
     private String trainingId;
-    private List<Tarea> tareasList;
+    private List<Tarea> tareasList = new ArrayList<>();
 
 }
 

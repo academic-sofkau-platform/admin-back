@@ -13,7 +13,9 @@ public class CursoDto {
     private String id ;
     private String nombre;
     private String descripcion;
+    private String accionMejora;
     private String consigna;
     private String enlace;
     private Integer aprobacion;
+
 }

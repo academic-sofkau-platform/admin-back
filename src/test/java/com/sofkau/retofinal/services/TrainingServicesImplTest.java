@@ -194,24 +194,22 @@ class TrainingServicesImplTest {
         Date date1 = DateFor.parse("2022-09-15");
         Date date2 = DateFor.parse("2022-09-30");
         List<Aprendiz> aprendices1 = new ArrayList<>();
-        aprendices1.add(new Aprendiz("1",
+        aprendices1.add(new Aprendiz("fabri@gmail.com",
                 "Fabri",
                 "Rancio",
                 "Las Vegas",
                 "Femenino",
-                "fabri@gmail.com",
                 "1234",
                 "xd.png",
                 null,
                 true,
                 null));
 
-        aprendices1.add(new Aprendiz("2",
+        aprendices1.add(new Aprendiz("queinteresante@gmail.com",
                 "Matias",
                 "Souza",
                 "Ranciolandia",
                 "Masculino",
-                "queinteresante@gmail.com",
                 "12345",
                 "elmati.png",
                 null,
@@ -293,48 +291,44 @@ class TrainingServicesImplTest {
         Date date4 = DateFor.parse("2021-09-30");
         List<Aprendiz> aprendices1 = new ArrayList<>();
         List<Aprendiz> aprendices2 = new ArrayList<>();
-        aprendices1.add(new Aprendiz("1",
+        aprendices1.add(new Aprendiz("fabri@gmail.com",
                 "Fabri",
                 "Rancio",
                 "Las Vegas",
                 "Femenino",
-                "fabri@gmail.com",
                 "1234",
                 "xd.png",
                 null,
                 true,
                 null));
 
-        aprendices1.add(new Aprendiz("2",
+        aprendices1.add(new Aprendiz("queinteresante@gmail.com",
                 "Matias",
                 "Souza",
                 "Ranciolandia",
                 "Masculino",
-                "queinteresante@gmail.com",
                 "12345",
                 "elmati.png",
                 null,
                 false,
                 null));
 
-        aprendices2.add(new Aprendiz("1",
+        aprendices2.add(new Aprendiz("nicodrilo@gmail.com",
                 "Nico",
                 "Drilo",
                 "Las Vegas",
                 "Femenino",
-                "nicodrilo@gmail.com",
                 "1234",
                 "xd.png",
                 null,
                 true,
                 null));
 
-        aprendices2.add(new Aprendiz("2",
+        aprendices2.add(new Aprendiz("luchoca@gmail.com",
                 "Lucho",
                 "Ca",
                 "Ranciolandia",
                 "Masculino",
-                "luchoca@gmail.com",
                 "12345",
                 "ellucho.png",
                 null,
@@ -383,24 +377,22 @@ class TrainingServicesImplTest {
         Date date1 = DateFor.parse("2022-09-15");
         Date date2 = DateFor.parse("2022-09-30");
         List<Aprendiz> aprendices1 = new ArrayList<>();
-        aprendices1.add(new Aprendiz("1",
+        aprendices1.add(new Aprendiz("fabri@gmail.com",
                 "Fabri",
                 "Rancio",
                 "Las Vegas",
                 "Femenino",
-                "fabri@gmail.com",
                 "1234",
                 "xd.png",
                 null,
                 true,
                 null));
 
-        aprendices1.add(new Aprendiz("2",
+        aprendices1.add(new Aprendiz("queinteresante@gmail.com",
                 "Matias",
                 "Souza",
                 "Ranciolandia",
                 "Masculino",
-                "queinteresante@gmail.com",
                 "12345",
                 "elmati.png",
                 null,

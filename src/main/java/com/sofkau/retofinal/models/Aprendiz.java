@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Document(collection="apprentices")
 @Data
@@ -15,15 +16,14 @@ import java.util.List;
 @NoArgsConstructor
 public class Aprendiz {
     @Id
-    private String id;
+    private String email;
     private String name;
     private String lastName;
     private String city;
     private String gender;
-    private String email;
     private String phoneNumber;
     private String photo;
     private List <Tarea> tareas = new ArrayList<>();
     private Boolean bilingual;
-    private List <AccionDeMejora> accionDeMejoras = new ArrayList<>();
+    private List <String> accionDeMejoras = new ArrayList<>();
 }
