@@ -42,4 +42,10 @@ public class CursoServiceImpl implements ICursoService {
     public Mono<Void> deleteById(String cursoId) {
         return repository.deleteById(cursoId);
     }
+
+    public Mono<Curso> findCursoById(String cursoId){
+        return findAll().filter(cursoDto -> cursoDto.getId().equals(cursoId))
+                .map(cursoDto -> AppUtils.dtoToCurso(cursoDto))
+                .next();
+    }
 }

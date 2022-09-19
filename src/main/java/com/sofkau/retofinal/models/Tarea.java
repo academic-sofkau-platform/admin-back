@@ -18,6 +18,6 @@ public class Tarea {
     private String tareaId =  UUID.randomUUID().toString();
     private String cursoId;
     private String tipo;
-    private Integer calificacion;
-
+    private Integer nota;
+    private String resultado;
 }
