@@ -36,7 +36,7 @@ public class ActividadServiceImpl implements IActividadService {
                     actividad.setPuntaje(actividad.getPuntaje() + puntaje);
                     return AppUtils.actividadToDto(repository.save(actividad).block());
                 })
-                .switchIfEmpty(Mono.just(AppUtils.actividadToDto(repository.save(new Actividad(cursoId, aprendizId, LocalDate.parse(fecha), puntaje, "test", 78)).block())));
+                .switchIfEmpty(Mono.just(AppUtils.actividadToDto(repository.save(new Actividad(cursoId, aprendizId, LocalDate.parse(fecha), puntaje)).block())));
     }
 
     private Mono<Actividad> findByAprendizIdAndFecha(String aprendizId,String cursoId, LocalDate fecha) {

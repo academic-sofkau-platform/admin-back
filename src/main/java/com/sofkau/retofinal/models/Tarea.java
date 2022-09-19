@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tareas {
+public class Tarea {
 
     @Id
     private String tareaId =  UUID.randomUUID().toString();

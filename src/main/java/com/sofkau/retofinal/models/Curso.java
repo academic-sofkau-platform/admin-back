@@ -16,4 +16,6 @@ public class Curso {
     private String nombre;
     private String descripcion;
     private Integer aprobacion;
+    private String enlace;
+    private String consigna;
 }

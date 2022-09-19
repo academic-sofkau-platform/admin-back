@@ -3,7 +3,7 @@ package com.sofkau.retofinal.services;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
 import com.sofkau.retofinal.models.Aprendiz;
-import com.sofkau.retofinal.models.Tareas;
+import com.sofkau.retofinal.models.Tarea;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.repositories.TrainingRepository;
 import com.sofkau.retofinal.utils.AppUtils;
@@ -76,7 +76,7 @@ public class TrainingServicesImpl implements ITrainingService {
 
     }
     @Override
-    public Mono<TrainingDto> addtarea(String trainingId, String aprendizId, Tareas tarea){
+    public Mono<TrainingDto> addtarea(String trainingId, String aprendizId, Tarea tarea){
         return  repository.findById(trainingId)
                 .flatMap(training -> {training.getApprentices()
                         .forEach(aprendiz -> {

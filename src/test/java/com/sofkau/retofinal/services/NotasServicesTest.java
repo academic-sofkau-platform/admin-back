@@ -1,8 +1,7 @@
 package com.sofkau.retofinal.services;
 
-import com.sofkau.retofinal.dto.CursoDto;
 import com.sofkau.retofinal.models.Notas;
-import com.sofkau.retofinal.models.Tareas;
+import com.sofkau.retofinal.models.Tarea;
 import com.sofkau.retofinal.repositories.NotasRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import reactor.test.StepVerifier;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -29,7 +27,7 @@ class NotasServicesTest {
 
     @Test
     void save() {
-        List<Tareas> actividades1 = new ArrayList<>();
+        List<Tarea> actividades1 = new ArrayList<>();
         Notas n= new Notas("1555de12", "7595fb82-db54-490b-91fc-ec0c8e7daaa1", actividades1);
         Notas n2= new Notas("1555de12", "7595fb82-db54-490b-91fc-ec0c8e7daaa1", actividades1);
 
@@ -45,7 +43,7 @@ class NotasServicesTest {
 
     @Test
     void findAll() {
-        List<Tareas> actividades1 = new ArrayList<>();
+        List<Tarea> actividades1 = new ArrayList<>();
         Notas n2= new Notas("1", "7", actividades1);
 
         when(notasRepository.findAll()).thenReturn(Flux.just(n2));
@@ -62,7 +60,7 @@ class NotasServicesTest {
 
     @Test
     void findByAprendizId() {
-        List<Tareas> actividades1 = new ArrayList<>();
+        List<Tarea> actividades1 = new ArrayList<>();
         Notas n2= new Notas("1", "7", actividades1);
 
         when(notasRepository.findById("1")).thenReturn(Mono.just(n2));
@@ -79,7 +77,7 @@ class NotasServicesTest {
 
     @Test
     void findByAprendizIdAndTrainingId() {
-        List<Tareas> actividades1 = new ArrayList<>();
+        List<Tarea> actividades1 = new ArrayList<>();
         Notas n2= new Notas("1", "7", actividades1);
 
         when(notasRepository.findAll()).thenReturn(Flux.just(n2));

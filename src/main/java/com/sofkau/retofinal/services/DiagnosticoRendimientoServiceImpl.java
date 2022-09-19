@@ -34,7 +34,7 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
         this.accionDeMejoras.add(new AccionDeMejora("63234969e11cf83d158c80c3", "022686ac-9f63-4636-8ac4-37c2129cba51",  "Repaso Introduccion al Desarrollo (link documentación)"));
     }
 
-    public void diagnosticar(Flux<Notas> notas){
+    /*public void diagnosticar(Flux<Notas> notas){
         // Recorre todas las notas
         notas.toStream().forEach(notas1 -> {
 
@@ -64,14 +64,14 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
                 .get(0);
 
         // SE DEBE ACTUALIZAR LA BD PARA QUE ACCION DE MEJORA EN APRENDIZ NO SEA NULL SINO []
-        aprendiz.setAccionDeMejora(new ArrayList<>());
+        aprendiz.setAccionDeMejoras(new ArrayList<>());
 
         return aprendiz;
     }
 
     private Mono<AccionDeMejora> getAccioneDeMejoraByActividadId(String ActividadId) {
         return Flux.fromIterable(this.accionDeMejoras)
-                .filter(accionDeMejora -> accionDeMejora.getActividadId().equals(ActividadId))
+                .filter(accionDeMejora -> accionDeMejora.equals(ActividadId))
                 .next()
                 .switchIfEmpty(Mono.empty());
     }
@@ -128,6 +128,6 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
                     envioDeCorreoService.sendSimpleMail(envioDeCorreoService.TemplateFeedback(detallesDeCorreo));
                     //System.out.println(detallesDeCorreo);
                 });
-    }
+    }*/
 
 }
