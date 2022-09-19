@@ -14,7 +14,7 @@ import java.util.List;
 public class Notas {
 
     @Id
-    private String aprendizId ;
+    private String aprendizEmail;
     private String trainingId;
     private List<Tarea> tareasList = new ArrayList<>();
 

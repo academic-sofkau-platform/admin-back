@@ -16,12 +16,11 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Aprendiz {
     @Id
-    private String id = UUID.randomUUID().toString();
+    private String email;
     private String name;
     private String lastName;
     private String city;
     private String gender;
-    private String email;
     private String phoneNumber;
     private String photo;
     private List <Tarea> tareas = new ArrayList<>();

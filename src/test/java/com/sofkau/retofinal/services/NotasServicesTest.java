@@ -51,7 +51,7 @@ class NotasServicesTest {
         Flux<Notas> notas = notasServices.findAll();
 
         StepVerifier.create(notas)
-                .expectNextMatches(notas1 -> notas1.getAprendizId().equals(n2.getAprendizId()) &&
+                .expectNextMatches(notas1 -> notas1.getAprendizEmail().equals(n2.getAprendizEmail()) &&
                         notas1.getTrainingId().equals(n2.getTrainingId())&&
                         notas1.getTareasList().equals(n2.getTareasList()))
                 .expectComplete()
@@ -68,7 +68,7 @@ class NotasServicesTest {
         Mono<Notas> notas = notasServices.findByAprendizId("1");
 
         StepVerifier.create(notas)
-                .expectNextMatches(notas1 -> notas1.getAprendizId().equals(n2.getAprendizId()) &&
+                .expectNextMatches(notas1 -> notas1.getAprendizEmail().equals(n2.getAprendizEmail()) &&
                         notas1.getTrainingId().equals(n2.getTrainingId())&&
                         notas1.getTareasList().equals(n2.getTareasList()))
                 .expectComplete()
@@ -85,7 +85,7 @@ class NotasServicesTest {
         Mono<Notas> notas = notasServices.findByAprendizIdAndTrainingId("1", "7");
 
         StepVerifier.create(notas)
-                .expectNextMatches(notas1 -> notas1.getAprendizId().equals(n2.getAprendizId()) &&
+                .expectNextMatches(notas1 -> notas1.getAprendizEmail().equals(n2.getAprendizEmail()) &&
                         notas1.getTrainingId().equals(n2.getTrainingId())&&
                         notas1.getTareasList().equals(n2.getTareasList()))
                 .expectComplete()
