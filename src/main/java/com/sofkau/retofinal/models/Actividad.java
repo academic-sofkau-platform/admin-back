@@ -18,15 +18,15 @@ public class Actividad {
     @Id
     private String actividadId = UUID.randomUUID().toString();
     private String cursoId;
-    private String aprendizId;
+    private String aprendizEmail;
     private LocalDate fecha;
     private Integer puntaje;
     //TODO: PONER LA ENTIDAD NOTAS EN ACTIVIDAD
 
 
-    public Actividad(String cursoId, String aprendizId, LocalDate fecha, Integer puntaje) {
+    public Actividad(String cursoId, String aprendizEmail, LocalDate fecha, Integer puntaje) {
         this.cursoId = cursoId;
-        this.aprendizId = aprendizId;
+        this.aprendizEmail = aprendizEmail;
         this.fecha = fecha;
         this.puntaje = puntaje;
     }

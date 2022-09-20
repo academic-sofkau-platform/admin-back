@@ -52,7 +52,7 @@ public class NotasServices implements INotasService {
     @Override
     public Mono<Notas> findByAprendizIdAndTrainingId(String aprendizId, String trainingId) {
         return Mono.just(Objects.requireNonNull(repository.findAll()
-                .filter(notas1 -> notas1.getAprendizId().equals(aprendizId))
+                .filter(notas1 -> notas1.getAprendizEmail().equals(aprendizId))
                 .filter(notas1 -> notas1.getTrainingId().equals(trainingId))
                 .blockFirst()));
 

@@ -39,7 +39,7 @@ public class ActividadServiceImpl implements IActividadService {
 
     public Flux<Actividad> findActivityByAprendizId(String aprendizId) {
         return repository.findAll()
-                .filter(actividad -> actividad.getAprendizId().equals(aprendizId))
+                .filter(actividad -> actividad.getAprendizEmail().equals(aprendizId))
                 .switchIfEmpty(Mono.empty());
     }
 }

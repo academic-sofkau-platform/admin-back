@@ -5,9 +5,12 @@ import com.sofkau.retofinal.services.DiagnosticoRendimientoServiceImpl;
 import com.sofkau.retofinal.services.NotasServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 @RestController
@@ -46,8 +49,15 @@ public class ControllerNotas {
         System.out.println("se esta ejecutando media noche");
         return training.findAllTrainingActivos()
                 .flatMap(training1 -> Flux.fromIterable(training1.getApprentices())
-                    .flatMap(aprendiz -> service.save(new Notas(aprendiz.getId(), training1.getTrainingId(), aprendiz.getTareas()))
+                    .flatMap(aprendiz -> service.save(new Notas(aprendiz.getEmail(), training1.getTrainingId(), aprendiz.getTareas()))
                     )
                 );
     }
+
+    @PostMapping("/diagnosticar")
+    public void diagnosticar(){
+       diagnosticoRendimientoService.diagnosticar(service.findAll());
+    }
+
+    // TODO: Funcion que devuelva las acciones de mejora de un aprendiz
 }
