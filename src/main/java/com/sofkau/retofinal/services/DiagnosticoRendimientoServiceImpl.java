@@ -1,12 +1,14 @@
 package com.sofkau.retofinal.services;
 
 import com.sofkau.retofinal.models.*;
+import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -21,6 +23,8 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
     @Autowired
     private EnvioDeCorreoServiceImpl envioDeCorreoService;
 
+    public ArrayList<Aprendiz> aprendicesConAccionesDeMejora = new ArrayList<>();
+
     public DiagnosticoRendimientoServiceImpl() {
         /*this.accionDeMejoras.add(new AccionDeMejora("63226e34adbe15156e21d4ad","7595fb82-db54-490b-91fc-ec0c8e7daaa1",  "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
         this.accionDeMejoras.add(new AccionDeMejora("63226e4cadbe15156e21d4ae", "7595fb82-db54-490b-91fc-ec0c8e7daaa1",  "Repaso de conceptos de fundamentos de DDD (link de documentación)"));
@@ -33,35 +37,62 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
     }
 
     public void diagnosticar(Flux<Notas> notas){
-        ArrayList<Aprendiz> aprendicesConAccionesDeMejora = new ArrayList<>();
-
         // Recorre todas las notas
         notas.toStream().forEach(nota -> {
 
             // se obtiene el objeto aprendiz
-            Mono<Aprendiz> aprendiz = getAprendizByEmail(nota.getTrainingId(), nota.getAprendizEmail());
+            Aprendiz aprendiz = getAprendizByEmail(nota.getTrainingId(), nota.getAprendizEmail()).block();
+            if(aprendiz == null) return;
 
             // se obtienen las tareas de la nota
-            nota.getTareasList()
-                    .forEach(tarea -> {
-                        if(tarea == null || tarea.getNota() == null) return;
+            nota.getTareasList().forEach(tarea -> {
+                if(tarea == null || tarea.getNota() == null) return;
 
-                        if(tarea.getNota() < 75){
-                            // se obtiene el curso de la nota
-                            cursoService.findCursoById(tarea.getCursoId()).subscribe(curso -> {
-                                if(curso == null || curso.getAccionMejora()== null) return;
-                                // agrega la accion de mejora al aprendiz
-                                aprendiz.subscribe(aprendiz1 -> {
-                                    aprendiz1.getAccionDeMejoras().add(curso.getAccionMejora());
-                                });
-                            });
-                        }
-                    });
+                // se obtiene el curso de la nota
+                Curso curso = cursoService.findCursoById(tarea.getCursoId()).block();
+                if(curso == null || curso.getAccionMejora()== null) return;
 
+                var promedio = (tarea.getNota()*100)/curso.getAprobacion();
+                if(promedio < 75){
+
+                    // agrega la accion de mejora al aprendiz
+                    if(!aprendiz.getAccionDeMejoras().contains(curso.getAccionMejora())){
+                        aprendiz.getAccionDeMejoras().add(curso.getAccionMejora());
+                    }
+
+                    // Agrega al aprendiz a la lista para enviar correo
+                    AgregarAprendizALista(aprendiz);
+                }
+            });
+
+            PersistirAccionesMejora(nota.getTrainingId());
+        });
+        enviarCorreosToAprendicesConAccionesDeMejora();
+    }
+
+    // todo: actualizar aprendices con acciones de mejora
+    private void PersistirAccionesMejora(String trainingId){
+        Training training = AppUtils.dtoToTraining(trainingServices.findById(trainingId).block());
+
+        List<Aprendiz> newAprendices = training.getApprentices();
+        this.aprendicesConAccionesDeMejora.forEach(aprendiz -> {
+            newAprendices.forEach(aprendiz1 -> {
+                if(aprendiz1.getEmail().equals(aprendiz.getEmail())){
+                    aprendiz1.setAccionDeMejoras(aprendiz.getAccionDeMejoras());
+                }
+            });
         });
 
-        enviarCorreosToAprendicesConAccionesDeMejora(aprendicesConAccionesDeMejora);
+        training.setApprentices(newAprendices);
+        trainingServices.update(training, trainingId);
+    }
 
+    private void AgregarAprendizALista(Aprendiz aprendiz){
+
+        boolean está = this.aprendicesConAccionesDeMejora.stream().anyMatch(aprendiz1 -> aprendiz1.getEmail().equals(aprendiz.getEmail()));
+        if(!está){
+            this.aprendicesConAccionesDeMejora.add(aprendiz);
+        }
     }
 
     private Mono<Aprendiz> getAprendizByEmail(String trainingId, String aprendizId){
@@ -79,7 +110,7 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
                 .switchIfEmpty(Mono.empty());
     }
 
-    private void enviarCorreosToAprendicesConAccionesDeMejora(ArrayList<Aprendiz> aprendicesConAccionesDeMejora){
+    private void enviarCorreosToAprendicesConAccionesDeMejora(){
         aprendicesConAccionesDeMejora
                 .forEach(aprendiz -> {
                     // enviar correo
@@ -88,10 +119,8 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
                     detallesDeCorreo.setRecipient(aprendiz.getEmail());
 
                     detallesDeCorreo.setMsgBody(BuildBody(aprendiz));
-
-                    System.out.println(aprendiz.getEmail());
-                    //envioDeCorreoService.sendSimpleMail(envioDeCorreoService.TemplateFeedback(detallesDeCorreo));
-                    System.out.println(detallesDeCorreo);
+                    envioDeCorreoService.sendSimpleMail(envioDeCorreoService.TemplateFeedback(detallesDeCorreo));
+                    //System.out.println(BuildBody(aprendiz));
                 });
     }
 
