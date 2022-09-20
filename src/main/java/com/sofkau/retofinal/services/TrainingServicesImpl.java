@@ -135,36 +135,24 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMapIterable(TrainingDto::getApprentices);
     }
     */
-    //Todo terminar
-    //agregarAprendices versión 1 gian
-//    @Override
-//    public Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList){
-//        List<Aprendiz> concatenated_list = new ArrayList<>();
-//        return this.getActiveTrainings()
-//                .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
-//                .filter(training -> training.getTrainingId().equals(trainingId))
-//                .flatMap(training -> {
-//                    concatenated_list.addAll(training.getApprentices());
-//                    concatenated_list.addAll(aprendizList);
-//                    training.setApprentices(concatenated_list);
-//                    return save(training).thenReturn(AppUtils.trainingToDto(training));
-//                })
-//                .next();
-//    }
 
-    //agregarAprendices versión 2
     @Override
     public Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList){
         List<Aprendiz> concatenated_list = new ArrayList<>();
         return this.findById(trainingId)
-                .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
+                .map(AppUtils::dtoToTraining)
                 .flatMap(training -> {
-                    concatenated_list.addAll(training.getApprentices());
-                    concatenated_list.addAll(aprendizList);
-                    training.setApprentices(concatenated_list);
-                    return repository.save(training).thenReturn(AppUtils.trainingToDto(training));
-                });
+                    var newList = aprendizList.stream()
+                            .filter(aprendiz -> !aprendiz.getName().equals(""))
+                            .filter(aprendiz -> !aprendiz.getEmail().equals(""))
+                            .collect(Collectors.toList());
 
+                    concatenated_list.addAll(training.getApprentices());
+                    concatenated_list.addAll(newList);
+                    training.setApprentices(concatenated_list);
+                    return repository.save(training)
+                            .thenReturn(AppUtils.trainingToDto(training));
+                });
     }
 }
 

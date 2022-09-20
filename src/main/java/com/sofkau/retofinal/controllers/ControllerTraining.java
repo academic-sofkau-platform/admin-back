@@ -8,7 +8,6 @@ import com.sofkau.retofinal.services.TrainingServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -22,7 +21,6 @@ import static com.sofkau.retofinal.utils.AppUtils.*;
 @CrossOrigin("*")
 public class ControllerTraining {
     //Todo control de errores del post
-    //Todo Dto
     //Todo control de respuesta http
     @Autowired
     TrainingServicesImpl service;
