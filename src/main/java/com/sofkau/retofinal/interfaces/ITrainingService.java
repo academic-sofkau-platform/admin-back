@@ -4,6 +4,7 @@ import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.Tarea;
 import com.sofkau.retofinal.models.Training;
+import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

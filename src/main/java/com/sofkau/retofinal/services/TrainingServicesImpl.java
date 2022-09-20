@@ -8,6 +8,8 @@ import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.repositories.TrainingRepository;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,6 +17,7 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.sofkau.retofinal.utils.AppUtils.decoderBase64;
@@ -133,18 +136,35 @@ public class TrainingServicesImpl implements ITrainingService {
     }
     */
     //Todo terminar
+    //agregarAprendices versión 1 gian
+//    @Override
+//    public Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList){
+//        List<Aprendiz> concatenated_list = new ArrayList<>();
+//        return this.getActiveTrainings()
+//                .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
+//                .filter(training -> training.getTrainingId().equals(trainingId))
+//                .flatMap(training -> {
+//                    concatenated_list.addAll(training.getApprentices());
+//                    concatenated_list.addAll(aprendizList);
+//                    training.setApprentices(concatenated_list);
+//                    return save(training).thenReturn(AppUtils.trainingToDto(training));
+//                })
+//                .next();
+//    }
+
+    //agregarAprendices versión 2
     @Override
     public Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList){
         List<Aprendiz> concatenated_list = new ArrayList<>();
-        return this.getActiveTrainings()
+        return this.findById(trainingId)
                 .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
-                .filter(training -> training.getTrainingId().equals(trainingId))
                 .flatMap(training -> {
                     concatenated_list.addAll(training.getApprentices());
                     concatenated_list.addAll(aprendizList);
                     training.setApprentices(concatenated_list);
-                    return save(training).thenReturn(AppUtils.trainingToDto(training));
-                })
-                .next();
+                    return repository.save(training).thenReturn(AppUtils.trainingToDto(training));
+                });
+
     }
 }
+
