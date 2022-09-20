@@ -13,6 +13,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -128,5 +129,33 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMapIterable(TrainingDto::getApprentices);
     }
     */
+    @Override
+    public Mono<Void> agregarAprendices(String trainingId, List<Aprendiz> aprendizList){
+//        return this.getActiveTrainings()
+//                .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
+//                .filter(training -> training.getTrainingId().equals(trainingId))
+//                .flatMap(training -> {
+//                    aprendizList.stream().forEach(aprendiz -> {
+//                        training.getApprentices().add(aprendiz);
+//                    });
+//                    return save(training).thenReturn(AppUtils.trainingToDto(training));
+//                })
+//                .switchIfEmpty(Mono.empty());
+        return null;
+    }
 
 }
+
+/*
+*     @Override
+    public Mono<TrainingDto> asignarCoach(String coach, String trainingId) {
+        return repository
+                .findById(trainingId)
+                .flatMap(training -> {
+                    training.setTrainingId(trainingId);
+                    training.setCoach(coach);
+                    return save(training).thenReturn(AppUtils.trainingToDto(training));
+                })
+                .switchIfEmpty(Mono.empty());
+    }
+* */

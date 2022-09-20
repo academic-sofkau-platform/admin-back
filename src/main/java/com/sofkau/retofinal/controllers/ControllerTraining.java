@@ -98,13 +98,14 @@ public class ControllerTraining {
         return service.getAprendicesByTrainingId(trainingId);
     }
 
-    //TODO delete aprendiz por id de training y email
     @PostMapping("/deleteAprendiz/{trainingId}")
     public Mono<Void> delete(@PathVariable("trainingId") String trainingId, @RequestBody String email){
         return service.deleteAprendizByEmail(trainingId,email);
     }
 
-
-    //Todo update aprendiz
-
+    //Agregar aprendiz a un training activo
+    @PutMapping("/agregarAprendiz/{trainingId}")
+    public Mono<Void> agregarAprendiz(@PathVariable("trainingId") String trainingId, @RequestBody List<Aprendiz> aprendices){
+        return service.agregarAprendices(trainingId, aprendices);
+    }
 }

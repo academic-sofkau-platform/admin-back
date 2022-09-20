@@ -7,6 +7,8 @@ import com.sofkau.retofinal.models.Training;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 
 public interface ITrainingService {
     Mono<TrainingDto> save(Training training);
@@ -25,4 +27,6 @@ public interface ITrainingService {
     Flux<Aprendiz> getAprendicesByTrainingId(String trainingId);
 
    // Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
+
+    Mono<Void> agregarAprendices(String trainingId, List<Aprendiz> aprendizList);
 }
