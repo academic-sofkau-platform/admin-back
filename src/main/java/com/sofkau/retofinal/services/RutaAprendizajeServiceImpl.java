@@ -86,8 +86,7 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                             .filter(ruta -> !ruta.getId().equals(rutaId)).collect(Collectors.toList());
                     rutaAprendizaje.setRutas(list);
                     return repository.save(rutaAprendizaje);
-                })
-                .then();
+                }).then(Mono.empty());
     }
 
     @Override

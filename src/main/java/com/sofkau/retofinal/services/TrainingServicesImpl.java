@@ -3,6 +3,7 @@ package com.sofkau.retofinal.services;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
 import com.sofkau.retofinal.models.Aprendiz;
+import com.sofkau.retofinal.models.ResultadoCursoList;
 import com.sofkau.retofinal.models.Tarea;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.repositories.TrainingRepository;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -20,6 +23,10 @@ import java.util.stream.Collectors;
 public class TrainingServicesImpl implements ITrainingService {
     @Autowired
     TrainingRepository repository;
+    @Autowired
+    private RutaAprendizajeServiceImpl rutaAprendizajeService;
+    @Autowired
+    private CursoServiceImpl cursoService;
 
     @Override
     public Mono<TrainingDto> save(Training training) {
@@ -75,14 +82,16 @@ public class TrainingServicesImpl implements ITrainingService {
                 }).then();
 
     }
+
     @Override
-    public Mono<TrainingDto> addtarea(String trainingId, String aprendizId, Tarea tarea){
-        return  repository.findById(trainingId)
-                .flatMap(training -> {training.getApprentices()
-                        .forEach(aprendiz -> {
-                            if (aprendiz.getEmail().equals(aprendizId))
-                                aprendiz.getTareas().add(tarea);
-                        });
+    public Mono<TrainingDto> addtarea(String trainingId, String aprendizId, Tarea tarea) {
+        return repository.findById(trainingId)
+                .flatMap(training -> {
+                    training.getApprentices()
+                            .forEach(aprendiz -> {
+                                if (aprendiz.getEmail().equals(aprendizId))
+                                    aprendiz.getTareas().add(tarea);
+                            });
                     return save(training);
                 });
 
@@ -109,8 +118,8 @@ public class TrainingServicesImpl implements ITrainingService {
         return this.getActiveTrainings()
                 .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
                 .flatMap(training ->
-                Flux.fromIterable(training.getApprentices())
-        );
+                        Flux.fromIterable(training.getApprentices())
+                );
     }
 
     @Override
@@ -129,4 +138,26 @@ public class TrainingServicesImpl implements ITrainingService {
     }
     */
 
+    @Override
+    public Flux<ResultadoCursoList> getResultadoCursos() {
+        List<ResultadoCursoList> resultadoCursoLists = new ArrayList<>();
+        this.getActiveTrainings()
+                .flatMap(trainingDto -> {
+                    var rutaDto = rutaAprendizajeService.findById(trainingDto.getRutaAprendizaje().getId()).block();
+                    var rutaAprendizaje = AppUtils.dtoToRutaAprendizaje(rutaDto);
+                    rutaAprendizaje.getRutas().stream().map(rutita -> {
+                        trainingDto
+                                .getApprentices()
+                                .stream()
+                                .map(aprendiz -> resultadoCursoLists.add(new ResultadoCursoList(aprendiz,
+                                        AppUtils.dtoToTraining(trainingDto),
+                                        cursoService.repository.findById(rutita.getCursoId()).block()))
+                                );
+                        return resultadoCursoLists;
+                    });
+                    return null;
+                });
+        return null;
+//        return Flux.just(resultadoCursoLists);
+    }
 }
