@@ -28,5 +28,5 @@ public interface ITrainingService {
 
    // Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
 
-    Mono<Void> agregarAprendices(String trainingId, List<Aprendiz> aprendizList);
+    Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList);
 }

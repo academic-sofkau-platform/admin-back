@@ -12,9 +12,12 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.sofkau.retofinal.utils.AppUtils.decoderBase64;
 
 
 @Service
@@ -129,33 +132,19 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMapIterable(TrainingDto::getApprentices);
     }
     */
+    //Todo terminar
     @Override
-    public Mono<Void> agregarAprendices(String trainingId, List<Aprendiz> aprendizList){
-//        return this.getActiveTrainings()
-//                .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
-//                .filter(training -> training.getTrainingId().equals(trainingId))
-//                .flatMap(training -> {
-//                    aprendizList.stream().forEach(aprendiz -> {
-//                        training.getApprentices().add(aprendiz);
-//                    });
-//                    return save(training).thenReturn(AppUtils.trainingToDto(training));
-//                })
-//                .switchIfEmpty(Mono.empty());
-        return null;
-    }
-
-}
-
-/*
-*     @Override
-    public Mono<TrainingDto> asignarCoach(String coach, String trainingId) {
-        return repository
-                .findById(trainingId)
+    public Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList){
+        List<Aprendiz> concatenated_list = new ArrayList<>();
+        return this.getActiveTrainings()
+                .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
+                .filter(training -> training.getTrainingId().equals(trainingId))
                 .flatMap(training -> {
-                    training.setTrainingId(trainingId);
-                    training.setCoach(coach);
+                    concatenated_list.addAll(training.getApprentices());
+                    concatenated_list.addAll(aprendizList);
+                    training.setApprentices(concatenated_list);
                     return save(training).thenReturn(AppUtils.trainingToDto(training));
                 })
-                .switchIfEmpty(Mono.empty());
+                .next();
     }
-* */
+}

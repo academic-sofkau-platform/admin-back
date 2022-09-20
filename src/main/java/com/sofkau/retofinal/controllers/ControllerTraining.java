@@ -105,7 +105,8 @@ public class ControllerTraining {
 
     //Agregar aprendiz a un training activo
     @PutMapping("/agregarAprendiz/{trainingId}")
-    public Mono<Void> agregarAprendiz(@PathVariable("trainingId") String trainingId, @RequestBody List<Aprendiz> aprendices){
+    public Mono<TrainingDto> agregarAprendiz(@PathVariable("trainingId") String trainingId,
+                                             @RequestBody List<Aprendiz> aprendices){
         return service.agregarAprendices(trainingId, aprendices);
     }
 }
