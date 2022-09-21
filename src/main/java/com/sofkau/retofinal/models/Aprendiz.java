@@ -6,9 +6,11 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Document(collection="apprentices")
 @Data
@@ -16,8 +18,13 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Aprendiz {
     @Id
+    @Email
     private String email;
+    @NotBlank(message = "Name is mandatory")
+    @Size(max = 100)
     private String name;
+    @NotBlank(message = "LastName is mandatory")
+    @Size(max = 100)
     private String lastName;
     private String city;
     private String gender;
