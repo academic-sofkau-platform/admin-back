@@ -24,7 +24,7 @@ public class TrainingDto {
     private Date endDate;
     private String coach;
     private List<Aprendiz> apprentices;
-    private RutaAprendizaje rutaAprendizaje;
+    private String rutaAprendizajeId;
     private long apprenticesCount;
     private String periodo;
 }

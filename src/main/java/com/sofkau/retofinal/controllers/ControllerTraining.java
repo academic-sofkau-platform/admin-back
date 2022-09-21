@@ -1,9 +1,6 @@
 package com.sofkau.retofinal.controllers;
 import com.sofkau.retofinal.dto.TrainingDto;
-import com.sofkau.retofinal.models.Aprendiz;
-import com.sofkau.retofinal.models.Tarea;
-import com.sofkau.retofinal.models.Training;
-import com.sofkau.retofinal.models.TrainingAuxiliar;
+import com.sofkau.retofinal.models.*;
 import com.sofkau.retofinal.services.TrainingServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -103,6 +100,12 @@ public class ControllerTraining {
     public Mono<Void> delete(@PathVariable("trainingId") String trainingId, @RequestBody String email){
         return service.deleteAprendizByEmail(trainingId,email);
     }
+
+    @GetMapping("/hola")
+    public Flux<ResultadoCursoList> getResultadoCursos(){
+        return service.getResultadoCursos();
+    }
+
 
 
     //Todo update aprendiz
