@@ -1,6 +1,8 @@
 package com.sofkau.retofinal.services;
 
 import com.sofkau.retofinal.interfaces.INotasService;
+import com.sofkau.retofinal.models.Aprendiz;
+import com.sofkau.retofinal.models.Curso;
 import com.sofkau.retofinal.models.Notas;
 import com.sofkau.retofinal.models.Tarea;
 import com.sofkau.retofinal.repositories.NotasRepository;
@@ -10,12 +12,17 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class NotasServices implements INotasService {
 
     @Autowired
     NotasRepository repository;
+    @Autowired
+    CursoServiceImpl cursoService;
+    @Autowired
+    TrainingServicesImpl trainingServices;
 
     @Autowired
     DiagnosticoRendimientoServiceImpl diagnosticoRendimientoService;
@@ -47,4 +54,18 @@ public class NotasServices implements INotasService {
 
     }
 
+    public Flux<Curso> getCursoByAprendizId(String aprendizId){
+        return findByAprendizId(aprendizId)
+                .map(Notas::getTareasList)
+                .flatMapMany(Flux::fromIterable)
+                .map(Tarea::getCursoId)
+                .flatMap(cursoId -> cursoService.findCursoById(cursoId));
+    }
+
+    public Flux<String> getAccionMejora(String aprendizId){
+        return findByAprendizId(aprendizId)
+                .flatMap(notas1 -> trainingServices.getAprendizByTrainingIdAndEmail(notas1.getTrainingId(), aprendizId))
+                .map(Aprendiz::getAccionDeMejoras)
+                .flatMapMany(Flux::fromIterable);
+    }
 }

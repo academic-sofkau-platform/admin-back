@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/notas")
@@ -26,8 +30,6 @@ public class ControllerNotas {
 
     @Autowired
     private DiagnosticoRendimientoServiceImpl diagnosticoRendimientoService;
-
-
 
    @Scheduled(cron = "0 0 * * * *")
    public void extraerMediaNoche(){
@@ -58,6 +60,10 @@ public class ControllerNotas {
     public void diagnosticar(){
        diagnosticoRendimientoService.diagnosticar(service.findAll());
     }
-
-    // TODO: Funcion que devuelva las acciones de mejora de un aprendiz
+    @GetMapping("/accionesMejora/{aprendizId}")
+    public ResponseEntity<List<String>> accionesMejoraDeAlumno(@PathVariable("aprendizId") String aprendizId){
+       var res = service.getAccionMejora(aprendizId).collectList().block();
+        return ResponseEntity.ok()
+                .body(res);
+    }
 }
