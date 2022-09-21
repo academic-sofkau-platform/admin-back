@@ -2,10 +2,7 @@ package com.sofkau.retofinal.services;
 
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
-import com.sofkau.retofinal.models.Aprendiz;
-import com.sofkau.retofinal.models.ResultadoCursoList;
-import com.sofkau.retofinal.models.Tarea;
-import com.sofkau.retofinal.models.Training;
+import com.sofkau.retofinal.models.*;
 import com.sofkau.retofinal.repositories.TrainingRepository;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
