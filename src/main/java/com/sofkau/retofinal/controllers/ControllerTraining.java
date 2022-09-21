@@ -82,7 +82,8 @@ public class ControllerTraining {
 
     @GetMapping("/findAllTrainingActivos")
     public Flux<TrainingDto> findAllTrainingActivos() {
-        return service.getActiveTrainings();
+        //return service.getActiveTrainings();
+        return service.getActiveTrainingComplete();
     }
 
 

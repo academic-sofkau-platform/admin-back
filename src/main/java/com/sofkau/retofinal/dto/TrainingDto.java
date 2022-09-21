@@ -26,5 +26,5 @@ public class TrainingDto {
     private List<Aprendiz> apprentices;
     private String rutaAprendizajeId;
     private long apprenticesCount;
-    private String periodo;
+    private String period;
 }

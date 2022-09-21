@@ -25,4 +25,5 @@ public interface ITrainingService {
     Flux<Aprendiz> getAprendicesByTrainingId(String trainingId);
 
    // Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
+   public Flux<TrainingDto> getActiveTrainingComplete();
 }

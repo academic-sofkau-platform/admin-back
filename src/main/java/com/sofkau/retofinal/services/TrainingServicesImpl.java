@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -102,6 +103,21 @@ public class TrainingServicesImpl implements ITrainingService {
                     return trainingDto;
                 });*/
 
+    }
+
+    //Método para devolver la vida training activos
+    @Override
+    public Flux<TrainingDto> getActiveTrainingComplete(){
+        String strDateFormat ="MMM";
+        SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
+
+        return getActiveTrainings()
+                .map(trainingDto -> {
+                    trainingDto.setApprenticesCount(trainingDto.getApprentices().size());
+                    trainingDto.setPeriod(sdf.format(trainingDto.getStartDate()) + " - " + sdf.format(trainingDto.getEndDate()));
+                    repository.save((AppUtils.dtoToTraining(trainingDto)));
+                    return trainingDto;
+                });
     }
 
     @Override
