@@ -1,6 +1,8 @@
 package com.sofkau.retofinal.services;
 
 import com.sofkau.retofinal.interfaces.INotasService;
+import com.sofkau.retofinal.models.Aprendiz;
+import com.sofkau.retofinal.models.Curso;
 import com.sofkau.retofinal.models.Notas;
 import com.sofkau.retofinal.models.Tarea;
 import com.sofkau.retofinal.repositories.NotasRepository;
@@ -10,28 +12,22 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class NotasServices implements INotasService {
 
     @Autowired
     NotasRepository repository;
+    @Autowired
+    CursoServiceImpl cursoService;
+    @Autowired
+    TrainingServicesImpl trainingServices;
 
     @Autowired
     DiagnosticoRendimientoServiceImpl diagnosticoRendimientoService;
 
-    @Autowired
-    private ActividadServiceImpl actividadService;
-
     public ArrayList<Notas> notas = new ArrayList<>();
-    public NotasServices() {
-        List<Tarea> actividades1 = new ArrayList<>();
-
-        this.notas.add(new Notas("1555de", "7595fb82-db54-490b-91fc-ec0c8e7daaa1", actividades1));
-        this.notas.add(new Notas("1231231311354456", "4149bdc6-f0b4-4f94-a030-385c695a88a7", actividades1));
-        this.notas.add(new Notas("1555de12", "7595fb82-db54-490b-91fc-ec0c8e7daaa1", actividades1));
-
-    }
 
     @Override
     public Mono<Notas> save(Notas notas) {
@@ -58,4 +54,18 @@ public class NotasServices implements INotasService {
 
     }
 
+    public Flux<Curso> getCursoByAprendizId(String aprendizId){
+        return findByAprendizId(aprendizId)
+                .map(Notas::getTareasList)
+                .flatMapMany(Flux::fromIterable)
+                .map(Tarea::getCursoId)
+                .flatMap(cursoId -> cursoService.findCursoById(cursoId));
+    }
+
+    public Flux<String> getAccionMejora(String aprendizId){
+        return findByAprendizId(aprendizId)
+                .flatMap(notas1 -> trainingServices.getAprendizByTrainingIdAndEmail(notas1.getTrainingId(), aprendizId))
+                .map(Aprendiz::getAccionDeMejoras)
+                .flatMapMany(Flux::fromIterable);
+    }
 }

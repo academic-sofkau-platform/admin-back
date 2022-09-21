@@ -131,6 +131,16 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMapIterable(Training::getApprentices);
     }
 
+    @Override
+    public Mono<Aprendiz> getAprendizByTrainingIdAndEmail(String trainingId, String emailId) {
+        return this.getActiveTrainings()
+                .map(AppUtils::dtoToTraining)
+                .filter(training -> training.getTrainingId().equals(trainingId))
+                .flatMapIterable(Training::getApprentices)
+                .filter(aprendiz -> aprendiz.getEmail().equals(emailId))
+                .next();
+    }
+
     /*
     @Override
     public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
