@@ -3,6 +3,7 @@ package com.sofkau.retofinal.controllers;
 import com.sofkau.retofinal.dto.ActividadDto;
 import com.sofkau.retofinal.models.Actividad;
 import com.sofkau.retofinal.services.ActividadServiceImpl;
+import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ import java.util.Date;
 public class ControllerActividad {
 
     @Autowired
-    private ActividadServiceImpl service;
+    ActividadServiceImpl service;
 
     @PostMapping
     public Mono<ActividadDto> save(@RequestBody Actividad actividad){
@@ -45,9 +46,14 @@ public class ControllerActividad {
                 .filter(actividad -> actividad.getAprendizId().equals(aprendizId));
     }
 
-    @PutMapping("/updatepuntaje")
-    public Mono<ActividadDto> updatePuntaje(@RequestBody Actividad actividad) {
-       return service.updatePuntaje(actividad, 3);
+    @GetMapping("/agarreporid/{id}")
+    public Mono<ActividadDto> getPorId(@PathVariable("id") String id){
+        return service.findById(id);
+    }
+
+    @PutMapping("/updatepuntaje/{id}")
+    public Mono<ActividadDto> updatePuntaje(@PathVariable("id") String id) {
+        return service.updatePuntaje(AppUtils.dtoToActividad(service.findById(id).block()), 3);
     }
 
     @GetMapping("/aprendices/{aprendizId}")

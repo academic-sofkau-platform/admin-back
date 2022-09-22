@@ -11,6 +11,7 @@ public interface IActividadService {
 
     Mono<ActividadDto> save(Actividad actividad);
     Flux<ActividadDto> findAll();
+    Mono<ActividadDto> findById(String Id);
     Mono<ActividadDto> updatePuntaje(Actividad actividad, Integer puntaje);
     Flux<Actividad> findActivityByAprendizId(String aprendizId);
 }
