@@ -101,10 +101,10 @@ public class ControllerTraining {
         return service.deleteAprendizByEmail(trainingId,email);
     }
 
-    @GetMapping("/hola")
+    /*@GetMapping("/hola")
     public Flux<ResultadoCursoList> getResultadoCursos(){
         return service.getResultadoCursos();
-    }
+    }*/
 
 
 

@@ -27,5 +27,5 @@ public interface ITrainingService {
     Mono<Aprendiz> getAprendizByTrainingIdAndEmail(String trainingId, String emailId);
 
    // Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
-   Flux<ResultadoCursoList> getResultadoCursos();
+   //Flux<ResultadoCursoList> getResultadoCursos();
    }

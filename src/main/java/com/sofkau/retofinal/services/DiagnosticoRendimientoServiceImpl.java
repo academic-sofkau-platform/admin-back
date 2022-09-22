@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -37,9 +38,8 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
         this.accionDeMejoras.add(new AccionDeMejora("63234969e11cf83d158c80c3", "022686ac-9f63-4636-8ac4-37c2129cba51",  "Repaso Introduccion al Desarrollo (link documentación)"));*/
     }
 
-    public void diagnosticar(Flux<Notas> notas){
+    public List<Mono<TrainingDto>> diagnosticar(Flux<Notas> notas){
         ArrayList<Aprendiz> aprendicesConAccionesDeMejora2 = new ArrayList<>();
-
         // Recorre todas las notas
         notas.toStream().forEach(nota -> {
 
@@ -56,12 +56,13 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
             });
 
         });
-        persistirAccionesMejora(notas, aprendicesConAccionesDeMejora2);
+        //persistirAccionesMejoraV1(notas, aprendicesConAccionesDeMejora2);
+        return persistirAccionesMejoraV2(notas, aprendicesConAccionesDeMejora2);
         //enviarCorreosToAprendicesConAccionesDeMejora(aprendicesConAccionesDeMejora2);
     }
 
     // todo: actualizar aprendices con acciones de mejora
-    private void persistirAccionesMejora(Flux<Notas> notas, ArrayList<Aprendiz> aprendicesConAccionesDeMejora2){
+    private void persistirAccionesMejoraV1(Flux<Notas> notas, ArrayList<Aprendiz> aprendicesConAccionesDeMejora2){
         // recorre todos los aprendices con acciones de mejora
         aprendicesConAccionesDeMejora2.forEach(aprendiz -> {
             // se obtiene el training donde está el aprendiz
@@ -87,6 +88,42 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
             System.out.println(trainingDtoMono);
         });
     }
+    private List<Mono<TrainingDto>> persistirAccionesMejoraV2(Flux<Notas> notas, ArrayList<Aprendiz> aprendicesConAccionesDeMejora2){
+        ArrayList<Training> trainings = new ArrayList<>();
+        // recorre todos los aprendices con acciones de mejora
+        return aprendicesConAccionesDeMejora2.stream().map(aprendiz -> {
+            // se obtiene el training donde está el aprendiz
+            String trainingId = notas.filter(nota1 -> nota1.getAprendizEmail().equals(aprendiz.getEmail()))
+                    .next()
+                    .map(Notas::getTrainingId)
+                    .block();
+            Training training = trainingServices.findById(trainingId)
+                    .map(AppUtils::dtoToTraining)
+                    .block();
+            if(training == null) return null;
+            //buscar si el training ya fue agregado a la lista
+            if(trainings.size() > 0){
+                training = trainings.stream().map(training1 -> {
+                    if(training1.getTrainingId().equals(trainingId)){
+                         return training1;
+                    }
+                    return null;
+                }).collect(Collectors.toList()).get(0);
+            }
+
+            // se crea una nueva lista de aprendices basada en la del training
+            training.getApprentices().forEach(aprendiz1 -> {
+                // busca el aprendiz con acciones de mejora y se las setea
+                if(aprendiz1.getEmail().equals(aprendiz.getEmail())){
+                    aprendiz1.setAccionDeMejoras(aprendiz.getAccionDeMejoras());
+                }
+            });
+            //trainings.add(training);
+            agregarTrainingALista(trainings, training);
+            return trainingServices.actualizarAprendices(training.getApprentices(), trainingId);
+        }).collect(Collectors.toList());
+
+    }
 
     private void agregarAprendizALista(ArrayList<Aprendiz> aprendicesConAccionesDeMejora2, Aprendiz aprendiz){
 
@@ -94,6 +131,14 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
         if(!está){
             aprendicesConAccionesDeMejora2.add(aprendiz);
         }
+    }
+
+    private void agregarTrainingALista(ArrayList<Training> trainings, Training training){
+        trainings.forEach(training1 -> {
+            if(training1.getTrainingId().equals(training.getTrainingId())){
+                training1=training;
+            }
+        });
     }
 
     private void enviarCorreosToAprendicesConAccionesDeMejora(ArrayList<Aprendiz> aprendicesConAccionesDeMejora2){

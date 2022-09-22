@@ -1,9 +1,12 @@
 package com.sofkau.retofinal.controllers;
 
+import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.models.Notas;
+import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.services.DiagnosticoRendimientoServiceImpl;
 import com.sofkau.retofinal.services.NotasServices;
 
+import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import reactor.core.publisher.Mono;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -57,8 +61,10 @@ public class ControllerNotas {
     }
 
     @PostMapping("/diagnosticar")
-    public void diagnosticar(){
-       diagnosticoRendimientoService.diagnosticar(service.findAll());
+    public List<Training> diagnosticar(){
+        return diagnosticoRendimientoService.diagnosticar(service.findAll()).stream()
+                .map(trainingDtoMono -> AppUtils.dtoToTraining(trainingDtoMono.block()))
+                .collect(Collectors.toList());
     }
     @GetMapping("/accionesMejora/{aprendizId}")
     public ResponseEntity<List<String>> accionesMejoraDeAlumno(@PathVariable("aprendizId") String aprendizId){

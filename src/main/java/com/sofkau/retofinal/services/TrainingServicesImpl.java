@@ -26,8 +26,8 @@ public class TrainingServicesImpl implements ITrainingService {
     private RutaAprendizajeServiceImpl rutaAprendizajeService;
     @Autowired
     private CursoServiceImpl cursoService;
-    @Autowired
-    private NotasServices notasServices;
+    /*@Autowired
+    private NotasServices notasServices;*/
 
     @Override
     public Mono<TrainingDto> save(Training training) {
@@ -41,6 +41,17 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMap(training -> {
                     training.setTrainingId(trainingId);
                     training.setCoach(coach);
+                    return save(training).thenReturn(AppUtils.trainingToDto(training));
+                })
+                .switchIfEmpty(Mono.empty());
+    }
+
+    public Mono<TrainingDto> actualizarAprendices(List<Aprendiz> aprendizs, String trainingId){
+        return repository
+                .findById(trainingId)
+                .flatMap(training -> {
+                    training.setTrainingId(trainingId);
+                    training.setApprentices(aprendizs);
                     return save(training).thenReturn(AppUtils.trainingToDto(training));
                 })
                 .switchIfEmpty(Mono.empty());
@@ -149,7 +160,7 @@ public class TrainingServicesImpl implements ITrainingService {
     }
     */
 
-    @Override
+    /*@Override
 
     public Flux<ResultadoCursoList> getResultadoCursos() {
         List<ResultadoCursoList> resultadoCursoLists = new ArrayList<>();
@@ -160,8 +171,8 @@ public class TrainingServicesImpl implements ITrainingService {
                     notas.getTareasList()
                             .stream()
                             .forEach(tarea -> {var cursoId = tarea.getCursoId();});
-
-                });
+                    return null;
+                });*/
 
 
 //        return this.getActiveTrainings()
@@ -185,5 +196,5 @@ public class TrainingServicesImpl implements ITrainingService {
 //                    return Flux.fromIterable(resultadoCursoLists);
 //                });
 
-    }
+    //}
 }
