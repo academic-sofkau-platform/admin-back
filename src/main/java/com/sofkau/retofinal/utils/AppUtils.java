@@ -66,6 +66,11 @@ public class AppUtils {
         Flux<CursoDto> cursoListDto = cursoFlux.map(AppUtils::cursoToDto);
         return cursoListDto;
     }
+    public static Curso dtoToCurso(CursoDto cursoDto){
+        Curso curso = new Curso();
+        BeanUtils.copyProperties(cursoDto, curso);
+        return curso;
+    }
 
     //Trainings
     public static TrainingDto trainingToDto(Training training){
@@ -114,7 +119,7 @@ public class AppUtils {
         training.setDescription(trainingAuxiliar.getDescription());
         training.setEndDate(trainingAuxiliar.getEndDate());
         training.setName(trainingAuxiliar.getName());
-        training.setRutaId(trainingAuxiliar.getRutaId());
+        training.setRutaAprendizajeId(trainingAuxiliar.getRutaId());
         training.setStartDate(trainingAuxiliar.getStartDate());
         return training;
     }

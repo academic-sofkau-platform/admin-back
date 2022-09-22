@@ -23,5 +23,5 @@ public class Training {
     private Date endDate;
     private String coach;
     private List<Aprendiz> apprentices;
-    private String rutaId;
+    private String rutaAprendizajeId;
 }

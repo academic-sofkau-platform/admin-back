@@ -12,12 +12,18 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tareas {
+public class Tarea {
 
     @Id
     private String tareaId =  UUID.randomUUID().toString();
     private String cursoId;
     private String tipo;
-    private Integer calificacion;
+    private Integer nota;
+    private String resultado;
+    private boolean entregado = false;
+    private String contenido;
 
+    public boolean getEntregado() {
+        return entregado;
+    }
 }
