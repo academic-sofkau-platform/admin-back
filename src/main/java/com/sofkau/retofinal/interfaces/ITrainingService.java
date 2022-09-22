@@ -5,8 +5,11 @@ import com.sofkau.retofinal.models.Aprendiz;
 import com.sofkau.retofinal.models.ResultadoCursoList;
 import com.sofkau.retofinal.models.Tarea;
 import com.sofkau.retofinal.models.Training;
+import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 
 public interface ITrainingService {
@@ -27,5 +30,6 @@ public interface ITrainingService {
     Mono<Aprendiz> getAprendizByTrainingIdAndEmail(String trainingId, String emailId);
 
    // Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
-   //Flux<ResultadoCursoList> getResultadoCursos();
-   }
+
+    Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList);
+}

@@ -8,6 +8,8 @@ import com.sofkau.retofinal.models.*;
 import com.sofkau.retofinal.repositories.TrainingRepository;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.sofkau.retofinal.utils.AppUtils.decoderBase64;
 
 
 @Service
@@ -159,42 +163,23 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMapIterable(TrainingDto::getApprentices);
     }
     */
+    @Override
+    public Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList){
+        List<Aprendiz> concatenated_list = new ArrayList<>();
+        return this.findById(trainingId)
+                .map(AppUtils::dtoToTraining)
+                .flatMap(training -> {
+                    var newList = aprendizList.stream()
+                            .filter(aprendiz -> !aprendiz.getName().equals(""))
+                            .filter(aprendiz -> !aprendiz.getEmail().equals(""))
+                            .collect(Collectors.toList());
 
-    /*@Override
-
-    public Flux<ResultadoCursoList> getResultadoCursos() {
-        List<ResultadoCursoList> resultadoCursoLists = new ArrayList<>();
-        return notasServices.findAll()
-                .flatMap(notas -> {
-                    var trainingId = notas.getTrainingId();
-                    var aprendiz = repository.findById(notas.getAprendizEmail());
-                    notas.getTareasList()
-                            .stream()
-                            .forEach(tarea -> {var cursoId = tarea.getCursoId();});
-                    return null;
-                });*/
-
-
-//        return this.getActiveTrainings()
-//                .flatMap(trainingDto -> {
-//                    System.out.println("segundo sout");
-//                    var rutaAprendizaje = rutaAprendizajeService.findById(trainingDto.getRutaAprendizajeId());
-//                     rutaAprendizaje.map(rutaAprendizajeDto -> {
-//                        System.out.println("tercer sout");
-//                        return rutaAprendizajeDto
-//                                .getRutas()
-//                                .stream()
-//                                .map(rutas ->
-//                                        trainingDto.getApprentices()
-//                                                .stream()
-//                                                .map(aprendiz -> resultadoCursoLists.add(
-//                                                        new ResultadoCursoList(aprendiz,
-//                                                                AppUtils.dtoToTraining(trainingDto),
-//                                                                cursoService.findCursoById(rutas.getCursoId()).block()))
-//                                                ));
-//                    });
-//                    return Flux.fromIterable(resultadoCursoLists);
-//                });
-
-    //}
+                    concatenated_list.addAll(training.getApprentices());
+                    concatenated_list.addAll(newList);
+                    training.setApprentices(concatenated_list);
+                    return repository.save(training)
+                            .thenReturn(AppUtils.trainingToDto(training));
+                });
+    }
 }
+
