@@ -2,6 +2,7 @@ package com.sofkau.retofinal.controllers;
 
 import com.sofkau.retofinal.dto.RutaAprendizajeDto;
 import com.sofkau.retofinal.dto.RutaDto;
+import com.sofkau.retofinal.models.RutaAprendiz;
 import com.sofkau.retofinal.services.RutaAprendizajeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,6 +69,10 @@ public class ControllerRutaAprendizaje {
     @GetMapping("/curso/{id}")
     public ResponseEntity<Mono<Boolean>> controlCursoEnRutaAprendizaje(@PathVariable("id") String cursoId){
         return ResponseEntity.ok().body(service.controlCursoEnRutaAprendizaje(cursoId));
+    }
+    @GetMapping("/getRutaAprendiz/{email}")
+    public Flux<RutaAprendiz> obtenerRutasAprendizajeAprendiz(@PathVariable("email") String email){
+        return service.obtenerRutasAprendizajeAprendiz(email);
     }
 
 }

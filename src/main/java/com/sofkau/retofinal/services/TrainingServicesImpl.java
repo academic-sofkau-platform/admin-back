@@ -1,5 +1,6 @@
 package com.sofkau.retofinal.services;
 
+import com.sofkau.retofinal.dto.RutaAprendizajeDto;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
 import com.sofkau.retofinal.models.*;
@@ -183,7 +184,6 @@ public class TrainingServicesImpl implements ITrainingService {
 
         return this.getActiveTrainings()
                 .flatMap(trainingDto -> {
-                    System.out.println("segundo sout");
                     var rutaAprendizaje = rutaAprendizajeService.findAll().filter(rutaAprendizajeDto -> rutaAprendizajeDto.getId().equals(trainingDto.getRutaAprendizajeId()));
                     rutaAprendizaje.map(rutaAprendizajeDto -> rutaAprendizajeDto.getRutas()
                             .stream()
@@ -193,6 +193,23 @@ public class TrainingServicesImpl implements ITrainingService {
                                                     cursoService.findAll().filter(cursoDto -> cursoDto.getId().equals(rutita.getCursoId())).map(AppUtils::dtoToCurso).collectList().block()))));
                     return Flux.fromIterable(resultadoCursoLists);
                 });
+
+
+      /**  return this.getActiveTrainings()
+                .flatMap(trainingDto -> {
+                    System.out.println("segundo sout");
+                    var rutaAprendizaje = rutaAprendizajeService.findById(trainingDto.getRutaAprendizajeId());
+                    rutaAprendizaje.map(RutaAprendizajeDto::getRutas).map(rutita ->
+                            trainingDto.getApprentices()
+                                    .stream()
+                                    .map(aprendiz -> resultadoCursoLists.add(
+                                            new ResultadoCursoList(aprendiz,
+                                                    AppUtils.dtoToTraining(trainingDto),
+                                                    new Curso()))
+                                    ));
+                    return Flux.fromIterable(resultadoCursoLists);
+                });*/
+
     }
 
 

@@ -47,4 +47,5 @@ public interface ITrainingService {
 
     Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList);
 
+
 }
