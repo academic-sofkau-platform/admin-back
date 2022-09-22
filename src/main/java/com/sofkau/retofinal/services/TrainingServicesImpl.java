@@ -6,6 +6,8 @@ import com.sofkau.retofinal.models.*;
 import com.sofkau.retofinal.repositories.TrainingRepository;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,6 +17,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.sofkau.retofinal.utils.AppUtils.decoderBase64;
+
 
 @Service
 public class TrainingServicesImpl implements ITrainingService {
@@ -22,6 +26,7 @@ public class TrainingServicesImpl implements ITrainingService {
     TrainingRepository repository;
     @Autowired
     private RutaAprendizajeServiceImpl rutaAprendizajeService;
+
 
     @Autowired
     private NotasServices notasServices;
@@ -42,6 +47,17 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMap(training -> {
                     training.setTrainingId(trainingId);
                     training.setCoach(coach);
+                    return save(training).thenReturn(AppUtils.trainingToDto(training));
+                })
+                .switchIfEmpty(Mono.empty());
+    }
+
+    public Mono<TrainingDto> actualizarAprendices(List<Aprendiz> aprendizs, String trainingId){
+        return repository
+                .findById(trainingId)
+                .flatMap(training -> {
+                    training.setTrainingId(trainingId);
+                    training.setApprentices(aprendizs);
                     return save(training).thenReturn(AppUtils.trainingToDto(training));
                 })
                 .switchIfEmpty(Mono.empty());
@@ -161,7 +177,6 @@ public class TrainingServicesImpl implements ITrainingService {
     }
     */
 
-
     @Override
     public Flux<ResultadoCursoList> getResultadoCursos() {
         List<ResultadoCursoList> resultadoCursoLists = new ArrayList<>();
@@ -178,9 +193,30 @@ public class TrainingServicesImpl implements ITrainingService {
                                                     cursoService.findAll().filter(cursoDto -> cursoDto.getId().equals(rutita.getCursoId())).map(AppUtils::dtoToCurso).collectList().block()))));
                     return Flux.fromIterable(resultadoCursoLists);
                 });
+    }
 
+
+
+    @Override
+    public Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList){
+        List<Aprendiz> concatenated_list = new ArrayList<>();
+        return this.findById(trainingId)
+                .map(AppUtils::dtoToTraining)
+                .flatMap(training -> {
+                    var newList = aprendizList.stream()
+                            .filter(aprendiz -> !aprendiz.getName().equals(""))
+                            .filter(aprendiz -> !aprendiz.getEmail().equals(""))
+                            .collect(Collectors.toList());
+
+                    concatenated_list.addAll(training.getApprentices());
+                    concatenated_list.addAll(newList);
+                    training.setApprentices(concatenated_list);
+                    return repository.save(training)
+                            .thenReturn(AppUtils.trainingToDto(training));
+                });
 
     }
 
 
 }
+

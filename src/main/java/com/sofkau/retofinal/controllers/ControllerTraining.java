@@ -17,6 +17,7 @@ import static com.sofkau.retofinal.utils.AppUtils.*;
 @RequestMapping("/trainings")
 @CrossOrigin("*")
 public class ControllerTraining {
+
     @Autowired
     TrainingServicesImpl service;
 
@@ -98,16 +99,17 @@ public class ControllerTraining {
         return service.getAprendicesByTrainingId(trainingId);
     }
 
-
     @PostMapping("/deleteAprendiz/{trainingId}")
     public Mono<Void> delete(@PathVariable("trainingId") String trainingId, @RequestBody String email){
         return service.deleteAprendizByEmail(trainingId,email);
     }
 
-    @GetMapping("/hola")
-    public Flux<ResultadoCursoList> getResultadoCursos(){
-        return service.getResultadoCursos();
-    }
 
+    //Agregar aprendiz a un training activo
+    @PutMapping("/agregarAprendiz/{trainingId}")
+    public Mono<TrainingDto> agregarAprendiz(@PathVariable("trainingId") String trainingId,
+                                             @RequestBody List<Aprendiz> aprendices){
+        return service.agregarAprendices(trainingId, aprendices);
+    }
 
 }
