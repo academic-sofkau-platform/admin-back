@@ -4,20 +4,34 @@ import com.sofkau.retofinal.dto.RutaAprendizajeDto;
 import com.sofkau.retofinal.dto.RutaDto;
 import com.sofkau.retofinal.interfaces.IRutaAprendizajeService;
 import com.sofkau.retofinal.models.Ruta;
+import com.sofkau.retofinal.models.RutaAprendiz;
 import com.sofkau.retofinal.models.RutaAprendizaje;
 import com.sofkau.retofinal.repositories.RutaAprendizajeRepository;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
     @Autowired
-    RutaAprendizajeRepository repository;
+    private RutaAprendizajeRepository repository;
+
+    @Autowired
+    private TrainingServicesImpl trainingService;
+
+    private CursoServiceImpl cursoService;
+
+    @Autowired
+    public RutaAprendizajeServiceImpl(@Lazy CursoServiceImpl cursoService) {
+        this.cursoService = cursoService;
+    }
 
     @Override
     public Mono<RutaAprendizajeDto> save(RutaAprendizajeDto rutaAprendizajeDto) {
@@ -91,12 +105,43 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
 
     @Override
     public Mono<Boolean> controlCursoEnRutaAprendizaje(String cursoId) {
-            return repository
+        return repository
                 .findAll()
                 .flatMapIterable(RutaAprendizaje::getRutas)
                 .filter(ruta -> ruta.getCursoId().equals(cursoId))
                 .next()
                 .hasElement();
+    }
+
+    //TODO despues del filter, necesito encontrar el primero y trabajar con el
+    @Override
+    public Flux<RutaAprendiz> obtenerRutasAprendizajeAprendiz(String email) {
+        List<RutaAprendiz> rutaAprendizList = new ArrayList<>();
+        return this.trainingService
+                .getActiveTrainings()
+                .filter(trainingDto -> trainingDto.getApprentices()
+                        .stream()
+                        .anyMatch(aprendiz -> aprendiz.getEmail().equals(email)))
+                .flatMapIterable(trainingDto -> {
+                    return trainingDto.getApprentices().stream().flatMap(aprendiz -> aprendiz.getTareas().stream())
+                            .map(tarea -> {
+                                return new RutaAprendiz(trainingDto.getRutaAprendizajeId(), tarea.getCursoId(), null, null, null, tarea);
+                            }).collect(Collectors.toUnmodifiableList());
+
+
+                })
+                .flatMap(rutaAprendiz -> {
+                    return this.repository.findById(rutaAprendiz.getRutaId())
+                            .flatMapIterable(RutaAprendizaje::getRutas)
+                            .map(ruta -> {
+                                return new RutaAprendiz(rutaAprendiz.getRutaId(), rutaAprendiz.getCursoId(), null, ruta.getNivel(), ruta.getPrerrequisitos(), rutaAprendiz.getTarea());
+                            });
+                })
+                .flatMap(rutaAprendiz -> {
+                    return this.cursoService.findCursoById(rutaAprendiz.getCursoId()).map(curso -> {
+                        return new RutaAprendiz(rutaAprendiz.getRutaId(), rutaAprendiz.getCursoId(), curso.getNombre(), rutaAprendiz.getNivel(), rutaAprendiz.getPrerrequisitos(), rutaAprendiz.getTarea());
+                    });
+                });
     }
 
 }
