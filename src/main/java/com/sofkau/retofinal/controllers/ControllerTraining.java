@@ -17,9 +17,6 @@ import static com.sofkau.retofinal.utils.AppUtils.*;
 @RequestMapping("/trainings")
 @CrossOrigin("*")
 public class ControllerTraining {
-    //Todo control de errores del post
-    //Todo Dto
-    //Todo control de respuesta http
     @Autowired
     TrainingServicesImpl service;
 
@@ -49,10 +46,16 @@ public class ControllerTraining {
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }*/
 
-    @PutMapping("/addtarea/{trainingId}/{aprendizId}")
+    @PutMapping("/addtarea/{trainingId}/{email}")
     public Mono<TrainingDto> addTarea(@RequestBody Tarea tarea,
                                  @PathVariable("trainingId") String trainingId, @PathVariable("aprendizId") String aprendizId){
         return service.addtarea( trainingId, aprendizId,tarea);
+    }
+    @PutMapping("/updateTarea/{trainingId}/{email}")
+    public Mono<TrainingDto> updateTarea(@RequestBody Tarea tarea,
+                                         @PathVariable("trainingId") String trainingId,
+                                         @PathVariable("email") String email){
+        return service.updateTarea(tarea,trainingId,email);
     }
 
     @PutMapping("/update/{id}")
@@ -95,7 +98,7 @@ public class ControllerTraining {
         return service.getAprendicesByTrainingId(trainingId);
     }
 
-    //TODO delete aprendiz por id de training y email
+
     @PostMapping("/deleteAprendiz/{trainingId}")
     public Mono<Void> delete(@PathVariable("trainingId") String trainingId, @RequestBody String email){
         return service.deleteAprendizByEmail(trainingId,email);
@@ -106,8 +109,5 @@ public class ControllerTraining {
         return service.getResultadoCursos();
     }
 
-
-
-    //Todo update aprendiz
 
 }

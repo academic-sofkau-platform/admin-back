@@ -1,7 +1,5 @@
 package com.sofkau.retofinal.services;
 
-import com.sofkau.retofinal.dto.RutaAprendizajeDto;
-import com.sofkau.retofinal.dto.RutaDto;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
 import com.sofkau.retofinal.models.*;
@@ -24,10 +22,13 @@ public class TrainingServicesImpl implements ITrainingService {
     TrainingRepository repository;
     @Autowired
     private RutaAprendizajeServiceImpl rutaAprendizajeService;
-    @Autowired
-    private CursoServiceImpl cursoService;
+
     @Autowired
     private NotasServices notasServices;
+
+    @Autowired
+    private CursoServiceImpl cursoService;
+
 
     @Override
     public Mono<TrainingDto> save(Training training) {
@@ -67,6 +68,7 @@ public class TrainingServicesImpl implements ITrainingService {
                 .switchIfEmpty(Mono.empty());
     }
 
+
     @Override
     public Mono<Void> deleteById(String trainingId) {
         return repository.deleteById(trainingId);
@@ -82,6 +84,22 @@ public class TrainingServicesImpl implements ITrainingService {
                     return repository.save(training);
                 }).then();
 
+    }
+
+    @Override
+    public Mono<TrainingDto> updateTarea(Tarea tarea, String trainingId, String email) {
+        return repository.findById(trainingId)
+                .flatMap(training -> {
+                    training.getApprentices()
+                            .stream()
+                            .filter(aprendiz -> aprendiz.getEmail().equals(email))
+                            .forEach(aprendiz -> aprendiz.getTareas()
+                                    .forEach(tarea1 -> {
+                                        tarea1.setEntregado(tarea.getEntregado());
+                                        tarea1.setContenido(tarea.getContenido());
+                                    }));
+                    return save(training);
+                });
     }
 
     @Override
@@ -106,12 +124,6 @@ public class TrainingServicesImpl implements ITrainingService {
                 .filter(training -> today.after(training.getStartDate()))
                 .filter(training -> today.before(training.getEndDate()))
                 .map(training -> AppUtils.trainingToDto(training));
-                /*.map(trainingDto -> {
-                    trainingDto.setApprenticesCount(trainingDto.getApprentices().size());
-                      repository.save(AppUtils.dtoToTraining(trainingDto));
-                    return trainingDto;
-                });*/
-
     }
 
     @Override
@@ -149,41 +161,26 @@ public class TrainingServicesImpl implements ITrainingService {
     }
     */
 
-    @Override
 
+    @Override
     public Flux<ResultadoCursoList> getResultadoCursos() {
         List<ResultadoCursoList> resultadoCursoLists = new ArrayList<>();
-        return notasServices.findAll()
-                .flatMap(notas -> {
-                    var trainingId = notas.getTrainingId();
-                    var aprendiz = repository.findById(notas.getAprendizEmail());
-                    notas.getTareasList()
-                            .stream()
-                            .forEach(tarea -> {var cursoId = tarea.getCursoId();});
 
+        return this.getActiveTrainings()
+                .flatMap(trainingDto -> {
+                    System.out.println("segundo sout");
+                    var rutaAprendizaje = rutaAprendizajeService.findAll().filter(rutaAprendizajeDto -> rutaAprendizajeDto.getId().equals(trainingDto.getRutaAprendizajeId()));
+                    rutaAprendizaje.map(rutaAprendizajeDto -> rutaAprendizajeDto.getRutas()
+                            .stream()
+                            .map(rutita ->
+                                    resultadoCursoLists.add(
+                                            new ResultadoCursoList(trainingDto.getApprentices(), AppUtils.dtoToTraining(trainingDto).getName(),
+                                                    cursoService.findAll().filter(cursoDto -> cursoDto.getId().equals(rutita.getCursoId())).map(AppUtils::dtoToCurso).collectList().block()))));
+                    return Flux.fromIterable(resultadoCursoLists);
                 });
 
 
-//        return this.getActiveTrainings()
-//                .flatMap(trainingDto -> {
-//                    System.out.println("segundo sout");
-//                    var rutaAprendizaje = rutaAprendizajeService.findById(trainingDto.getRutaAprendizajeId());
-//                     rutaAprendizaje.map(rutaAprendizajeDto -> {
-//                        System.out.println("tercer sout");
-//                        return rutaAprendizajeDto
-//                                .getRutas()
-//                                .stream()
-//                                .map(rutas ->
-//                                        trainingDto.getApprentices()
-//                                                .stream()
-//                                                .map(aprendiz -> resultadoCursoLists.add(
-//                                                        new ResultadoCursoList(aprendiz,
-//                                                                AppUtils.dtoToTraining(trainingDto),
-//                                                                cursoService.findCursoById(rutas.getCursoId()).block()))
-//                                                ));
-//                    });
-//                    return Flux.fromIterable(resultadoCursoLists);
-//                });
-
     }
+
+
 }

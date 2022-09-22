@@ -11,9 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 public class ResultadoCursoList {
 
-    private Aprendiz aprendiz;
-    private Training training;
-    private Curso curso;
+    private List<Aprendiz> aprendizList;
+    private String trainingName;
+    private List<Curso> curso;
 
 
 }
