@@ -112,4 +112,9 @@ public class ControllerTraining {
         return service.agregarAprendices(trainingId, aprendices);
     }
 
+    @GetMapping("/getResultadoCursos")
+    public Flux<ResultadoCursoList> getResultadoCursos(){
+        return service.getResultadoCursos();
+    }
+
 }

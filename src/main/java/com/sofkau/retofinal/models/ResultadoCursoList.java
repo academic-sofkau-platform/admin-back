@@ -10,10 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResultadoCursoList {
-
     private List<Aprendiz> aprendizList;
     private String trainingName;
     private List<Curso> curso;
-
-
+    private String rutaAprendizajeId;
 }

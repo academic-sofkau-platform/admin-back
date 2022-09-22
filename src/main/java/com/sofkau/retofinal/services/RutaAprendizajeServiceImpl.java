@@ -3,6 +3,7 @@ package com.sofkau.retofinal.services;
 import com.sofkau.retofinal.dto.RutaAprendizajeDto;
 import com.sofkau.retofinal.dto.RutaDto;
 import com.sofkau.retofinal.interfaces.IRutaAprendizajeService;
+import com.sofkau.retofinal.models.Curso;
 import com.sofkau.retofinal.models.Ruta;
 import com.sofkau.retofinal.models.RutaAprendiz;
 import com.sofkau.retofinal.models.RutaAprendizaje;
@@ -142,6 +143,16 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                         return new RutaAprendiz(rutaAprendiz.getRutaId(), rutaAprendiz.getCursoId(), curso.getNombre(), rutaAprendiz.getNivel(), rutaAprendiz.getPrerrequisitos(), rutaAprendiz.getTarea());
                     });
                 });
+    }
+
+    @Override
+    public Flux<Curso> findCursosByRutaAprendizajeId(String rutaAprendizajeId) {
+        return this.repository
+                .findById(rutaAprendizajeId)
+                .map(RutaAprendizaje::getRutas)
+                .flatMapMany(Flux::fromIterable)
+                .map(Ruta::getCursoId)
+                .flatMap(cursoId -> cursoService.findCursoById(cursoId));
     }
 
 }
