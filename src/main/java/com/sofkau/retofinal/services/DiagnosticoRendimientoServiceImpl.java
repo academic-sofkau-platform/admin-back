@@ -56,39 +56,10 @@ public class DiagnosticoRendimientoServiceImpl {   //   Se debe ejecutar cuando 
             });
 
         });
-        //persistirAccionesMejoraV1(notas, aprendicesConAccionesDeMejora2);
-        return persistirAccionesMejoraV2(notas, aprendicesConAccionesDeMejora2);
-        //enviarCorreosToAprendicesConAccionesDeMejora(aprendicesConAccionesDeMejora2);
+        enviarCorreosToAprendicesConAccionesDeMejora(aprendicesConAccionesDeMejora2);
+        return persistirAccionesMejora(notas, aprendicesConAccionesDeMejora2);
     }
-
-    // todo: actualizar aprendices con acciones de mejora
-    private void persistirAccionesMejoraV1(Flux<Notas> notas, ArrayList<Aprendiz> aprendicesConAccionesDeMejora2){
-        // recorre todos los aprendices con acciones de mejora
-        aprendicesConAccionesDeMejora2.forEach(aprendiz -> {
-            // se obtiene el training donde está el aprendiz
-            String trainingId = notas.filter(nota1 -> nota1.getAprendizEmail().equals(aprendiz.getEmail()))
-                    .next()
-                    .map(Notas::getTrainingId)
-                    .block();
-            Training training = trainingServices.findById(trainingId)
-                    .map(AppUtils::dtoToTraining)
-                    .block();
-            if(training == null) return;
-
-            // se crea una nueva lista de aprendices basada en la del training
-            training.getApprentices().forEach(aprendiz1 -> {
-                // busca el aprendiz con acciones de mejora y se las setea
-                if(aprendiz1.getEmail().equals(aprendiz.getEmail())){
-                    aprendiz1.setAccionDeMejoras(aprendiz.getAccionDeMejoras());
-                }
-            });
-
-            //training.setApprentices(newAprendices);
-            Mono<TrainingDto> trainingDtoMono = trainingServices.update(training, trainingId);
-            System.out.println(trainingDtoMono);
-        });
-    }
-    private List<Mono<TrainingDto>> persistirAccionesMejoraV2(Flux<Notas> notas, ArrayList<Aprendiz> aprendicesConAccionesDeMejora2){
+    private List<Mono<TrainingDto>> persistirAccionesMejora(Flux<Notas> notas, ArrayList<Aprendiz> aprendicesConAccionesDeMejora2){
         ArrayList<Training> trainings = new ArrayList<>();
         // recorre todos los aprendices con acciones de mejora
         return aprendicesConAccionesDeMejora2.stream().map(aprendiz -> {
