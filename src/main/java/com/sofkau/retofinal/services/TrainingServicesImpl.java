@@ -181,20 +181,23 @@ public class TrainingServicesImpl implements ITrainingService {
     @Override
     public Flux<ResultadoCursoList> getResultadoCursos() {
         return this.getActiveTrainings()
-                .map(trainingDto -> {
-                    return new ResultadoCursoList(trainingDto.getApprentices(), trainingDto.getName(), null, trainingDto.getRutaAprendizajeId());
-                })
-                .flatMap(resultadoCursoList -> {
+                .flatMapIterable(trainingDto -> trainingDto
+                        .getApprentices()
+                        .stream()
+                        .map(aprendiz -> new ResultadoCursoList(aprendiz,
+                                trainingDto.getName(),
+                                null,
+                                trainingDto.getRutaAprendizajeId()))
+                        .collect(Collectors.toUnmodifiableList())
+                ).flatMap(resultadoCursoList -> {
                     return this.rutaAprendizajeService
                             .findCursosByRutaAprendizajeId(resultadoCursoList.getRutaAprendizajeId())
-                            .collectList()
-                            .map(cursos -> {
-                                return new ResultadoCursoList(resultadoCursoList.getAprendizList(), resultadoCursoList.getTrainingName(), cursos, resultadoCursoList.getRutaAprendizajeId());
+                            .map(curso -> {
+                                return new ResultadoCursoList(resultadoCursoList.getAprendiz(), resultadoCursoList.getTrainingName(), curso, resultadoCursoList.getRutaAprendizajeId());
                             });
                 });
 
     }
-
     @Override
     public Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList) {
         List<Aprendiz> concatenated_list = new ArrayList<>();
