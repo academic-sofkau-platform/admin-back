@@ -134,13 +134,15 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                 .flatMap(rutaAprendiz -> {
                     return this.repository.findById(rutaAprendiz.getRutaId())
                             .flatMapIterable(RutaAprendizaje::getRutas)
+                            .filter(ruta ->
+                                ruta.getCursoId().equals(rutaAprendiz.getTarea().getCursoId()))
                             .map(ruta -> {
                                 return new RutaAprendiz(rutaAprendiz.getTrainingId(), rutaAprendiz.getNombreTraining(), rutaAprendiz.getRutaId(), rutaAprendiz.getCursoId(), null, ruta.getNivel(), ruta.getPrerrequisitos(), rutaAprendiz.getTarea());
-                            });
+                            } );
                 })
                 .flatMap(rutaAprendiz -> {
                     return this.cursoService.findCursoById(rutaAprendiz.getCursoId()).map(curso -> {
-                        return new RutaAprendiz(rutaAprendiz.getTrainingId(), rutaAprendiz.getNombreTraining(), rutaAprendiz.getRutaId(), rutaAprendiz.getCursoId(), curso.getNombre(), rutaAprendiz.getNivel(), rutaAprendiz.getPrerrequisitos(), rutaAprendiz.getTarea());
+                            return new RutaAprendiz(rutaAprendiz.getTrainingId(), rutaAprendiz.getNombreTraining(), rutaAprendiz.getRutaId(), rutaAprendiz.getCursoId(), curso.getNombre(), rutaAprendiz.getNivel(), rutaAprendiz.getPrerrequisitos(), rutaAprendiz.getTarea());
                     });
                 });
     }

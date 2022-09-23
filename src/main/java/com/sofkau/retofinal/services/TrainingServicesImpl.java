@@ -1,6 +1,5 @@
 package com.sofkau.retofinal.services;
 
-import com.sofkau.retofinal.dto.RutaAprendizajeDto;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
 import com.sofkau.retofinal.models.*;
@@ -8,18 +7,17 @@ import com.sofkau.retofinal.repositories.TrainingRepository;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.sofkau.retofinal.utils.AppUtils.decoderBase64;
 
 
 @Service
@@ -116,6 +114,20 @@ public class TrainingServicesImpl implements ITrainingService {
                     return save(training);
                 });
     }
+    @Override
+    public Mono<TrainingDto> updateNotaTarea(Tarea tarea, String trainingId, String email) {
+        return repository.findById(trainingId)
+                .flatMap(training -> {
+                    training.getApprentices()
+                            .stream()
+                            .filter(aprendiz -> aprendiz.getEmail().equals(email))
+                            .forEach(aprendiz -> aprendiz.getTareas()
+                                    .forEach(tarea1 -> {
+                                        tarea1.setNota(tarea.getNota());
+                                    }));
+                    return save(training);
+                });
+    }
 
     @Override
     public Mono<TrainingDto> addtarea(String trainingId, String aprendizId, Tarea tarea) {
@@ -139,6 +151,21 @@ public class TrainingServicesImpl implements ITrainingService {
                 .filter(training -> today.after(training.getStartDate()))
                 .filter(training -> today.before(training.getEndDate()))
                 .map(training -> AppUtils.trainingToDto(training));
+    }
+
+    //Método para devolver la vista training activos
+    @Override
+    public Flux<TrainingDto> getActiveTrainingComplete(){
+        String strDateFormat ="MMM";
+        SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
+
+        return getActiveTrainings()
+                .map(trainingDto -> {
+                    trainingDto.setApprenticesCount(trainingDto.getApprentices().size());
+                    trainingDto.setPeriod(sdf.format(trainingDto.getStartDate()) + " - " + sdf.format(trainingDto.getEndDate()));
+                    repository.save((AppUtils.dtoToTraining(trainingDto)));
+                    return trainingDto;
+                });
     }
 
     @Override

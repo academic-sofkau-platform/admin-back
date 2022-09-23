@@ -58,6 +58,12 @@ public class ControllerTraining {
                                          @PathVariable("email") String email){
         return service.updateTarea(tarea,trainingId,email);
     }
+    @PostMapping("/updateNotaTarea/{trainingId}/{email}")
+    public Mono<TrainingDto> updateNotaTarea(@RequestBody Tarea tarea,
+                                         @PathVariable("trainingId") String trainingId,
+                                         @PathVariable("email") String email){
+        return service.updateNotaTarea(tarea,trainingId,email);
+    }
 
     @PutMapping("/update/{id}")
     public Mono<TrainingDto> update(@RequestBody Training training,
@@ -83,7 +89,8 @@ public class ControllerTraining {
 
     @GetMapping("/findAllTrainingActivos")
     public Flux<TrainingDto> findAllTrainingActivos() {
-        return service.getActiveTrainings();
+        //return service.getActiveTrainings();
+        return service.getActiveTrainingComplete();
     }
 
 
