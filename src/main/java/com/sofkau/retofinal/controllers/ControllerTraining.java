@@ -52,7 +52,7 @@ public class ControllerTraining {
                                  @PathVariable("trainingId") String trainingId, @PathVariable("aprendizId") String aprendizId){
         return service.addtarea( trainingId, aprendizId,tarea);
     }
-    @PutMapping("/updateTarea/{trainingId}/{email}")
+    @PostMapping("/updateTarea/{trainingId}/{email}")
     public Mono<TrainingDto> updateTarea(@RequestBody Tarea tarea,
                                          @PathVariable("trainingId") String trainingId,
                                          @PathVariable("email") String email){
