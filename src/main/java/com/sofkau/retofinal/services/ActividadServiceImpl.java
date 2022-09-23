@@ -27,11 +27,16 @@ public class ActividadServiceImpl implements IActividadService {
     }
 
     @Override
+    public Mono<ActividadDto> findById(String Id) {
+       return Mono.just(AppUtils.actividadToDto(repository.findById(Id).block()));
+    }
+
+    @Override
     public Mono<ActividadDto> updatePuntaje(Actividad actividadx, Integer puntaje) {
         return  repository.findById(actividadx.getActividadId())
-                .map(actividad -> {
+                .flatMap(actividad -> {
                     actividad.setPuntaje(actividad.getPuntaje() + puntaje);
-                    return AppUtils.actividadToDto(repository.save(actividad).block());
+                    return repository.save(actividad).thenReturn(AppUtils.actividadToDto(actividad));
                 })
                 .switchIfEmpty(Mono.empty());
     }
@@ -39,7 +44,7 @@ public class ActividadServiceImpl implements IActividadService {
 
     public Flux<Actividad> findActivityByAprendizId(String aprendizId) {
         return repository.findAll()
-                .filter(actividad -> actividad.getAprendizEmail().equals(aprendizId))
+                .filter(actividad -> actividad.getAprendizId().equals(aprendizId))
                 .switchIfEmpty(Mono.empty());
     }
 }

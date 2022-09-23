@@ -1,9 +1,6 @@
 package com.sofkau.retofinal.controllers;
 import com.sofkau.retofinal.dto.TrainingDto;
-import com.sofkau.retofinal.models.Aprendiz;
-import com.sofkau.retofinal.models.Tarea;
-import com.sofkau.retofinal.models.Training;
-import com.sofkau.retofinal.models.TrainingAuxiliar;
+import com.sofkau.retofinal.models.*;
 import com.sofkau.retofinal.services.TrainingServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,9 +17,7 @@ import static com.sofkau.retofinal.utils.AppUtils.*;
 @RequestMapping("/trainings")
 @CrossOrigin("*")
 public class ControllerTraining {
-    //Todo control de errores del post
-    //Todo Dto
-    //Todo control de respuesta http
+
     @Autowired
     TrainingServicesImpl service;
 
@@ -52,10 +47,16 @@ public class ControllerTraining {
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }*/
 
-    @PutMapping("/addtarea/{trainingId}/{aprendizId}")
+    @PutMapping("/addtarea/{trainingId}/{email}")
     public Mono<TrainingDto> addTarea(@RequestBody Tarea tarea,
                                  @PathVariable("trainingId") String trainingId, @PathVariable("aprendizId") String aprendizId){
         return service.addtarea( trainingId, aprendizId,tarea);
+    }
+    @PostMapping("/updateTarea/{trainingId}/{email}")
+    public Mono<TrainingDto> updateTarea(@RequestBody Tarea tarea,
+                                         @PathVariable("trainingId") String trainingId,
+                                         @PathVariable("email") String email){
+        return service.updateTarea(tarea,trainingId,email);
     }
 
     @PutMapping("/update/{id}")
@@ -99,13 +100,22 @@ public class ControllerTraining {
         return service.getAprendicesByTrainingId(trainingId);
     }
 
-    //TODO delete aprendiz por id de training y email
     @PostMapping("/deleteAprendiz/{trainingId}")
     public Mono<Void> delete(@PathVariable("trainingId") String trainingId, @RequestBody String email){
         return service.deleteAprendizByEmail(trainingId,email);
     }
 
 
-    //Todo update aprendiz
+    //Agregar aprendiz a un training activo
+    @PutMapping("/agregarAprendices/{trainingId}")
+    public Mono<TrainingDto> agregarAprendiz(@PathVariable("trainingId") String trainingId,
+                                             @RequestBody List<Aprendiz> aprendices){
+        return service.agregarAprendices(trainingId, aprendices);
+    }
+
+    @GetMapping("/getResultadoCursos")
+    public Flux<ResultadoCursoList> getResultadoCursos(){
+        return service.getResultadoCursos();
+    }
 
 }

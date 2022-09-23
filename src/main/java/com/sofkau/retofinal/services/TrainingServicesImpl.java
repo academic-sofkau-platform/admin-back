@@ -1,26 +1,43 @@
 package com.sofkau.retofinal.services;
 
+import com.sofkau.retofinal.dto.RutaAprendizajeDto;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
-import com.sofkau.retofinal.models.Aprendiz;
-import com.sofkau.retofinal.models.Tarea;
-import com.sofkau.retofinal.models.Training;
+import com.sofkau.retofinal.models.*;
 import com.sofkau.retofinal.repositories.TrainingRepository;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.text.SimpleDateFormat;
+
+import java.util.ArrayList;
+
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.sofkau.retofinal.utils.AppUtils.decoderBase64;
 
 
 @Service
 public class TrainingServicesImpl implements ITrainingService {
     @Autowired
     TrainingRepository repository;
+    @Autowired
+    private RutaAprendizajeServiceImpl rutaAprendizajeService;
+
+
+    @Autowired
+    private NotasServices notasServices;
+
+    @Autowired
+    private CursoServiceImpl cursoService;
+
 
     @Override
     public Mono<TrainingDto> save(Training training) {
@@ -34,6 +51,17 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMap(training -> {
                     training.setTrainingId(trainingId);
                     training.setCoach(coach);
+                    return save(training).thenReturn(AppUtils.trainingToDto(training));
+                })
+                .switchIfEmpty(Mono.empty());
+    }
+
+    public Mono<TrainingDto> actualizarAprendices(List<Aprendiz> aprendizs, String trainingId) {
+        return repository
+                .findById(trainingId)
+                .flatMap(training -> {
+                    training.setTrainingId(trainingId);
+                    training.setApprentices(aprendizs);
                     return save(training).thenReturn(AppUtils.trainingToDto(training));
                 })
                 .switchIfEmpty(Mono.empty());
@@ -60,6 +88,7 @@ public class TrainingServicesImpl implements ITrainingService {
                 .switchIfEmpty(Mono.empty());
     }
 
+
     @Override
     public Mono<Void> deleteById(String trainingId) {
         return repository.deleteById(trainingId);
@@ -76,14 +105,32 @@ public class TrainingServicesImpl implements ITrainingService {
                 }).then();
 
     }
+
     @Override
-    public Mono<TrainingDto> addtarea(String trainingId, String aprendizId, Tarea tarea){
-        return  repository.findById(trainingId)
-                .flatMap(training -> {training.getApprentices()
-                        .forEach(aprendiz -> {
-                            if (aprendiz.getEmail().equals(aprendizId))
-                                aprendiz.getTareas().add(tarea);
-                        });
+    public Mono<TrainingDto> updateTarea(Tarea tarea, String trainingId, String email) {
+        return repository.findById(trainingId)
+                .flatMap(training -> {
+                    training.getApprentices()
+                            .stream()
+                            .filter(aprendiz -> aprendiz.getEmail().equals(email))
+                            .forEach(aprendiz -> aprendiz.getTareas()
+                                    .forEach(tarea1 -> {
+                                        tarea1.setEntregado(tarea.getEntregado());
+                                        tarea1.setContenido(tarea.getContenido());
+                                    }));
+                    return save(training);
+                });
+    }
+
+    @Override
+    public Mono<TrainingDto> addtarea(String trainingId, String aprendizId, Tarea tarea) {
+        return repository.findById(trainingId)
+                .flatMap(training -> {
+                    training.getApprentices()
+                            .forEach(aprendiz -> {
+                                if (aprendiz.getEmail().equals(aprendizId))
+                                    aprendiz.getTareas().add(tarea);
+                            });
                     return save(training);
                 });
 
@@ -97,12 +144,6 @@ public class TrainingServicesImpl implements ITrainingService {
                 .filter(training -> today.after(training.getStartDate()))
                 .filter(training -> today.before(training.getEndDate()))
                 .map(training -> AppUtils.trainingToDto(training));
-                /*.map(trainingDto -> {
-                    trainingDto.setApprenticesCount(trainingDto.getApprentices().size());
-                      repository.save(AppUtils.dtoToTraining(trainingDto));
-                    return trainingDto;
-                });*/
-
     }
 
     //Método para devolver la vista training activos
@@ -125,8 +166,8 @@ public class TrainingServicesImpl implements ITrainingService {
         return this.getActiveTrainings()
                 .map(trainingDto -> AppUtils.dtoToTraining(trainingDto))
                 .flatMap(training ->
-                Flux.fromIterable(training.getApprentices())
-        );
+                        Flux.fromIterable(training.getApprentices())
+                );
     }
 
     @Override
@@ -137,6 +178,16 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMapIterable(Training::getApprentices);
     }
 
+    @Override
+    public Mono<Aprendiz> getAprendizByTrainingIdAndEmail(String trainingId, String emailId) {
+        return this.getActiveTrainings()
+                .map(AppUtils::dtoToTraining)
+                .filter(training -> training.getTrainingId().equals(trainingId))
+                .flatMapIterable(Training::getApprentices)
+                .filter(aprendiz -> aprendiz.getEmail().equals(emailId))
+                .next();
+    }
+
     /*
     @Override
     public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
@@ -145,4 +196,45 @@ public class TrainingServicesImpl implements ITrainingService {
     }
     */
 
+    @Override
+    public Flux<ResultadoCursoList> getResultadoCursos() {
+        return this.getActiveTrainings()
+                .flatMapIterable(trainingDto -> trainingDto
+                        .getApprentices()
+                        .stream()
+                        .map(aprendiz -> new ResultadoCursoList(aprendiz,
+                                trainingDto.getName(),
+                                null,
+                                trainingDto.getRutaAprendizajeId()))
+                        .collect(Collectors.toUnmodifiableList())
+                ).flatMap(resultadoCursoList -> {
+                    return this.rutaAprendizajeService
+                            .findCursosByRutaAprendizajeId(resultadoCursoList.getRutaAprendizajeId())
+                            .map(curso -> {
+                                return new ResultadoCursoList(resultadoCursoList.getAprendiz(), resultadoCursoList.getTrainingName(), curso, resultadoCursoList.getRutaAprendizajeId());
+                            });
+                });
+
+    }
+    @Override
+    public Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList) {
+        List<Aprendiz> concatenated_list = new ArrayList<>();
+        return this.findById(trainingId)
+                .map(AppUtils::dtoToTraining)
+                .flatMap(training -> {
+                    var newList = aprendizList.stream()
+                            .filter(aprendiz -> !aprendiz.getName().equals(""))
+                            .filter(aprendiz -> !aprendiz.getEmail().equals(""))
+                            .collect(Collectors.toList());
+
+                    concatenated_list.addAll(training.getApprentices());
+                    concatenated_list.addAll(newList);
+                    training.setApprentices(concatenated_list);
+                    return repository.save(training)
+                            .thenReturn(AppUtils.trainingToDto(training));
+                });
+    }
+
+
 }
+

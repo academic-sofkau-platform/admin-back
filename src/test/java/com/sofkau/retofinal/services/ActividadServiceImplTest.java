@@ -37,9 +37,7 @@ class ActividadServiceImplTest {
                         actividadDto.getCursoId().equals("cursoId1") &&
                                 actividadDto.getAprendizId().equals("aprendizId1") &&
                                 actividadDto.getFecha().equals("2022-09-22") &&
-                                actividadDto.getPuntaje().equals(76) &&
-                                actividadDto.getTipo().equals("tipo") &&
-                                actividadDto.getNota().equals(75)
+                                actividadDto.getPuntaje().equals(76)
                 )
                 .expectComplete()
                 .verify();
@@ -76,9 +74,7 @@ class ActividadServiceImplTest {
                                 newAct.getCursoId().equals("cursoId1") &&
                                 newAct.getAprendizId().equals("aprendizId1") &&
                                 newAct.getFecha().equals("2022-09-22") &&
-                                newAct.getPuntaje().equals(6) &&
-                                newAct.getTipo().equals("tipo1") &&
-                                newAct.getNota().equals(75)
+                                newAct.getPuntaje().equals(6)
                         )
                 .expectComplete()
                 .verify();

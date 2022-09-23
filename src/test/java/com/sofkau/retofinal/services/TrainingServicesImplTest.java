@@ -27,17 +27,41 @@ class TrainingServicesImplTest {
     private TrainingRepository repository;
 
     @Test
-    void save() {
+    void save() throws ParseException {
+        SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
+        List<Aprendiz> listAprendices = new ArrayList<>();
+
         Training training = new Training();
         training.setTrainingId("1");
         training.setName("Prueba");
+        training.setDescription("descripción de prueba");
+        training.setStartDate(DateFor.parse("2022-09-15"));
+        training.setEndDate(DateFor.parse("2022-12-15"));
+        training.setCoach("Eddi amigo del Joaco");
+        training.setApprentices(listAprendices);
+        training.setRutaAprendizajeId("ruta1");
 
         when(repository.save(training))
                 .thenReturn(Mono.just(training));
 
         StepVerifier
                 .create(service.save(training))
-                .expectNextMatches(trainingDto -> trainingDto.getName().equals(training.getName()))
+                .expectNextMatches(trainingDto ->
+                        {
+                            try {
+                                return trainingDto.getTrainingId().equals("1") &&
+                                        trainingDto.getName().equals("Prueba") &&
+                                        trainingDto.getDescription().equals("descripción de prueba") &&
+                                        trainingDto.getStartDate().equals(DateFor.parse("2022-09-15")) &&
+                                        trainingDto.getEndDate().equals(DateFor.parse("2022-12-15")) &&
+                                        trainingDto.getCoach().equals("Eddi amigo del Joaco") &&
+                                        trainingDto.getApprentices().equals(listAprendices) &&
+                                        trainingDto.getRutaAprendizajeId().equals("ruta1");
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                )
                 .expectComplete()
                 .verify();
     }

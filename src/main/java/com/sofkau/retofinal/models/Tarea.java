@@ -20,4 +20,10 @@ public class Tarea {
     private String tipo;
     private Integer nota;
     private String resultado;
+    private boolean entregado = false;
+    private String contenido;
+
+    public boolean getEntregado() {
+        return entregado;
+    }
 }
