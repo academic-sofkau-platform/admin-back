@@ -11,6 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 public class RutaAprendiz {
 
+    private String trainingId;
+    private String nombreTraining;
     private String rutaId;
     private String cursoId;
     private String nombreCurso;
