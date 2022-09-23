@@ -7,6 +7,7 @@ import com.sofkau.retofinal.models.*;
 import com.sofkau.retofinal.repositories.TrainingRepository;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,16 +26,13 @@ import static com.sofkau.retofinal.utils.AppUtils.decoderBase64;
 public class TrainingServicesImpl implements ITrainingService {
     @Autowired
     TrainingRepository repository;
-    @Autowired
-    private RutaAprendizajeServiceImpl rutaAprendizajeService;
 
-
-    @Autowired
-    private NotasServices notasServices;
+    private final RutaAprendizajeServiceImpl rutaAprendizajeService;
 
     @Autowired
-    private CursoServiceImpl cursoService;
-
+    public TrainingServicesImpl(@Lazy RutaAprendizajeServiceImpl rutaAprendizajeService) {
+        this.rutaAprendizajeService = rutaAprendizajeService;
+    }
 
     @Override
     public Mono<TrainingDto> save(Training training) {
