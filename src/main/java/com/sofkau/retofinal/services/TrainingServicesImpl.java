@@ -105,7 +105,7 @@ public class TrainingServicesImpl implements ITrainingService {
 
     }
 
-    //Método para devolver la vida training activos
+    //Método para devolver la vista training activos
     @Override
     public Flux<TrainingDto> getActiveTrainingComplete(){
         String strDateFormat ="MMM";
