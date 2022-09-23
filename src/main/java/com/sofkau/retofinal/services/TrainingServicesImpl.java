@@ -1,14 +1,11 @@
 package com.sofkau.retofinal.services;
 
-import com.sofkau.retofinal.dto.RutaAprendizajeDto;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
 import com.sofkau.retofinal.models.*;
 import com.sofkau.retofinal.repositories.TrainingRepository;
 import com.sofkau.retofinal.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.sofkau.retofinal.utils.AppUtils.decoderBase64;
 
 
 @Service
@@ -117,6 +112,20 @@ public class TrainingServicesImpl implements ITrainingService {
                                     .forEach(tarea1 -> {
                                         tarea1.setEntregado(tarea.getEntregado());
                                         tarea1.setContenido(tarea.getContenido());
+                                    }));
+                    return save(training);
+                });
+    }
+    @Override
+    public Mono<TrainingDto> updateNotaTarea(Tarea tarea, String trainingId, String email) {
+        return repository.findById(trainingId)
+                .flatMap(training -> {
+                    training.getApprentices()
+                            .stream()
+                            .filter(aprendiz -> aprendiz.getEmail().equals(email))
+                            .forEach(aprendiz -> aprendiz.getTareas()
+                                    .forEach(tarea1 -> {
+                                        tarea1.setNota(tarea.getNota());
                                     }));
                     return save(training);
                 });

@@ -24,6 +24,8 @@ public interface ITrainingService {
 
     Mono<Void> deleteById(String trainingId);
 
+    Mono<TrainingDto> updateNotaTarea(Tarea tarea, String trainingId, String email);
+
     Mono<TrainingDto> addtarea(String trainingId, String aprendizId, Tarea tarea);
 
     Flux<TrainingDto> getActiveTrainings();
