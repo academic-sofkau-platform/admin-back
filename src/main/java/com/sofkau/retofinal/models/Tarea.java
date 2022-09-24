@@ -23,6 +23,12 @@ public class Tarea {
     private boolean entregado = false;
     private String contenido;
 
+    public Tarea(String cursoId, String prueba, String res, String cont) {
+        this.cursoId = cursoId;
+        this.tipo = prueba;
+        this.resultado = res;
+        this.contenido = cont;
+    }
     public boolean getEntregado() {
         return entregado;
     }

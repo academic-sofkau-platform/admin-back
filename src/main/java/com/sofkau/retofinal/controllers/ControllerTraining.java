@@ -124,4 +124,9 @@ public class ControllerTraining {
         return service.getResultadoCursos();
     }
 
+    @PostMapping("/ranciada/{id}")
+    public Mono<TrainingDto> ranciada(@PathVariable("id") String trainingId){
+        return service.addTareasOfTrainingToApprentices(trainingId);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.sofkau.retofinal.services;
 
+import com.sofkau.retofinal.dto.RutaAprendizajeDto;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
 import com.sofkau.retofinal.models.*;
@@ -242,6 +243,21 @@ public class TrainingServicesImpl implements ITrainingService {
                 });
     }
 
-
+    @Override
+    public Mono<TrainingDto> addTareasOfTrainingToApprentices(String trainingId) {
+        return this.findById(trainingId)
+                .flatMap(trainingDto -> {
+                     return this.rutaAprendizajeService.findById(trainingDto.getRutaAprendizajeId())
+                            .map(RutaAprendizajeDto::getRutas)
+                            .flatMap(rutas -> {
+                                trainingDto
+                                        .getApprentices()
+                                        .forEach(aprendiz -> new ArrayList<>(rutas)
+                                                .forEach(ruta -> aprendiz
+                                                        .getTareas()
+                                                        .add(new Tarea(ruta.getCursoId(), null, null, null))));
+                                return this.save(AppUtils.dtoToTraining(trainingDto));
+                            });
+                });
+    }
 }
-
