@@ -42,7 +42,7 @@ public interface ITrainingService {
     // Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
     Flux<ResultadoCursoList> getResultadoCursos();
 
-    Mono<TrainingDto> updateTarea(Tarea tarea,String trainingId,String email);
+    Mono<TrainingDto> updateTarea(Tarea tarea,String trainingId,String email,String cursoId);
 
 
    // Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);

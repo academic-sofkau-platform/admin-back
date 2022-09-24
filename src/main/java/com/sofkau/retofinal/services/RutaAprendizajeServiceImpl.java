@@ -124,9 +124,10 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                         .stream()
                         .anyMatch(aprendiz -> aprendiz.getEmail().equals(email)))
                 .flatMapIterable(trainingDto -> {
-                    return trainingDto.getApprentices().stream().flatMap(aprendiz -> aprendiz.getTareas().stream())
+                    return trainingDto.getApprentices().stream().filter(aprendiz -> aprendiz.getEmail().equals(email)).flatMap(aprendiz -> aprendiz.getTareas().stream())
+
                             .map(tarea -> {
-                                return new RutaAprendiz(trainingDto.getTrainingId(), trainingDto.getName(), trainingDto.getRutaAprendizajeId(), null, null, null, null, tarea);
+                                return new RutaAprendiz(trainingDto.getTrainingId(), trainingDto.getName(), trainingDto.getRutaAprendizajeId(), tarea.getCursoId(), null, null, null, tarea);
                             }).collect(Collectors.toUnmodifiableList());
 
 
@@ -134,7 +135,7 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                 .flatMap(rutaAprendiz -> {
                     return this.repository.findById(rutaAprendiz.getRutaId())
                             .flatMapIterable(RutaAprendizaje::getRutas)
-
+                            .filter(ruta -> ruta.getCursoId().equals(rutaAprendiz.getTarea().getCursoId()))
                             .map(ruta -> {
                                 return new RutaAprendiz(rutaAprendiz.getTrainingId(), rutaAprendiz.getNombreTraining(), rutaAprendiz.getRutaId(),ruta.getCursoId(), null, ruta.getNivel(), ruta.getPrerrequisitos(), rutaAprendiz.getTarea());
                             } );

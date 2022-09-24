@@ -101,13 +101,14 @@ public class TrainingServicesImpl implements ITrainingService {
     }
 
     @Override
-    public Mono<TrainingDto> updateTarea(Tarea tarea, String trainingId, String email) {
+    public Mono<TrainingDto> updateTarea(Tarea tarea, String trainingId, String email, String cursoId) {
         return repository.findById(trainingId)
                 .flatMap(training -> {
                     training.getApprentices()
                             .stream()
                             .filter(aprendiz -> aprendiz.getEmail().equals(email))
                             .forEach(aprendiz -> aprendiz.getTareas()
+                                    .stream().filter(tarea1 -> tarea1.getCursoId().equals(cursoId))
                                     .forEach(tarea1 -> {
                                         tarea1.setEntregado(tarea.getEntregado());
                                         tarea1.setContenido(tarea.getContenido());
