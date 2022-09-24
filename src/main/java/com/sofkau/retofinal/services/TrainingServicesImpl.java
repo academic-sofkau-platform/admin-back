@@ -144,22 +144,6 @@ public class TrainingServicesImpl implements ITrainingService {
                     return save(training);
                 });
     }
-    @Override
-    public Mono<TrainingDto> addTareasOfTrainingToApprentices(String trainingId) {
-
-        return this.findById(trainingId)
-                .flatMap(trainingDto -> {
-                    return this.rutaAprendizajeService.findById(trainingDto.getRutaAprendizajeId())
-                            .map(RutaAprendizajeDto::getRutas)
-                            .flatMap(ruta -> {
-                                trainingDto.getApprentices().forEach(aprendiz -> aprendiz.getTareas().add(new Tarea(ruta.get(0).getCursoId(), "A", "B", "C")));
-                                return this.save(AppUtils.dtoToTraining(trainingDto));
-                            });
-                });
-    }
-
-
-
 
     @Override
     public Flux<TrainingDto> getActiveTrainings() {
@@ -259,6 +243,21 @@ public class TrainingServicesImpl implements ITrainingService {
                 });
     }
 
-
+    @Override
+    public Mono<TrainingDto> addTareasOfTrainingToApprentices(String trainingId) {
+        return this.findById(trainingId)
+                .flatMap(trainingDto -> {
+                     return this.rutaAprendizajeService.findById(trainingDto.getRutaAprendizajeId())
+                            .map(RutaAprendizajeDto::getRutas)
+                            .flatMap(rutas -> {
+                                trainingDto
+                                        .getApprentices()
+                                        .forEach(aprendiz -> new ArrayList<>(rutas)
+                                                .forEach(ruta -> aprendiz
+                                                        .getTareas()
+                                                        .add(new Tarea(ruta.getCursoId()))));
+                                return this.save(AppUtils.dtoToTraining(trainingDto));
+                            });
+                });
+    }
 }
-

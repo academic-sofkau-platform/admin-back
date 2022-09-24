@@ -126,4 +126,10 @@ public class ControllerTraining {
     }
 
 
+    @PostMapping("/agregarTareasAprendices/{id}")
+    public Mono<TrainingDto> agregarTareasAprendices(@PathVariable("id") String trainingId){
+        return service.addTareasOfTrainingToApprentices(trainingId);
+    }
+
+
 }
