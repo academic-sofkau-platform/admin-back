@@ -126,7 +126,7 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                 .flatMapIterable(trainingDto -> {
                     return trainingDto.getApprentices().stream().flatMap(aprendiz -> aprendiz.getTareas().stream())
                             .map(tarea -> {
-                                return new RutaAprendiz(trainingDto.getTrainingId(), trainingDto.getName(), trainingDto.getRutaAprendizajeId(), tarea.getCursoId(), null, null, null, tarea);
+                                return new RutaAprendiz(trainingDto.getTrainingId(), trainingDto.getName(), trainingDto.getRutaAprendizajeId(), null, null, null, null, tarea);
                             }).collect(Collectors.toUnmodifiableList());
 
 
@@ -134,15 +134,14 @@ public class RutaAprendizajeServiceImpl implements IRutaAprendizajeService {
                 .flatMap(rutaAprendiz -> {
                     return this.repository.findById(rutaAprendiz.getRutaId())
                             .flatMapIterable(RutaAprendizaje::getRutas)
-                            .filter(ruta ->
-                                ruta.getCursoId().equals(rutaAprendiz.getTarea().getCursoId()))
+
                             .map(ruta -> {
-                                return new RutaAprendiz(rutaAprendiz.getTrainingId(), rutaAprendiz.getNombreTraining(), rutaAprendiz.getRutaId(), rutaAprendiz.getCursoId(), null, ruta.getNivel(), ruta.getPrerrequisitos(), rutaAprendiz.getTarea());
+                                return new RutaAprendiz(rutaAprendiz.getTrainingId(), rutaAprendiz.getNombreTraining(), rutaAprendiz.getRutaId(),ruta.getCursoId(), null, ruta.getNivel(), ruta.getPrerrequisitos(), rutaAprendiz.getTarea());
                             } );
                 })
                 .flatMap(rutaAprendiz -> {
                     return this.cursoService.findCursoById(rutaAprendiz.getCursoId()).map(curso -> {
-                            return new RutaAprendiz(rutaAprendiz.getTrainingId(), rutaAprendiz.getNombreTraining(), rutaAprendiz.getRutaId(), rutaAprendiz.getCursoId(), curso.getNombre(), rutaAprendiz.getNivel(), rutaAprendiz.getPrerrequisitos(), rutaAprendiz.getTarea());
+                            return new RutaAprendiz(rutaAprendiz.getTrainingId(), rutaAprendiz.getNombreTraining(), rutaAprendiz.getRutaId(), curso.getId(), curso.getNombre(), rutaAprendiz.getNivel(), rutaAprendiz.getPrerrequisitos(), rutaAprendiz.getTarea());
                     });
                 });
     }

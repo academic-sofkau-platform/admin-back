@@ -1,5 +1,6 @@
 package com.sofkau.retofinal.services;
 
+import com.sofkau.retofinal.dto.RutaAprendizajeDto;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
 import com.sofkau.retofinal.models.*;
@@ -115,13 +116,14 @@ public class TrainingServicesImpl implements ITrainingService {
                 });
     }
     @Override
-    public Mono<TrainingDto> updateNotaTarea(Tarea tarea, String trainingId, String email) {
+    public Mono<TrainingDto> updateNotaTarea(Tarea tarea, String trainingId, String email, String cursoId) {
         return repository.findById(trainingId)
                 .flatMap(training -> {
                     training.getApprentices()
                             .stream()
                             .filter(aprendiz -> aprendiz.getEmail().equals(email))
                             .forEach(aprendiz -> aprendiz.getTareas()
+                                    .stream().filter(tarea1 -> tarea1.getCursoId().equals(cursoId))
                                     .forEach(tarea1 -> {
                                         tarea1.setNota(tarea.getNota());
                                     }));
@@ -137,11 +139,26 @@ public class TrainingServicesImpl implements ITrainingService {
                             .forEach(aprendiz -> {
                                 if (aprendiz.getEmail().equals(aprendizId))
                                     aprendiz.getTareas().add(tarea);
+
                             });
                     return save(training);
                 });
-
     }
+    @Override
+    public Mono<TrainingDto> addTareasOfTrainingToApprentices(String trainingId) {
+
+        return this.findById(trainingId)
+                .flatMap(trainingDto -> {
+                    return this.rutaAprendizajeService.findById(trainingDto.getRutaAprendizajeId())
+                            .map(RutaAprendizajeDto::getRutas)
+                            .flatMap(ruta -> {
+                                trainingDto.getApprentices().forEach(aprendiz -> aprendiz.getTareas().add(new Tarea(ruta.get(0).getCursoId(), "A", "B", "C")));
+                                return this.save(AppUtils.dtoToTraining(trainingDto));
+                            });
+                });
+    }
+
+
 
 
     @Override
