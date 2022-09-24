@@ -89,13 +89,13 @@ public class TrainingServicesImpl implements ITrainingService {
 
     //  A PRUEBA
     @Override
-    public Mono<Void> deleteAprendizByEmail(String trainingId, String email) {
+    public Mono<TrainingDto> deleteAprendizByEmail(String trainingId, String email) {
         return repository.findById(trainingId)
                 .flatMap(training -> {
                     var list = training.getApprentices().stream().filter(aprendiz -> !aprendiz.getEmail().equals(email)).collect(Collectors.toList());
                     training.setApprentices(list);
-                    return repository.save(training);
-                }).then();
+                    return this.save(training);
+                });
 
     }
 

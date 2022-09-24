@@ -29,6 +29,7 @@ public class ControllerTraining {
                  .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
     @GetMapping("/findAllTrainings")
+    @ResponseStatus(HttpStatus.OK)
     public Flux<TrainingDto> findAllTrainings() {
         return service.findAll();
     }
@@ -95,7 +96,8 @@ public class ControllerTraining {
 
 
     @GetMapping("/aprendices/{trainingId}/{email}")
-    public Mono<Aprendiz> getAllAprendicesByTrainingIdAndEmail(@PathVariable("trainingId") String trainingId, @PathVariable("email") String emailId) {
+    public Mono<Aprendiz> getAllAprendicesByTrainingIdAndEmail(@PathVariable("trainingId") String trainingId,
+                                                               @PathVariable("email") String emailId) {
         return service.getAprendicesByTrainingId(trainingId)
                 .filter(aprendiz -> aprendiz.getEmail().equals(emailId))
                 .next();
@@ -107,7 +109,7 @@ public class ControllerTraining {
     }
 
     @PostMapping("/deleteAprendiz/{trainingId}")
-    public Mono<Void> delete(@PathVariable("trainingId") String trainingId, @RequestBody String email){
+    public Mono<TrainingDto> delete(@PathVariable("trainingId") String trainingId, @RequestBody String email){
         return service.deleteAprendizByEmail(trainingId,email);
     }
 
