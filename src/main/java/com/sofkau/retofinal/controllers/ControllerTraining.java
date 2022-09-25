@@ -109,7 +109,7 @@ public class ControllerTraining {
     }
 
     @PostMapping("/deleteAprendiz/{trainingId}")
-    public Mono<Void> delete(@PathVariable("trainingId") String trainingId, @RequestBody String email){
+    public Mono<TrainingDto> delete(@PathVariable("trainingId") String trainingId, @RequestBody String email){
         return service.deleteAprendizByEmail(trainingId,email);
     }
 

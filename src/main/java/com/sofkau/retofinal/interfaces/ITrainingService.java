@@ -30,7 +30,7 @@ public interface ITrainingService {
 
     Flux<TrainingDto> getActiveTrainings();
 
-    Mono<Void> deleteAprendizByEmail(String trainingId, String email);
+    Mono<TrainingDto> deleteAprendizByEmail(String trainingId, String email);
 
     Flux<Aprendiz> getAllAprendicesDeLosTrainingActivos();
 
