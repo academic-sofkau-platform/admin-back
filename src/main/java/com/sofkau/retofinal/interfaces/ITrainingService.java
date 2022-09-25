@@ -38,14 +38,7 @@ public interface ITrainingService {
 
     Mono<Aprendiz> getAprendizByTrainingIdAndEmail(String trainingId, String emailId);
 
-
-    // Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
-    Flux<ResultadoCursoList> getResultadoCursos();
-
     Mono<TrainingDto> updateTarea(Tarea tarea,String trainingId,String email,String cursoId);
-
-
-   // Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
 
    public Flux<TrainingDto> getActiveTrainingComplete();
 
@@ -53,4 +46,8 @@ public interface ITrainingService {
     Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList);
 
     Mono<TrainingDto> addTareasOfTrainingToApprentices(String trainingId);
+    public Flux<ResultadoCursoList> getAprendicesParaCalificar();
+
+    public Flux<Tarea> getAllTareasByEmail(String email,String trainingId);
+
 }

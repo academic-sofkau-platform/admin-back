@@ -28,10 +28,14 @@ public class TrainingServicesImpl implements ITrainingService {
 
     private final RutaAprendizajeServiceImpl rutaAprendizajeService;
 
+
     @Autowired
     public TrainingServicesImpl(@Lazy RutaAprendizajeServiceImpl rutaAprendizajeService) {
         this.rutaAprendizajeService = rutaAprendizajeService;
     }
+
+    @Autowired
+    private CursoServiceImpl cursoService;
 
     @Override
     public Mono<TrainingDto> save(Training training) {
@@ -116,6 +120,7 @@ public class TrainingServicesImpl implements ITrainingService {
                     return save(training);
                 });
     }
+
     @Override
     public Mono<TrainingDto> updateNotaTarea(Tarea tarea, String trainingId, String email, String cursoId) {
         return repository.findById(trainingId)
@@ -157,8 +162,8 @@ public class TrainingServicesImpl implements ITrainingService {
 
     //Método para devolver la vista training activos
     @Override
-    public Flux<TrainingDto> getActiveTrainingComplete(){
-        String strDateFormat ="MMM";
+    public Flux<TrainingDto> getActiveTrainingComplete() {
+        String strDateFormat = "MMM";
         SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
 
         return getActiveTrainings()
@@ -204,27 +209,33 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMapIterable(TrainingDto::getApprentices);
     }
     */
+    public Flux<Tarea> getAllTareasByEmail(String email, String trainingId) {
+        return getAprendizByTrainingIdAndEmail(trainingId,email)
+                .map(Aprendiz::getTareas)
+                        .flatMapMany(Flux::fromIterable);
+
+
+    }
+
 
     @Override
-    public Flux<ResultadoCursoList> getResultadoCursos() {
+    public Flux<ResultadoCursoList> getAprendicesParaCalificar() {
         return this.getActiveTrainings()
                 .flatMapIterable(trainingDto -> trainingDto
                         .getApprentices()
                         .stream()
-                        .map(aprendiz -> new ResultadoCursoList(aprendiz,
-                                trainingDto.getName(),
-                                null,
-                                trainingDto.getRutaAprendizajeId()))
+                        .map(aprendiz ->
+                                new ResultadoCursoList(
+                                        aprendiz.getName(),
+                                        aprendiz.getLastName(),
+                                        aprendiz.getEmail(),
+                                        trainingDto.getName(),
+                                        trainingDto.getTrainingId()
+                                ))
                         .collect(Collectors.toUnmodifiableList())
-                ).flatMap(resultadoCursoList -> {
-                    return this.rutaAprendizajeService
-                            .findCursosByRutaAprendizajeId(resultadoCursoList.getRutaAprendizajeId())
-                            .map(curso -> {
-                                return new ResultadoCursoList(resultadoCursoList.getAprendiz(), resultadoCursoList.getTrainingName(), curso, resultadoCursoList.getRutaAprendizajeId());
-                            });
-                });
-
+                );
     }
+
     @Override
     public Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList) {
         List<Aprendiz> concatenated_list = new ArrayList<>();
@@ -248,7 +259,7 @@ public class TrainingServicesImpl implements ITrainingService {
     public Mono<TrainingDto> addTareasOfTrainingToApprentices(String trainingId) {
         return this.findById(trainingId)
                 .flatMap(trainingDto -> {
-                     return this.rutaAprendizajeService.findById(trainingDto.getRutaAprendizajeId())
+                    return this.rutaAprendizajeService.findById(trainingDto.getRutaAprendizajeId())
                             .map(RutaAprendizajeDto::getRutas)
                             .flatMap(rutas -> {
                                 trainingDto

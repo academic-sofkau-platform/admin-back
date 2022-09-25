@@ -123,7 +123,7 @@ public class ControllerTraining {
 
     @GetMapping("/getResultadoCursos")
     public Flux<ResultadoCursoList> getResultadoCursos(){
-        return service.getResultadoCursos();
+        return service.getAprendicesParaCalificar();
     }
 
 
@@ -131,6 +131,9 @@ public class ControllerTraining {
     public Mono<TrainingDto> agregarTareasAprendices(@PathVariable("id") String trainingId){
         return service.addTareasOfTrainingToApprentices(trainingId);
     }
-
+    @GetMapping("hola/{trainingId}/{email}")
+    public Flux<Tarea> getAllTareasByEmail(@PathVariable("trainingId") String trainingId, @PathVariable("email") String email){
+        return service.getAllTareasByEmail(email,trainingId);
+    }
 
 }
