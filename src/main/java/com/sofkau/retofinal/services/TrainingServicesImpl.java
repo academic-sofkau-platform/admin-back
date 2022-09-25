@@ -95,11 +95,7 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMap(training -> {
                     var list = training.getApprentices().stream().filter(aprendiz -> !aprendiz.getEmail().equals(email)).collect(Collectors.toList());
                     training.setApprentices(list);
-<<<<<<< HEAD
-                    return this.save(training);
-=======
                     return save(training);
->>>>>>> 0d57bb114e80f8451e8ccfcce4db8ac6c0f0649d
                 });
 
     }
