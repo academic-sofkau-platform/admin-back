@@ -202,13 +202,6 @@ public class TrainingServicesImpl implements ITrainingService {
                 .next();
     }
 
-    /*
-    @Override
-    public Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId) {
-        return this.getActiveTrainings().filter(training -> training.getTrainingId().equals(trainingId))
-                .flatMapIterable(TrainingDto::getApprentices);
-    }
-    */
     public Flux<Tarea> getAllTareasByEmail(String email, String trainingId) {
         return getAprendizByTrainingIdAndEmail(trainingId,email)
                 .map(Aprendiz::getTareas)
