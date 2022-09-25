@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.sofkau.retofinal.utils.AppUtils.*;
@@ -29,24 +28,16 @@ public class ControllerTraining {
                  .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
     @GetMapping("/findAllTrainings")
+    @ResponseStatus(HttpStatus.OK)
     public Flux<TrainingDto> findAllTrainings() {
         return service.findAll();
     }
+
     @GetMapping("/findById/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Mono<TrainingDto> findById(@PathVariable("id") String trainingId) {
         return service.findById(trainingId);
     }
-
-    //Todo Reparar
-/*    @PutMapping("/update/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<ResponseEntity<Training>> update(@RequestBody Training training,
-                                                 @PathVariable("id") String trainingId) {
-        return service.update(training, trainingId)
-                .flatMap(training1 -> Mono.just(ResponseEntity.ok(training1)))
-                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
-    }*/
-
     @PutMapping("/addtarea/{trainingId}/{email}")
     public Mono<TrainingDto> addTarea(@RequestBody Tarea tarea,
                                  @PathVariable("trainingId") String trainingId, @PathVariable("aprendizId") String aprendizId){
@@ -82,22 +73,14 @@ public class ControllerTraining {
         return service.asignarCoach(name, trainingId);
     }
 
-    //TODO: findAll de aprendices
-    @GetMapping("/findAllAprendices")
-    public Flux<Aprendiz> findAllApredices() {
-        List<Aprendiz> listaAprendices = new ArrayList<>();
-        return null;
-    }
-
     @GetMapping("/findAllTrainingActivos")
     public Flux<TrainingDto> findAllTrainingActivos() {
-        //return service.getActiveTrainings();
         return service.getActiveTrainingComplete();
     }
 
-
     @GetMapping("/aprendices/{trainingId}/{email}")
-    public Mono<Aprendiz> getAllAprendicesByTrainingIdAndEmail(@PathVariable("trainingId") String trainingId, @PathVariable("email") String emailId) {
+    public Mono<Aprendiz> getAllAprendicesByTrainingIdAndEmail(@PathVariable("trainingId") String trainingId,
+                                                               @PathVariable("email") String emailId) {
         return service.getAprendicesByTrainingId(trainingId)
                 .filter(aprendiz -> aprendiz.getEmail().equals(emailId))
                 .next();
@@ -113,8 +96,6 @@ public class ControllerTraining {
         return service.deleteAprendizByEmail(trainingId,email);
     }
 
-
-    //Agregar aprendiz a un training activo
     @PutMapping("/agregarAprendices/{trainingId}")
     public Mono<TrainingDto> agregarAprendiz(@PathVariable("trainingId") String trainingId,
                                              @RequestBody List<Aprendiz> aprendices){
