@@ -43,17 +43,19 @@ public class ControllerTraining {
                                  @PathVariable("trainingId") String trainingId, @PathVariable("aprendizId") String aprendizId){
         return service.addtarea( trainingId, aprendizId,tarea);
     }
-    @PostMapping("/updateTarea/{trainingId}/{email}")
+    @PostMapping("/updateTarea/{trainingId}/{email}/{cursoId}")
     public Mono<TrainingDto> updateTarea(@RequestBody Tarea tarea,
+                                         @PathVariable("cursoId") String cursoId,
                                          @PathVariable("trainingId") String trainingId,
                                          @PathVariable("email") String email){
-        return service.updateTarea(tarea,trainingId,email);
+        return service.updateTarea(tarea,trainingId,email,cursoId);
     }
-    @PostMapping("/updateNotaTarea/{trainingId}/{email}")
+    @PostMapping("/updateNotaTarea/{trainingId}/{email}/{cursoId}")
     public Mono<TrainingDto> updateNotaTarea(@RequestBody Tarea tarea,
                                          @PathVariable("trainingId") String trainingId,
-                                         @PathVariable("email") String email){
-        return service.updateNotaTarea(tarea,trainingId,email);
+                                         @PathVariable("email") String email,
+                                             @PathVariable("cursoId") String cursoId){
+        return service.updateNotaTarea(tarea,trainingId,email,cursoId);
     }
 
     @PutMapping("/update/{id}")
@@ -104,5 +106,12 @@ public class ControllerTraining {
     public Flux<ResultadoCursoList> getResultadoCursos(){
         return service.getResultadoCursos();
     }
+
+
+    @PostMapping("/agregarTareasAprendices/{id}")
+    public Mono<TrainingDto> agregarTareasAprendices(@PathVariable("id") String trainingId){
+        return service.addTareasOfTrainingToApprentices(trainingId);
+    }
+
 
 }

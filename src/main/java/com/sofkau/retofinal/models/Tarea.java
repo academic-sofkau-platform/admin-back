@@ -23,6 +23,9 @@ public class Tarea {
     private boolean entregado = false;
     private String contenido;
 
+    public Tarea(String cursoId) {
+        this.cursoId = cursoId;
+    }
     public boolean getEntregado() {
         return entregado;
     }

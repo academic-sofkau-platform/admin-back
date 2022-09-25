@@ -1,5 +1,6 @@
 package com.sofkau.retofinal.services;
 
+import com.sofkau.retofinal.dto.RutaAprendizajeDto;
 import com.sofkau.retofinal.dto.TrainingDto;
 import com.sofkau.retofinal.interfaces.ITrainingService;
 import com.sofkau.retofinal.models.*;
@@ -94,19 +95,24 @@ public class TrainingServicesImpl implements ITrainingService {
                 .flatMap(training -> {
                     var list = training.getApprentices().stream().filter(aprendiz -> !aprendiz.getEmail().equals(email)).collect(Collectors.toList());
                     training.setApprentices(list);
+<<<<<<< HEAD
                     return this.save(training);
+=======
+                    return save(training);
+>>>>>>> 0d57bb114e80f8451e8ccfcce4db8ac6c0f0649d
                 });
 
     }
 
     @Override
-    public Mono<TrainingDto> updateTarea(Tarea tarea, String trainingId, String email) {
+    public Mono<TrainingDto> updateTarea(Tarea tarea, String trainingId, String email, String cursoId) {
         return repository.findById(trainingId)
                 .flatMap(training -> {
                     training.getApprentices()
                             .stream()
                             .filter(aprendiz -> aprendiz.getEmail().equals(email))
                             .forEach(aprendiz -> aprendiz.getTareas()
+                                    .stream().filter(tarea1 -> tarea1.getCursoId().equals(cursoId))
                                     .forEach(tarea1 -> {
                                         tarea1.setEntregado(tarea.getEntregado());
                                         tarea1.setContenido(tarea.getContenido());
@@ -115,13 +121,14 @@ public class TrainingServicesImpl implements ITrainingService {
                 });
     }
     @Override
-    public Mono<TrainingDto> updateNotaTarea(Tarea tarea, String trainingId, String email) {
+    public Mono<TrainingDto> updateNotaTarea(Tarea tarea, String trainingId, String email, String cursoId) {
         return repository.findById(trainingId)
                 .flatMap(training -> {
                     training.getApprentices()
                             .stream()
                             .filter(aprendiz -> aprendiz.getEmail().equals(email))
                             .forEach(aprendiz -> aprendiz.getTareas()
+                                    .stream().filter(tarea1 -> tarea1.getCursoId().equals(cursoId))
                                     .forEach(tarea1 -> {
                                         tarea1.setNota(tarea.getNota());
                                     }));
@@ -137,12 +144,11 @@ public class TrainingServicesImpl implements ITrainingService {
                             .forEach(aprendiz -> {
                                 if (aprendiz.getEmail().equals(aprendizId))
                                     aprendiz.getTareas().add(tarea);
+
                             });
                     return save(training);
                 });
-
     }
-
 
     @Override
     public Flux<TrainingDto> getActiveTrainings() {
@@ -242,6 +248,21 @@ public class TrainingServicesImpl implements ITrainingService {
                 });
     }
 
-
+    @Override
+    public Mono<TrainingDto> addTareasOfTrainingToApprentices(String trainingId) {
+        return this.findById(trainingId)
+                .flatMap(trainingDto -> {
+                     return this.rutaAprendizajeService.findById(trainingDto.getRutaAprendizajeId())
+                            .map(RutaAprendizajeDto::getRutas)
+                            .flatMap(rutas -> {
+                                trainingDto
+                                        .getApprentices()
+                                        .forEach(aprendiz -> new ArrayList<>(rutas)
+                                                .forEach(ruta -> aprendiz
+                                                        .getTareas()
+                                                        .add(new Tarea(ruta.getCursoId()))));
+                                return this.save(AppUtils.dtoToTraining(trainingDto));
+                            });
+                });
+    }
 }
-

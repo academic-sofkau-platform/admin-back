@@ -24,7 +24,7 @@ public interface ITrainingService {
 
     Mono<Void> deleteById(String trainingId);
 
-    Mono<TrainingDto> updateNotaTarea(Tarea tarea, String trainingId, String email);
+    Mono<TrainingDto> updateNotaTarea(Tarea tarea, String trainingId, String email, String cursoId);
 
     Mono<TrainingDto> addtarea(String trainingId, String aprendizId, Tarea tarea);
 
@@ -42,7 +42,7 @@ public interface ITrainingService {
     // Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
     Flux<ResultadoCursoList> getResultadoCursos();
 
-    Mono<TrainingDto> updateTarea(Tarea tarea,String trainingId,String email);
+    Mono<TrainingDto> updateTarea(Tarea tarea,String trainingId,String email,String cursoId);
 
 
    // Flux<Aprendiz> getAllAprendicesByTrainingId(String trainingId);
@@ -52,6 +52,5 @@ public interface ITrainingService {
 
     Mono<TrainingDto> agregarAprendices(String trainingId, List<Aprendiz> aprendizList);
 
-
-
+    Mono<TrainingDto> addTareasOfTrainingToApprentices(String trainingId);
 }
