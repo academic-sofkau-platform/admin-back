@@ -113,7 +113,7 @@ public class ControllerTraining {
         return service.addTareasOfTrainingToApprentices(trainingId);
     }
     @GetMapping("getTareaAprendiz/{trainingId}/{email}")
-    public Flux<Tarea> getAllTareasByEmail(@PathVariable("trainingId") String trainingId, @PathVariable("email") String email){
+    public Flux<TareasAprendiz> getAllTareasByEmail(@PathVariable("trainingId") String trainingId, @PathVariable("email") String email){
         return service.getAllTareasByEmail(email,trainingId);
     }
     @GetMapping("getAllAprendiz")

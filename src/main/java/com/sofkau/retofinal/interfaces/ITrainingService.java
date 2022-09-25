@@ -1,10 +1,7 @@
 package com.sofkau.retofinal.interfaces;
 
 import com.sofkau.retofinal.dto.TrainingDto;
-import com.sofkau.retofinal.models.Aprendiz;
-import com.sofkau.retofinal.models.ResultadoCursoList;
-import com.sofkau.retofinal.models.Tarea;
-import com.sofkau.retofinal.models.Training;
+import com.sofkau.retofinal.models.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -48,6 +45,6 @@ public interface ITrainingService {
     Mono<TrainingDto> addTareasOfTrainingToApprentices(String trainingId);
     public Flux<ResultadoCursoList> getAprendicesParaCalificar();
 
-    public Flux<Tarea> getAllTareasByEmail(String email,String trainingId);
+    public Flux<TareasAprendiz> getAllTareasByEmail(String email, String trainingId);
 
 }

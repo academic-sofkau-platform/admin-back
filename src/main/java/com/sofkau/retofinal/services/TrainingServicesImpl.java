@@ -202,12 +202,14 @@ public class TrainingServicesImpl implements ITrainingService {
                 .next();
     }
 
-    public Flux<Tarea> getAllTareasByEmail(String email, String trainingId) {
-        return getAprendizByTrainingIdAndEmail(trainingId,email)
+    public Flux<TareasAprendiz> getAllTareasByEmail(String email, String trainingId) {
+        return getAprendizByTrainingIdAndEmail(trainingId, email)
                 .map(Aprendiz::getTareas)
-                        .flatMapMany(Flux::fromIterable);
-
-
+                .flatMapMany(Flux::fromIterable)
+                .flatMap(tarea ->
+                    cursoService.findCursoById(tarea.getCursoId())
+                            .map(curso -> new TareasAprendiz(tarea,curso.getNombre()))
+                );
     }
 
 
