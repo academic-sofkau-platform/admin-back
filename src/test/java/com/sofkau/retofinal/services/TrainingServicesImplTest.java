@@ -3,6 +3,7 @@ package com.sofkau.retofinal.services;
 import com.sofkau.retofinal.models.*;
 import com.sofkau.retofinal.models.Training;
 import com.sofkau.retofinal.repositories.TrainingRepository;
+import com.sofkau.retofinal.utils.AppUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -258,7 +259,7 @@ class TrainingServicesImplTest {
 
         StepVerifier
                 .create(service.deleteAprendizByEmail(training1.getTrainingId(), "fabri@gmail.com"))
-                .expectNext()
+                .expectNextMatches(trainingDto -> trainingDto.getTrainingId().equals(training1.getTrainingId()))
                 .expectComplete()
                 .verify();
     }
