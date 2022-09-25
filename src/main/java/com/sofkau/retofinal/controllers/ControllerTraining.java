@@ -112,7 +112,7 @@ public class ControllerTraining {
     public Mono<TrainingDto> agregarTareasAprendices(@PathVariable("id") String trainingId){
         return service.addTareasOfTrainingToApprentices(trainingId);
     }
-    @GetMapping("getA/{trainingId}/{email}")
+    @GetMapping("getTareaAprendiz/{trainingId}/{email}")
     public Flux<Tarea> getAllTareasByEmail(@PathVariable("trainingId") String trainingId, @PathVariable("email") String email){
         return service.getAllTareasByEmail(email,trainingId);
     }
