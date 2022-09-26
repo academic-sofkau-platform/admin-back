@@ -16,6 +16,8 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/rutaAprendizaje")
 @CrossOrigin("*")
 public class ControllerRutaAprendizaje {
+
+
     @Autowired
     RutaAprendizajeServiceImpl service;
 
