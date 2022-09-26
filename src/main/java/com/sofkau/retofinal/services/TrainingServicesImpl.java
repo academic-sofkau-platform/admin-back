@@ -207,19 +207,24 @@ public class TrainingServicesImpl implements ITrainingService {
 
     @Override
     public Flux<ResultadoCursoList> getResultadoCursos() {
+        List<Tarea> tareas_list = new ArrayList<>();
         return this.getActiveTrainings()
                 .flatMapIterable(trainingDto -> trainingDto
                         .getApprentices()
                         .stream()
-                        .map(aprendiz -> new ResultadoCursoList(aprendiz,
-                                trainingDto.getName(),
-                                null,
-                                trainingDto.getRutaAprendizajeId()))
+                        .map(aprendiz -> {
+                            tareas_list.addAll(aprendiz.getTareas());
+                            return new ResultadoCursoList(aprendiz,
+                                    trainingDto.getName(),
+                                    null,
+                                    trainingDto.getRutaAprendizajeId());
+                        } )
                         .collect(Collectors.toUnmodifiableList())
                 ).flatMap(resultadoCursoList -> {
                     return this.rutaAprendizajeService
                             .findCursosByRutaAprendizajeId(resultadoCursoList.getRutaAprendizajeId())
                             .map(curso -> {
+                                tareas_list.stream().filter(tarea -> tarea.getCursoId().equals(curso.getId()));
                                 return new ResultadoCursoList(resultadoCursoList.getAprendiz(), resultadoCursoList.getTrainingName(), curso, resultadoCursoList.getRutaAprendizajeId());
                             });
                 });
