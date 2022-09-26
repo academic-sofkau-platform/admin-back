@@ -108,8 +108,8 @@ public class ControllerTraining {
     }
 
 
-    @PostMapping("/agregarTareasAprendices/{id}")
-    public Mono<TrainingDto> agregarTareasAprendices(@PathVariable("id") String trainingId){
+    @PostMapping("/agregarTareasAprendices")
+    public Mono<TrainingDto> agregarTareasAprendices(@RequestBody String trainingId){
         return service.addTareasOfTrainingToApprentices(trainingId);
     }
     @GetMapping("getTareaAprendiz/{trainingId}/{email}")
